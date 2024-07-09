@@ -37,7 +37,7 @@ export class wallpaper extends plugin {
             const today = new Date();
             const formattedToday = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 
-            const recordFilePath = path.join(_path, './plugins/elaina-plugin/config/dksj.ini');
+            const recordFilePath = path.join(_path, './plugins/air-plugin/note/dksj.ini');
 
             let existingRecord;
             try {
