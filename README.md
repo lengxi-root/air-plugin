@@ -2,12 +2,12 @@
 
 #使用Gitee安装
 ```
-git clone --depth=1 https://gitee.com/lengxihddj/air-plugin.git./plugins/air-plugin/
+git clone --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugins/air-plugin/
 ```
 
 #使用Github安装
 ```
-git clone --depth=1 https://github.com/lengxi-root/air-plugin.git./plugins/air-plugin/
+git clone --depth=1 https://github.com/lengxi-root/air-plugin.git ./plugins/air-plugin/
 ```
 
 注意：请更改apps内接口和图片链接
