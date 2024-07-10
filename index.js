@@ -1,24 +1,13 @@
 import fs from 'node:fs'
-import mkcfg from './lib/config.js'
 import { dirPath } from './lib/tool.js'
 //输出提示
 logger.info(logger.yellow("- 正在加载 air-plugin "))
-await mkcfg('config', {
-  tips:'',
-  Ark: true,
-  chat: {
-    user_id: "",
-    appid: '',
-    token: ''
-  },
-}, { 
-  tips: [
-    'Ark: 是否使用卡片回复，官方机器人专用，野生机器人请填false',
-    'chat功能需要在腾讯元器申请智能体：https://yuanqi.tencent.com/',
-    'user_id: 智能体用户id，在调用示例里面查看user_id',
-    'appid: 智能体id, token: 智能体token'
-  ]
-})
+if (!fs.existsSync(dp)) {
+  fs.copyFile(`${dirPath}/config/default/config.yaml`, `${dirPath}/config/config.yaml`, (err) => {
+    if (err) throw err;
+    console.log('默认配置加载完成');
+  });
+};
 //加载插件
 const files = fs.readdirSync(`${dirPath}/apps`).filter(file => file.endsWith('.js'))
 
