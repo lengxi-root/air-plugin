@@ -1,7 +1,13 @@
 import fetch from 'node-fetch'
-const 用户id = "用户id";//看调用示例里面的user_id
-const 智能体id = "智能体id"
-const token = "token"
+import { cfg } from '../lib/config.js'
+let config = await cfg('config')
+import { tool, msgurl, dirPath } from '../lib/tool.js'
+let Ark = config.Ark
+let chat = config.chat;
+let userid = chat.user_id;
+let appid = chat.appid;
+let token = chat.token;
+
 export class example extends plugin {
 	constructor() {
 		super({
@@ -21,14 +27,15 @@ export class example extends plugin {
 
 
 
-	async help(e) {
-		let m = await main(this.e.msg.replace('(/|#)(CE|ce)',''));
-		console.log(m);
-		this.reply("\n"+m, true)
-		return true;
-	}
-
-
+async help(e) {
+    let m = await main(this.e.msg.replace('(/|#)(CE|ce)', ''));
+    if (Ark) {
+        let msg = tool.textark('[伊蕾娜]', [tool.textobj(m)]);
+        console.log(msg);
+        await this.reply(msg);
+        return true;
+    } 
+}
 }
 
 
@@ -42,8 +49,8 @@ async function main(content) {
 		  'Authorization': 'Bearer ' + token
 		},
 		body: JSON.stringify({
-		  assistant_id: 智能体id,
-		  user_id: 用户id,
+		  assistant_id: appid,
+		  user_id: userid,
 		  stream: false,
 		  messages: [
 			{
