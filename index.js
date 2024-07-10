@@ -5,7 +5,7 @@ logger.info(logger.yellow("- 正在加载 air-plugin "))
 if (!fs.existsSync(`${dirPath}/config/config.yaml`)) {
   fs.copyFile(`${dirPath}/config/default/config.yaml`, `${dirPath}/config/config.yaml`, (err) => {
     if (err) throw err;
-    logger.info(logger.yellow("默认配置加载完成"))
+    logger.info(logger.yellow("- air-plugin 默认配置加载完成"))
   });
 };
 //加载插件
