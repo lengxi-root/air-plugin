@@ -2,10 +2,10 @@ import fs from 'node:fs'
 import { dirPath } from './lib/tool.js'
 //输出提示
 logger.info(logger.yellow("- 正在加载 air-plugin "))
-if (!fs.existsSync(dp)) {
+if (!fs.existsSync(`${dirPath}/config/config.yaml`)) {
   fs.copyFile(`${dirPath}/config/default/config.yaml`, `${dirPath}/config/config.yaml`, (err) => {
     if (err) throw err;
-    console.log('默认配置加载完成');
+    logger.info(logger.yellow("默认配置加载完成"))
   });
 };
 //加载插件
