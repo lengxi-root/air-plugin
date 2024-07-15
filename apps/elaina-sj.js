@@ -1,102 +1,83 @@
 import { segment } from "oicq";
-import fs from 'fs';
-import path from 'path';
-import fetch from 'node-fetch'; 
-import { tool, msgurl, dirPath } from '../lib/tool.js'
+import fetch from "node-fetch";
+import { tool, basename, msgurl, pluginPath } from '../lib/tool.js';
 import { cfg } from '../lib/config.js'
-
 let config = await cfg('config')
 let Ark = config.Ark
 const _path = process.cwd();
-
 export class wallpaper extends plugin {
     constructor() {
         super({
-            name: '今日伊蕾娜',
-            dsc: 'relaina',
-            event:'message',
+            name: 'api伊蕾娜',
+            dsc: 'api-elaina',
+            event: 'message',
             priority: 500,
             rule: [
                 {
-                    reg: "^(#|/)今日伊蕾娜$",
-                    fnc:'mrelaina'
+                    reg: "^(#|/)随机伊蕾娜$",
+                    fnc: 'sjelaina'
+                },
+                {
+                    reg: "^(#|/)表情伊蕾娜$",
+                    fnc: 'bqelaina'
                 }
             ]
-        });
+        })
     }
 
-    async mrelaina(e) {
+    async sjelaina(e) {
         console.log("用户命令：", e.msg);
-        try {
-            const today = new Date();
-            const formattedToday = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
+        let url = `https://vst.qqmsg.cn/api/esj`;
+        let res = await fetch(url).catch((err) => logger.error(err));
 
-            const recordFilePath = path.join(_path, `${dirPath}/note/dksj.ini`);
+        // 提取图片地址
+        let imageUrl = res.url;
+        let msg, tips, btn
+        if (Ark) {
+            msg = [tool.imgark('[伊蕾娜]', '', '', `${msgurl}${imageUrl}`)]
+            btn = [tool.button([
+                tool.rows({text: '再来一张',data: '#随机伊蕾娜', enter: true}),
+                tool.rows({text: '点击跳转',data: `${msgurl}${imageUrl}`, type: 0})
+            ])]
+            await this.reply(msg)
+            await this.reply(btn)
+            return true
 
-            let existingRecord;
-            try {
-                existingRecord = JSON.parse(await fs.readFileSync(recordFilePath, 'utf-8'));
-            } catch (err) {
-                existingRecord = {};
-            }
-
-            // 如果该用户当天已经获取过，直接返回已有的数据
-            if (existingRecord[e.user_id] && existingRecord[e.user_id].date === formattedToday) {
-                const { randomNumber, imageUrl } = existingRecord[e.user_id];
-
-                if (Ark) {
-                    let msg = [tool.imgark('[伊蕾娜]', `你今日的 ELaina 值是：${randomNumber}`, '', `${msgurl}${imageUrl}`)]
-                    let btn = [tool.button([
-                        tool.rows({ text: '今日打卡', data: '#今日伊蕾娜', enter: true }),
-                        tool.rows({ text: '点击跳转', data: `${msgurl}${imageUrl}`, type: 0 })
-                    ])]
-                    await this.reply(msg)
-                    await this.reply(btn)
-                    return true
-                }
-                let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}\n`, segment.image(imageUrl)];
-                e.reply(msg);
-                e.reply(`如果图片未发送成功，请点击链接查看：${msgurl}${imageUrl}`);
-                return true;
-            }
-
-            // 如果当天未获取过，进行新的获取
-            const response = await fetch('https://vst.qqmsg.cn/api/emr', {
-                redirect: 'follow' 
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP 错误！状态: ${response.status}`);
-            }
-            const imageUrl = response.url;
-
-            let randomNumber = Math.floor(Math.random() * 100) + 1;
-
-            existingRecord[e.user_id] = {
-                date: formattedToday,
-                randomNumber: randomNumber,
-                imageUrl: imageUrl
-            };
-
-            fs.writeFileSync(recordFilePath, JSON.stringify(existingRecord));
-
-            if (Ark) {
-                let msg = [tool.imgark('[伊蕾娜]', `你今日的 ELaina 值是：${randomNumber}`, '', `${msgurl}${imageUrl}`)]
-                let btn = [tool.button([
-                    tool.rows({ text: '今日打卡', data: '#今日伊蕾娜', enter: true }),
-                    tool.rows({ text: '点击跳转', data: `${msgurl}${imageUrl}`, type: 0 })
-                ])]
-                await this.reply(msg)
-                await this.reply(btn)
-                return true
-            }
-            let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}\n`, segment.image(imageUrl)];
-            e.reply(msg);
-            e.reply(`如果图片未发送成功，请点击链接查看：${msgurl}${imageUrl}`);
-            return true;
-        } catch (error) {
-            logger.error(`获取图片链接失败: ${error.message}`);
-            e.reply('获取图片失败，请稍后再试');
-            return;
         }
+        msg = [segment.at(e.user_id), segment.image(imageUrl)];// 图文回复
+        await e.reply(`\n如果图片未发送成功，请点击链接查看：${imageUrl}`)
+        // 发送消息
+        await e.reply(msg);
+
+        return true;
+    }
+
+    async bqelaina(e) {
+        console.log("用户命令：", e.msg);
+        let url = `https://vst.qqmsg.cn/api/ebq`;
+        let res = await fetch(url).catch((err) => logger.error(err));
+
+        // 提取图片地址
+        let imageUrl = res.url;
+        let msg, tips, btn
+        if (Ark) {
+            msg = [tool.imgark('[伊蕾娜]', '', '', `${msgurl}${imageUrl}`)]
+            btn = [tool.button([
+                tool.rows({text: '再来一张',data: '#表情伊蕾娜', enter: true}),
+                tool.rows({text: '点击跳转',data: `${msgurl}${imageUrl}`, type: 0})
+            ])]
+            await this.reply(msg)
+            await this.reply(btn)
+            return true
+
+        }
+         msg = [segment.at(e.user_id), segment.image(imageUrl)];
+
+        e.reply(`\n如果图片未发送成功，请点击链接查看：${msgurl}${imageUrl}`)
+
+        // 发送消息
+        e.reply(msg);
+
+        return true;
     }
 }
