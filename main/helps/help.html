@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AIR帮助</title>
+    <link rel="preload" href="{{pluResPath}}/plugins/air-plugin/main/helps/zkkl.TTF" as="font">
+    <link rel="stylesheet" type="text/css" href="{{pluResPath}}/plugins/air-plugin/main/helps/help.css" />
+</head>
+<body>
+    <div class="container" id="container">
+        <div class="head_box">
+            <h1 class="day_text">{{helpname}}</h1>
+            <div class="plugin">{{doc}}</div>
+        </div>
+
+        <div class="help">
+
+            <div class="title">
+                <h2>{{helpList.group}}</h2>
+            </div>
+            <div class="help-text">
+                {{each helpList.list list}}
+                <div class="help-div">
+                    <div>
+                        <div class="img-div">
+                            <img src="{{pluResPath}}/plugins/air-plugin/note/helps/icon.png">
+                        </div>
+                        <div class="text-div">
+                            <b class="text-title-div">
+                                {{list.title}}
+                            </b>
+                            <div class="text-desc-div">
+                                {{list.desc}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+
+            </div>
+        </div>
+
+        <h3 class="logo">Created By Yunzai-Bot & air-plugin</h3>
+    </div>
+</body>
+
+</html>

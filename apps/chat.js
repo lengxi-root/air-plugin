@@ -12,7 +12,7 @@ export class example extends plugin {
 	constructor() {
 		super({
 			/** 功能名称 */
-		name: 'elaina智能体',
+		name: '智能体',
 			/** 功能描述 */
 			dsc: 'znt-elaina',
 			event: 'message',

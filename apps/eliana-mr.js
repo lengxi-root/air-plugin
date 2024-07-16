@@ -31,7 +31,7 @@ export class wallpaper extends plugin {
             const today = new Date();
             const formattedToday = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 
-            const recordFilePath = path.join(_path, `${dirPath}/note/dksj.ini`);
+            const recordFilePath = path.join(_path, `${dirPath}/main/data/dksj.ini`);
 
             let existingRecord;
             try {
