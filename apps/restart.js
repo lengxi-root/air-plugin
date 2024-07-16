@@ -16,40 +16,8 @@ export class Restart extends plugin {
     })
     if (e) this.e = e
   }
-  key = "Yz:restart"
+  key = "Yzair:restart"
 
-  init() {
-    Bot.once("online", () => this.restartMsg())
-    this.e = {
-      reply: msg => Bot.sendMasterMsg(msg),
-      isMaster: true,
-    }
-    if (cfg.bot.restart_time)
-      setTimeout(() => this.restart(), cfg.bot.restart_time*60000)
-
-    this.task = []
-    if (cfg.bot.restart_cron)
-      for (const i of Array.isArray(cfg.bot.restart_cron) ? cfg.bot.restart_cron : [cfg.bot.restart_cron])
-        this.task.push({
-          name: "定时重启",
-          cron: i,
-          fnc: () => this.restart(),
-        })
-    if (cfg.bot.stop_cron)
-      for (const i of Array.isArray(cfg.bot.stop_cron) ? cfg.bot.stop_cron : [cfg.bot.stop_cron])
-        this.task.push({
-          name: "定时关机",
-          cron: i,
-          fnc: () => this.stop(),
-        })
-    if (cfg.bot.start_cron)
-      for (const i of Array.isArray(cfg.bot.start_cron) ? cfg.bot.start_cron : [cfg.bot.start_cron])
-        this.task.push({
-          name: "定时开机",
-          cron: i,
-          fnc: () => new Start(this.e).start(),
-        })
-  }
 
   async restartMsg() {
     let restart = await redis.get(this.key)
