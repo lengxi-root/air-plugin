@@ -1,7 +1,7 @@
 import plugin from "../../../lib/plugins/plugin.js";
 import { createRequire } from "module";
 import lodash from "lodash";
-import { Restart } from "../lib/restart.js";
+import { Restart } from "./restart.js";
 import Version from "../lib/version.js";
 import xxCfg from "../lib/xxCfg.js";
 import { dirPath, basename, pluginPath } from "../lib/tool.js";

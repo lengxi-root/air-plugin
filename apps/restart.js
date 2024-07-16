@@ -8,7 +8,7 @@ export class Restart extends plugin {
   constructor(e) {
     super({
       name: "进程管理",
-      dsc: "#重启 #关机 #停止",
+      dsc: "#重启",
       event: "message",
       priority: 10,
       rule: [
