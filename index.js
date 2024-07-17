@@ -3,7 +3,7 @@ import { dirPath } from './lib/tool.js'
 //输出提示
 logger.info(logger.yellow("- 正在加载 air-plugin "))
 if (!fs.existsSync(`${dirPath}/config/air.config.yaml`)) {
-  fs.copyFile(`${dirPath}/config_def/air/config.yaml`, `${dirPath}/config/air.config.yaml`, (err) => {
+  fs.copyFile(`${dirPath}/main/config_def/air/config.yaml`, `${dirPath}/config/air.config.yaml`, (err) => {
     if (err) throw err;
     logger.info(logger.yellow("- air-plugin 默认配置加载完成"))
   });
