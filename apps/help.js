@@ -11,7 +11,7 @@ const helpList =
     {
       "icon": 1,
       "title": "/今日伊蕾娜",
-      "desc": "每日一张伊蕾娜质量图"
+      "desc": "每日一张伊蕾娜质量图和幸运值"
     },
     {
       "icon": 2,
@@ -26,7 +26,7 @@ const helpList =
     {
       "icon": 4,
       "title": "/CE+对话",
-      "desc": "需要绑定智能体，跟智能体对话"
+      "desc": "跟智能体对话"
     },
   ],
 };
@@ -47,7 +47,7 @@ export class help extends plugin {
             priority: 999,
             rule: [
                 {
-                    reg: '^(#|/)?(air|AIR)?(帮助|菜单|功能)$',
+                    reg: '^(#|/)?(air|AIR)(帮助|菜单|功能)?$',
                     fnc: 'help'
                 }
             ]
