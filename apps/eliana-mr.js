@@ -31,7 +31,15 @@ export class wallpaper extends plugin {
             const today = new Date();
             const formattedToday = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 
-            const recordFilePath = path.join(_path, `${dirPath}/main/data/dksj.ini`);
+            const mainPath = path.join(_path, `${dirPath}/main`);
+            const dataPath = path.join(mainPath, 'data');
+
+            // 检查并创建 data 文件夹，如果不存在
+            if (!fs.existsSync(dataPath)) {
+                fs.mkdirSync(dataPath, { recursive: true });
+            }
+
+            const recordFilePath = path.join(dataPath, 'dksj.ini');
 
             let existingRecord;
             try {
