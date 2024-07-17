@@ -3,7 +3,11 @@ tips:
   - chat功能需要在腾讯元器申请智能体：https://yuanqi.tencent.com/
   - "user_id: 智能体用户id，在调用示例里面查看user_id"
   - "appid: 智能体id, token: 智能体token"
+
 Ark: true
+# 官方机器人消息url配置
+MsgUrl: "https://vst.elaina.cn/url?url="
+
 chat:
   user_id: ""
   appid: ""

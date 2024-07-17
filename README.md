@@ -28,7 +28,7 @@ git clone --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugins/air-pl
 git clone --depth=1 https://github.com/lengxi-root/air-plugin.git ./plugins/air-plugin/
 ```
 
-3. 使用VST QQ msg url
+3. 使用VST QQ msg url(已不对外开放，使用请联系开发者)
 
 <details><summary>展开</summary>
 

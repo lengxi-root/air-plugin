@@ -63,6 +63,16 @@ export function supportGuoba() {
           componentProps: {
             placeholder: '请输入智能体token',
           }
+        },
+          {
+          field: 'MsgUrl',
+          label: '官方机器人消息url配置,
+          bottomHelpMessage: '开启Ark的时候需要，url后面会接上图片地址',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '请输入智能体token',
+          }
         }
       ],
       async getConfigData() {
