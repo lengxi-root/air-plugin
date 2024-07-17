@@ -66,7 +66,7 @@ export function supportGuoba() {
         },
           {
           field: 'MsgUrl',
-          label: '官方机器人消息url配置,
+          label: '官方机器人消息url配置',
           bottomHelpMessage: '开启Ark的时候需要，url后面会接上图片地址',
           component: 'Input',
           required: false,
