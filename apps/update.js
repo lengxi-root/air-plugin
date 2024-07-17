@@ -117,8 +117,8 @@ export class update extends plugin {
       await this.reply(`air-plugin\n最后更新时间：${time}`);
       this.isUp = true;
       /** 获取air组件的更新日志 */
-      let log = await this.getLog(basename);
-      await this.reply(log);
+      // let log = await this.getLog(basename);
+      // await this.reply(log);
     }
 
     logger.mark(`${this.e.logFnc} 最后更新时间：${time}`);
