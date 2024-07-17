@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import cfg from './lib/xxcfg.js';
+import cfg from './lib/xxCfg.js';
 import fs from 'fs';
 import yaml from 'yaml';
 import lodash from 'lodash'
