@@ -3,9 +3,8 @@ import fs from 'fs';
 import path from 'path';
 import fetch from 'node-fetch'; 
 import { tool, msgurl, dirPath } from '../lib/tool.js'
-import { cfg } from '../lib/config.js'
-
-let config = await cfg('config')
+import cfg from '../lib/xxCfg.js'
+let config = await cfg.getConfig('air', 'config')
 let Ark = config.Ark
 const _path = process.cwd();
 

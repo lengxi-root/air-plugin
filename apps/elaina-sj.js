@@ -1,8 +1,8 @@
 import { segment } from "oicq";
 import fetch from "node-fetch";
 import { tool, basename, msgurl, pluginPath } from '../lib/tool.js';
-import { cfg } from '../lib/config.js'
-let config = await cfg('config')
+import cfg from '../lib/xxCfg.js'
+let config = await cfg.getConfig('air', 'config')
 let Ark = config.Ark
 const _path = process.cwd();
 export class wallpaper extends plugin {
@@ -45,7 +45,7 @@ export class wallpaper extends plugin {
 
         }
         msg = [segment.at(e.user_id), segment.image(imageUrl)];// 图文回复
-        await e.reply(`\n如果图片未发送成功，请点击链接查看：${imageUrl}`)
+        await e.reply(`\n如果图片未发送成功，请点击链接查看：${msgurl}${imageUrl}`)
         // 发送消息
         await e.reply(msg);
 

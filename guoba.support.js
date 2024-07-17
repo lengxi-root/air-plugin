@@ -1,7 +1,7 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import getconfig from './main/model/cfg.js';
+import cfg from './lib/xxcfg.js';
 import fs from 'fs';
 import yaml from 'yaml';
 import lodash from 'lodash'
@@ -66,12 +66,12 @@ export function supportGuoba() {
         }
       ],
       async getConfigData() {
-        let { config } = getconfig(`config`, `config`)
+        let config = await cfg.getConfig(`air`, `config`)
         return config;
       },
       async setConfigData(data, { Result }) {
         // 1.读取现有配置文件
-        const configFilePath = path.join(__dirname, 'config', 'config.yaml');
+        const configFilePath = path.join(__dirname, 'config', 'air.config.yaml');
         let config = {};
         if (fs.existsSync(configFilePath)) {
           const configContent = fs.readFileSync(configFilePath, 'utf8');
@@ -82,10 +82,11 @@ export function supportGuoba() {
           lodash.set(config, keyPath, value);
         }
         // 3. 将更新后的配置对象写回文件
-        const updatedConfigYAML = yaml.stringify(config);
-        fs.writeFileSync(configFilePath, updatedConfigYAML, 'utf8');
+        // const updatedConfigYAML = yaml.stringify(config);
+        // fs.writeFileSync(configFilePath, updatedConfigYAML, 'utf8');
+        await cfg.saveSet('air', 'config', 'config', config)
         logger.mark(`[AIR:配置文件]配置文件更新`)
-        return Result.ok({}, '保存成功~');
+        return Result.ok({}, '保存成功~请及时重启云崽应用配置');
       }
     }
   }

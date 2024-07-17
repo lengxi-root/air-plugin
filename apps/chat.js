@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
-import { cfg } from '../lib/config.js'
-let config = await cfg('config')
+import cfg from '../lib/xxCfg.js'
+let config = await cfg.getConfig('air', 'config')
 import { tool, msgurl, dirPath } from '../lib/tool.js'
 let Ark = config.Ark
 let chat = config.chat;
