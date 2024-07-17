@@ -32,15 +32,14 @@ git clone --depth=1 https://github.com/lengxi-root/air-plugin.git ./plugins/air-
 
 <details><summary>展开</summary>
 
-带上机器人appid浏览器访问一次这个网址
-
+请进入群聊953774387 发送消息 appid换成自己机器人的appid
 ```
-https://vst.qqmsg.cn/index2.php?appid=+你的机器人appid
+#校验+appid
 ```
 
 进行创建你机器人appid的校验文件，进入机器人后台把
 ```
-vst.qqmsg.cn/url
+vst.elaina.cn/url
 ```
 输入进 消息url配置
 
