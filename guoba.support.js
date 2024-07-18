@@ -71,7 +71,7 @@ export function supportGuoba() {
           component: 'Input',
           required: false,
           componentProps: {
-            placeholder: '如：https://vst.elaina.cn/url?url=',
+            placeholder: '如：https://vst.elaina.vin/url?url=',
           }
         }
       ],

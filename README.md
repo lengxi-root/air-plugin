@@ -69,7 +69,7 @@ https://你的网站域名/url?url=
 
 </details>
 
-<details><summary>3.展开</summary>
+<details><summary>3.展开-暂时无法使用</summary>
 <br>
   
 带上自己的机器人appid进入该网站
@@ -129,5 +129,5 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 ### 开发者 & 赞助支持
 
 - 冷曦：[GitHub](https://github.com/lengxi-root) | [Gitee](https://gitee.com/lengxihddj) |  [QQ：2218872014](https://qm.qq.com/q/44OFS6WBKM)
-- TS沂沨：[GitHub](https://github.com/Ts-yf) | [Gitee](https://gitee.com/Ts-yf) |  QQ：1918530969
+- TS沂沨：[GitHub](https://github.com/Ts-yf) | [Gitee](https://gitee.com/Ts-yf) |  [QQ：1918530969](https://qm.qq.com/q/l7nDOOUQL)
 
