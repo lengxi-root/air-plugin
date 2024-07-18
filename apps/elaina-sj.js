@@ -27,7 +27,7 @@ export class wallpaper extends plugin {
 
     async sjelaina(e) {
         console.log("用户命令：", e.msg);
-        let url = `https://vst.elaina.cn/api/esj`;
+        let url = `https://vst.elaina.vin/api/esj`;
         let res = await fetch(url).catch((err) => logger.error(err));
 
         // 提取图片地址
