@@ -40,7 +40,7 @@ git clone --depth=1 https://github.com/lengxi-root/air-plugin.git ./plugins/air-
 
 进行创建你机器人appid的校验文件，进入机器人后台把
 ```
-vst.elaina.cn/url
+vst.qqmsg.cn/url
 ```
 输入进 消息url配置 然后在锅巴设置里 把下面内容输入到 消息url配置
 ```
