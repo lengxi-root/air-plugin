@@ -44,7 +44,7 @@ vst.elaina.cn/url
 ```
 输入进 消息url配置 然后在锅巴设置里 把下面内容输入到 消息url配置
 ```
-https://vst.elaina.vin/url?url=
+https://vst.qqmsg.cn/url?url=
 ```
 
 </details>

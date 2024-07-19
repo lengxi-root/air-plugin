@@ -16,7 +16,7 @@ export class Restart extends plugin {
     })
     if (e) this.e = e
   }
-  key = "Yzair:restart"
+  key = "Yz:restart-air"
 
 
   async restartMsg() {

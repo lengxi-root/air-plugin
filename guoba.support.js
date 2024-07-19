@@ -71,7 +71,7 @@ export function supportGuoba() {
           component: 'Input',
           required: false,
           componentProps: {
-            placeholder: '如：https://vst.elaina.vin/url?url=',
+            placeholder: '如：https://vst.qqmsg.cn/url?url=',
           }
         }
       ],
@@ -96,7 +96,7 @@ export function supportGuoba() {
         // fs.writeFileSync(configFilePath, updatedConfigYAML, 'utf8');
         await cfg.saveSet('air', 'config', 'config', config)
         logger.mark(`[AIR:配置文件]配置文件更新`)
-        return Result.ok({}, '保存成功~请及时重启云崽应用配置');
+        return Result.ok({}, '保存成功~');
       }
     }
   }

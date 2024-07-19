@@ -2,8 +2,6 @@ import { segment } from "oicq";
 import fetch from "node-fetch";
 import { tool, basename, msgurl, pluginPath } from '../lib/tool.js';
 import cfg from '../lib/xxCfg.js'
-let config = await cfg.getConfig('air', 'config')
-let Ark = config.Ark
 const _path = process.cwd();
 export class wallpaper extends plugin {
     constructor() {
@@ -26,8 +24,10 @@ export class wallpaper extends plugin {
     }
 
     async sjelaina(e) {
+        let config = await cfg.getConfig('air', 'config')
+        let Ark = config.Ark
         console.log("用户命令：", e.msg);
-        let url = `https://vst.elaina.vin/api/esj`;
+        let url = `https://vst.qqmsg.cn/api/esj`;
         let res = await fetch(url).catch((err) => logger.error(err));
 
         // 提取图片地址
@@ -36,8 +36,8 @@ export class wallpaper extends plugin {
         if (Ark) {
             msg = [tool.imgark('[伊蕾娜]', '', '', `${msgurl}${imageUrl}`)]
             btn = [tool.button([
-                tool.rows({text: '再来一张',data: '#随机伊蕾娜', enter: true}),
-                tool.rows({text: '点击跳转',data: `${msgurl}${imageUrl}`, type: 0})
+                tool.rows({ text: '再来一张', data: '#随机伊蕾娜', enter: true }),
+                tool.rows({ text: '点击跳转', data: `${msgurl}${imageUrl}`, type: 0 })
             ])]
             await this.reply(msg)
             await this.reply(btn)
@@ -54,7 +54,9 @@ export class wallpaper extends plugin {
 
     async bqelaina(e) {
         console.log("用户命令：", e.msg);
-        let url = `https://vst.elaina.vin/api/ebq`;
+        let config = await cfg.getConfig('air', 'config')
+        let Ark = config.Ark
+        let url = `https://vst.qqmsg.cn/api/ebq`;
         let res = await fetch(url).catch((err) => logger.error(err));
 
         // 提取图片地址
@@ -63,15 +65,15 @@ export class wallpaper extends plugin {
         if (Ark) {
             msg = [tool.imgark('[伊蕾娜]', '', '', `${msgurl}${imageUrl}`)]
             btn = [tool.button([
-                tool.rows({text: '再来一张',data: '#表情伊蕾娜', enter: true}),
-                tool.rows({text: '点击跳转',data: `${msgurl}${imageUrl}`, type: 0})
+                tool.rows({ text: '再来一张', data: '#表情伊蕾娜', enter: true }),
+                tool.rows({ text: '点击跳转', data: `${msgurl}${imageUrl}`, type: 0 })
             ])]
             await this.reply(msg)
             await this.reply(btn)
             return true
 
         }
-         msg = [segment.at(e.user_id), segment.image(imageUrl)];
+        msg = [segment.at(e.user_id), segment.image(imageUrl)];
 
         e.reply(`\n如果图片未发送成功，请点击链接查看：${msgurl}${imageUrl}`)
 

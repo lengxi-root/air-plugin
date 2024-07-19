@@ -1,11 +1,9 @@
 import { segment } from "oicq";
 import fs from 'fs';
 import path from 'path';
-import fetch from 'node-fetch'; 
+import fetch from 'node-fetch';
 import { tool, msgurl, dirPath } from '../lib/tool.js'
 import cfg from '../lib/xxCfg.js'
-let config = await cfg.getConfig('air', 'config')
-let Ark = config.Ark
 const _path = process.cwd();
 
 export class wallpaper extends plugin {
@@ -26,6 +24,8 @@ export class wallpaper extends plugin {
 
     async mrelaina(e) {
         console.log("用户命令：", e.msg);
+        let config = await cfg.getConfig('air', 'config')
+        let Ark = config.Ark
         try {
             const today = new Date();
             const formattedToday = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
@@ -68,8 +68,8 @@ export class wallpaper extends plugin {
             }
 
             // 如果当天未获取过，进行新的获取
-            const response = await fetch('https://vst.elaina.vin/api/emr', {
-                redirect: 'follow' 
+            const response = await fetch('https://vst.qqmsg.cn/api/emr', {
+                redirect: 'follow'
             });
             if (!response.ok) {
                 throw new Error(`HTTP 错误！状态: ${response.status}`);
