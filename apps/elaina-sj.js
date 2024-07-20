@@ -1,6 +1,6 @@
 import { segment } from "oicq";
 import fetch from "node-fetch";
-import { tool, basename, msgurl, pluginPath } from '../lib/tool.js';
+import { tool, basename, pluginPath } from '../lib/tool.js';
 import cfg from '../lib/xxCfg.js'
 const _path = process.cwd();
 export class wallpaper extends plugin {
@@ -26,6 +26,7 @@ export class wallpaper extends plugin {
     async sjelaina(e) {
         let config = await cfg.getConfig('air', 'config')
         let Ark = config.Ark
+        let msgurl = config.MsgUrl
         console.log("用户命令：", e.msg);
         let url = `https://vst.qqmsg.cn/api/esj`;
         let res = await fetch(url).catch((err) => logger.error(err));
@@ -56,6 +57,7 @@ export class wallpaper extends plugin {
         console.log("用户命令：", e.msg);
         let config = await cfg.getConfig('air', 'config')
         let Ark = config.Ark
+        let msgurl = config.MsgUrl
         let url = `https://vst.qqmsg.cn/api/ebq`;
         let res = await fetch(url).catch((err) => logger.error(err));
 

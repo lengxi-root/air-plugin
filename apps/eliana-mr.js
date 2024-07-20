@@ -2,7 +2,7 @@ import { segment } from "oicq";
 import fs from 'fs';
 import path from 'path';
 import fetch from 'node-fetch';
-import { tool, msgurl, dirPath } from '../lib/tool.js'
+import { tool, dirPath } from '../lib/tool.js'
 import cfg from '../lib/xxCfg.js'
 const _path = process.cwd();
 
@@ -26,6 +26,7 @@ export class wallpaper extends plugin {
         console.log("用户命令：", e.msg);
         let config = await cfg.getConfig('air', 'config')
         let Ark = config.Ark
+        let msgurl = config.MsgUrl
         try {
             const today = new Date();
             const formattedToday = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
