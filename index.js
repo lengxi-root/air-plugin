@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import { dirPath } from './lib/tool.js'
+import { dirPath } from './lib/dir.js'
 //输出提示
 logger.info(logger.yellow("- 正在加载 air-plugin "))
 if (!fs.existsSync(`${dirPath}/config/air.config.yaml`)) {
