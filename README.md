@@ -98,8 +98,16 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 <details><summary>伊蕾娜图片</summary>
 
 - `#随机伊蕾娜`
-- `#表情伊蕾娜`
+
+[![伊蕾娜](https://gd-hbimg.huaban.com/4c3605aac02da41f1dcb4553b815f421f6854eafc0cab-oRwyzu)](https://github.com/lengxi-root/air-plugin)
+
 - `#今日伊蕾娜`
+
+[![伊蕾娜](https://gd-hbimg.huaban.com/b2ff276348b68e0ed02241955131d34fd87978c173741-1IVYXz)](https://github.com/lengxi-root/air-plugin)
+
+- `#表情伊蕾娜`
+
+[![伊蕾娜](https://gd-hbimg.huaban.com/bf14ef2e02c8c14adb5f19d6a0073e9c3c9814eb95df9-LqnarO)](https://github.com/lengxi-root/air-plugin)
 
 </details>
 
@@ -109,8 +117,9 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 - 按照调用示例所给的东西填入config
 - "user_id: 智能体用户id，在调用示例里面查看user_id"
 - "appid: 智能体id, token: 智能体token"
-
 - #CE + `问题`
+
+[![伊蕾娜](https://gd-hbimg.huaban.com/491c06d1eac04b4a4e991bc8856ed7d1b40213ce51cad-KqdVKB)](https://github.com/lengxi-root/air-plugin)
 
 </details>
 
