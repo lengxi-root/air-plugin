@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 import cfg from '../lib/xxCfg.js'
-import { tool, msgurl, dirPath } from '../lib/tool.js'
+import { tool, dirPath } from '../lib/tool.js'
 
 
 export class example extends plugin {
