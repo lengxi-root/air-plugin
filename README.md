@@ -117,6 +117,7 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 <details><summary>全局转Ark</summary>
 
 | 原内容 | 转换后 |
+| - | - |
 | 纯文本 | 文本卡片 |
 | 带链接文本 | 文本链接卡片 |
 | 图片 | 大图卡片 |
