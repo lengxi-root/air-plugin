@@ -26,7 +26,7 @@ export function supportGuoba() {
       schemas: [
         {
           component: 'Divider',
-          label: 'AIR插件设置'
+          label: 'Ark卡片设置'
         },
         {
           field: 'Ark',
@@ -40,7 +40,21 @@ export function supportGuoba() {
           bottomHelpMessage: '将其他插件的消息转换成Ark',
           component: 'Switch'
         },
-         {
+          {
+          field: 'MsgUrl',
+          label: '消息url配置',
+          bottomHelpMessage: 'Ark模式必填，请看README.md设置教程和搭建服务，如没有备案域名请进群953774387',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '如：https://vst.qqmsg.cn/url?url=',
+          }
+        },
+        {
+          component: 'Divider',
+          label: '智能体聊天设置'
+        },
+        {
           field: 'chat.user_id',
           label: '智能体user.id',
           bottomHelpMessage: '智能体用户id，在调用示例里面查看user_id',
@@ -68,16 +82,6 @@ export function supportGuoba() {
           required: false,
           componentProps: {
             placeholder: '请输入智能体token',
-          }
-        },
-          {
-          field: 'MsgUrl',
-          label: '消息url配置',
-          bottomHelpMessage: 'Ark模式必填',
-          component: 'Input',
-          required: false,
-          componentProps: {
-            placeholder: '如：https://vst.qqmsg.cn/url?url=',
           }
         }
       ],

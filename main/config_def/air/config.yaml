@@ -1,14 +1,17 @@
 tips:
+  - "推荐使用锅巴插件进行配置"
   - "Ark: 是否使用卡片回复，官方机器人专用，野生机器人请填false"
   - chat功能需要在腾讯元器申请智能体：https://yuanqi.tencent.com/
   - "user_id: 智能体用户id，在调用示例里面查看user_id"
   - "appid: 智能体id, token: 智能体token"
+  - "MsgUrl请看README.md设置教程或搭建服务，如没有备案域名请进群953774387"
 
-Ark: true
+Ark: false
 # 官方机器人消息url配置
-MsgUrl: "https://vst.elaina.cn/url?url="
+MsgUrl: "https://vst.qqmsg.cn/url?url="
 
 chat:
   user_id: ""
   appid: ""
   token: ""
+msgReset: false
