@@ -1,9 +1,3 @@
-import cfg from "../../../lib/config/config.js"
-import { spawn } from "child_process"
-import PluginsLoader from "../../../lib/plugins/loader.js"
-
-const temp = {}
-
 export class Restart extends plugin {
   constructor(e) {
     super({
@@ -18,17 +12,17 @@ export class Restart extends plugin {
   }
   key = "Yz:restart-air"
 
+  init() {
+    Bot.once("online", () => this.restartMsg())
+  }
 
   async restartMsg() {
     let restart = await redis.get(this.key)
     if (!restart) return
     await redis.del(this.key)
     restart = JSON.parse(restart)
-    if (restart.isStop)
-      return this.stop(restart.time)
-
     const time = Bot.getTimeDiff(restart.time)
-    const msg = [restart.isExit ? `开机成功，距离上次停止${time}` : `重启成功，用时${time}`]
+    const msg = [restart.isExit ? `开机成功，距离上次停止${time}` : `[AIR-Plugin]重启成功，用时${time}`]
     if (restart.msg_id)
       msg.unshift(segment.reply(restart.msg_id))
 
@@ -41,12 +35,7 @@ export class Restart extends plugin {
   }
 
   async set(isExit) {
-    if (temp.priority)
-      return redis.set(this.key, JSON.stringify({
-        isStop: true,
-        time: temp.stop_time,
-      }))
-    await this.reply(`开始${isExit ? "停止" : "重启"}，本次运行时长${Bot.getTimeDiff()}`)
+    await this.reply(`[AIR-Plugin]开始${isExit ? "停止" : "重启"}，本次运行时长${Bot.getTimeDiff()}`)
     return redis.set(this.key, JSON.stringify({
       isExit,
       group_id: this.e.group_id,
@@ -67,21 +56,5 @@ export class Restart extends plugin {
     } else process.exit()
   }
 
-  async stop(time) {
-    if (temp.priority) return false
-    temp.priority = PluginsLoader.priority
-    PluginsLoader.priority = [{ class: Start }]
-    if (typeof time === "number") return temp.stop_time = time
-    temp.stop_time = Date.now()
-    return this.reply(`关机成功，本次运行时长${Bot.getTimeDiff(temp.start_time)}`)
-  }
 
-  async exit() {
-    await this.set(true)
-    if (process.env.app_type === "pm2") {
-      const ret = await Bot.exec("pnpm stop")
-      await this.reply(`停止错误\n${ret.error}\n${ret.stdout}\n${ret.stderr}`)
-      Bot.makeLog("error", ["停止错误", ret])
-    } else process.exit(1)
-  }
 }
