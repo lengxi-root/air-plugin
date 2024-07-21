@@ -1,8 +1,6 @@
 
-  <picture>
-    <img height="350" alt="伊蕾娜" src="https://gd-hbimg.huaban.com/376b918e109d20d83556a9d76c7b2e91dbfede1dd3d24-Tkqbpl">
-  </picture>
-  
+[![伊蕾娜](https://gd-hbimg.huaban.com/376b918e109d20d83556a9d76c7b2e91dbfede1dd3d24-Tkqbpl)](https://github.com/lengxi-root/air-plugin)
+
 # Yunzai air-Plugin
 
 云崽机器人插件，主要适配官方机器人，搭配TRSS云崽的QQbot使用
@@ -93,6 +91,8 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 
 ## 使用教程
 
+发送`#air帮助`查看帮助菜单
+
 > 均支持 `#` 或 `/` 前缀
 
 <details><summary>伊蕾娜图片</summary>
@@ -111,6 +111,26 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 - "appid: 智能体id, token: 智能体token"
 
 - #CE + `问题`
+
+</details>
+
+<details><summary>全局转Ark</summary>
+
+| 原内容 | 转换后 |
+| 纯文本 | 文本卡片 |
+| 带链接文本 | 文本链接卡片 |
+| 图片 | 大图卡片 |
+
+注意：正确配置消息url以体验完整版(不然发不出去
+
+> 使用锅巴插件
+
+在锅巴插件配置打开`全局转Ark`然后保存
+
+> 手动配置
+
+- 找到`config/air.config.yaml`添加以下内容
+- `msgReset: true`
 
 </details>
 

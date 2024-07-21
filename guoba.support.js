@@ -31,7 +31,13 @@ export function supportGuoba() {
         {
           field: 'Ark',
           label: 'Ark卡片模式',
-          bottomHelpMessage: '仅trss官方Bot开启使用，其他请关闭',
+          bottomHelpMessage: '仅官方Bot开启使用，其他请关闭',
+          component: 'Switch'
+        },
+        {
+          field: 'msgReset',
+          label: '全局转Ark',
+          bottomHelpMessage: '将其他插件的消息转换成Ark',
           component: 'Switch'
         },
          {
@@ -67,7 +73,7 @@ export function supportGuoba() {
           {
           field: 'MsgUrl',
           label: '消息url配置',
-          bottomHelpMessage: '开启Ark的时候需要，url后面会接上图片地址',
+          bottomHelpMessage: 'Ark模式必填',
           component: 'Input',
           required: false,
           componentProps: {
