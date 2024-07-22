@@ -41,105 +41,22 @@ async function makeMsg(msg) {
     let msgurl = await cfg.getConfig('air', 'config')
     msgurl = msgurl.MsgUrl
   for (let i of Array.isArray(msg) ? msg : [msg]) {
-      logger.info(i)
-    if (typeof i === "object")
+    if (typeof i === "object"){
       i = { ...i }
-    else
+    }  else {
       i = { type: "text", text: Bot.String(i) }
+      }
+      // logger.info(i)
     switch (i.type) {
       case 'text':
-        return [textark(i.text)]
+      i.text = await textark(i.text)
+        // logger.info(i.text)
+        return [i.text]
       case 'image':
        if (Buffer.isBuffer(i.file)) i.file = await upimg(i.file, i)
         return [tool.imgark('[图片]','','',`${msgurl}${i.file}`)]
     }
-    /** 
-   switch (i.type) {
-     case "at":
-       //i.user_id = i.qq?.replace?.(`${data.self_id}${this.sep}`, "")
-       continue
-     case "text":
-       if (message.length) {
-         messages.push(tool.textark(i.text, tool.textobj(i.text)))
-         message = []
-         i = {}
-       }
-       break
-     case "face":
-     case "ark":
-     case "embed":
-       break
-     case "record":
-     case "video":
-     case "image":
-       if (message.length) {
-         messages.push(message)
-         message = []
-       }
-       break
-     case "file":
-       if (i.file) i.file = await Bot.fileToUrl(i.file, i)
-       i = { type: "text", text: `文件：${i.file}` }
-       break
-     case "reply":
-       if (i.id.startsWith("event_"))
-         reply = { type: "reply", event_id: i.id.replace(/^event_/, "") }
-       else
-         reply = i
-       continue
-     case "markdown":
-       if (typeof i.data === "object")
-         i = { type: "markdown", ...i.data }
-       else
-         i = { type: "markdown", content: i.data }
-       break
-     case "button":
-       button.push(...this.makeButtons(data, i.data))
-       continue
-     case "node":
-       for (const { message } of i.data)
-         messages.push(...(await this.makeMsg(data, message)))
-       continue
-     case "raw":
-       if (Array.isArray(i.data)) {
-         messages.push(i.data)
-         continue
-       }
-       i = i.data
-       break
-     default:
-       i = { type: "text", text: Bot.String(i) }
-   }
-   /** 
-   if (i.type === "text" && i.text) {
-     const match = i.text.match(this.toQRCodeRegExp)
-     if (match) for (const url of match) {
-       const msg = segment.image(await Bot.fileToUrl(await this.makeQRCode(url)))
-       if (message.length) {
-         messages.push(message)
-         message = []
-       }
-       message.push(msg)
-       i.text = i.text.replace(url, "[链接(请扫码查看)]")
-     }
-   }
-   
-   message.push(i)
-   */
   }
-  /** 
-  if (message.length)
-    messages.push(message)
-
-  while (button.length)
-    messages.push([{
-      type: "keyboard",
-      content: { rows: button.splice(0, 5) },
-    }])
-
-  if (reply) for (const i of messages)
-    i.unshift(reply)
-  */
   return msg
 }
 
@@ -153,7 +70,7 @@ async function textark(text) {
     let link = splitText[i].match(/https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g);
     if (link) {
       for (let j = 0; j < link.length; j++) {
-        msgs.push(tool.textobj(msgurl + link[j], msgurl + link[j]))
+        msgs.push(tool.textobj("查看连接", msgurl + link[j]))
       }
     }
   }
