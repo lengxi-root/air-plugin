@@ -17,7 +17,7 @@ export function supportGuoba() {
       link: 'https://github.com/lengxi-root/air-plugin',
       isV3: true,
       isV2: false,
-      description: `伊蕾娜api与其他娱乐功能调用`,
+      description: `伊蕾娜api与全局Ark卡片消息转换`,
       icon: 'mdi:stove',
       iconColor: '#d19f56',
       iconPath: path.join(__dirname, 'main/helps/icon.png')
@@ -43,7 +43,7 @@ export function supportGuoba() {
           {
           field: 'MsgUrl',
           label: '消息url配置',
-          bottomHelpMessage: 'Ark模式必填，请看README.md设置教程和搭建服务，如没有备案域名请进群953774387',
+          bottomHelpMessage: '非必填，请看README.md设置教程和搭建服务，如没有备案域名请进群953774387',
           component: 'Input',
           required: false,
           componentProps: {
