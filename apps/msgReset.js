@@ -70,7 +70,7 @@ async function textark(text) {
     let link = splitText[i].match(/https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g);
     if (link) {
       for (let j = 0; j < link.length; j++) {
-        msgs.push(tool.textobj("查看连接", msgurl + link[j]))
+        msgs.push(tool.textobj("查看链接", msgurl + link[j]))
       }
     }
   }
