@@ -58,8 +58,8 @@ export class wallpaper extends plugin {
                         tool.rows({ text: '今日打卡', data: '#今日伊蕾娜', enter: true }),
                         tool.rows({ text: '如未发送图片，点击查看', data: `${msgurl}${imageUrl}`, type: 0 })
                     ])]
-                    await this.reply(msg)
                     await this.reply(btn)
+                    await this.reply(msg)
                     return true
                 }
                 let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}`, segment.image(imageUrl)];
@@ -93,8 +93,8 @@ export class wallpaper extends plugin {
                     tool.rows({ text: '今日打卡', data: '#今日伊蕾娜', enter: true }),
                     tool.rows({ text: '如未发送图片，点击查看', data: `${msgurl}${imageUrl}`, type: 0 })
                 ])]
-                await this.reply(msg)
                 await this.reply(btn)
+                await this.reply(msg)
                 return true
             }
             let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}`, segment.image(imageUrl)];
