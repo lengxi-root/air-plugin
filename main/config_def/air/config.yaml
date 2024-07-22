@@ -6,7 +6,7 @@ tips:
   - "appid: 智能体id, token: 智能体token"
   - "MsgUrl请看README.md设置教程或搭建服务，如没有备案域名请进群953774387"
 
-Ark: false
+Ark: true
 msgReset: false
 # 官方机器人消息url配置
 MsgUrl: ""
