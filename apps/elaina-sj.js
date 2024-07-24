@@ -46,7 +46,7 @@ export class wallpaper extends plugin {
 
         }
         msg = [segment.at(e.user_id), segment.image(imageUrl)];// 图文回复
-        await e.reply(`\n如果图片未发送成功，请点击链接查看：${msgurl}${imageUrl}`)
+        await e.reply(`\n如未发送图片，点击链接查看：${msgurl}${imageUrl}`)
         // 发送消息
         await e.reply(msg);
 
@@ -77,7 +77,7 @@ export class wallpaper extends plugin {
         }
         msg = [segment.at(e.user_id), segment.image(imageUrl)];
 
-        e.reply(`\n如果图片未发送成功，请点击链接查看：${msgurl}${imageUrl}`)
+        e.reply(`\n如未发送图片，点击链接查看：${msgurl}${imageUrl}`)
 
         // 发送消息
         e.reply(msg);

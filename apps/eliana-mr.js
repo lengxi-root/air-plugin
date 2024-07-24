@@ -64,7 +64,7 @@ export class wallpaper extends plugin {
                 }
                 let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}`, segment.image(imageUrl)];
                 e.reply(msg);
-                e.reply(`如果图片未发送成功，请点击链接查看：${msgurl}${imageUrl}`);
+                e.reply(`如未发送图片，点击链接查看：${msgurl}${imageUrl}`);
                 return true;
             }
 
@@ -99,7 +99,7 @@ export class wallpaper extends plugin {
             }
             let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}`, segment.image(imageUrl)];
             e.reply(msg);
-            e.reply(`如果图片未发送成功，请点击链接查看：${msgurl}${imageUrl}`);
+            e.reply(`如未发送图片，点击链接查看：${msgurl}${imageUrl}`);
             return true;
         } catch (error) {
             logger.error(`获取图片链接失败: ${error.message}`);
