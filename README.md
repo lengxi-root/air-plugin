@@ -36,14 +36,16 @@ cd ./plugins/air-plugin
 
 3.安装依赖
 
-> 使用npm
+以下方法任选其一
+
+使用npm
 ```
 npm i
 ```
 
-> 使用pnpm
+使用pnpm
 
-安装pnpm，已安装可跳过
+> 安装pnpm，已安装可跳过
 ```
 npm i pnpm -g
 ```
@@ -51,9 +53,9 @@ npm i pnpm -g
 pnpm i
 ```
 
-> 使用yarn
+使用yarn
 
-安装yarn，已安装可跳过
+> 安装yarn，已安装可跳过
 ```
 npm i yarn -g
 ```
