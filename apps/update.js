@@ -91,7 +91,7 @@ export class update extends plugin {
   async runUpdate(isForce) {
     let command = "git -C " + dirPath + "/ pull --no-rebase";
     if (isForce) {
-      command = `git -C ${dirPath}/ checkout . && ${command}`;
+      command = `git -C ${dirPath}/ checkout . && ${command} && pnpm i`;
       this.e.reply("正在执行强制更新操作，请稍等");
     } else {
       this.e.reply("正在执行更新操作，请稍等");

@@ -17,7 +17,7 @@ export function supportGuoba() {
       link: 'https://github.com/lengxi-root/air-plugin',
       isV3: true,
       isV2: false,
-      description: `伊蕾娜api与其他娱乐功能调用`,
+      description: `伊蕾娜api与全局Ark卡片消息转换`,
       icon: 'mdi:stove',
       iconColor: '#d19f56',
       iconPath: path.join(__dirname, 'main/helps/icon.png')
@@ -40,10 +40,10 @@ export function supportGuoba() {
           bottomHelpMessage: '将其他插件的消息转换成Ark',
           component: 'Switch'
         },
-          {
+        {
           field: 'MsgUrl',
           label: '消息url配置',
-          bottomHelpMessage: 'Ark模式必填，请看README.md设置教程和搭建服务，如没有备案域名请进群953774387',
+          bottomHelpMessage: '非必填，请看README.md设置教程和搭建服务，如没有备案域名请进群953774387',
           component: 'Input',
           required: false,
           componentProps: {
@@ -64,7 +64,7 @@ export function supportGuoba() {
             placeholder: '请输入user.id',
           }
         },
-          {
+        {
           field: 'chat.appid',
           label: '智能体appid',
           bottomHelpMessage: '智能体id',
@@ -74,7 +74,7 @@ export function supportGuoba() {
             placeholder: '请输入智能体id',
           }
         },
-          {
+        {
           field: 'chat.token',
           label: '智能体token',
           bottomHelpMessage: '智能体token',
@@ -82,6 +82,46 @@ export function supportGuoba() {
           required: false,
           componentProps: {
             placeholder: '请输入智能体token',
+          }
+        },
+        {
+          component: 'Divider',
+          label: 'Mikan-蜜柑计划'
+        },
+        {
+          field: 'Mikan.withProxy',
+          label: '使用代理',
+          bottomHelpMessage: '是否使用代理访问',
+          component: 'Switch'
+        },
+        {
+          field: 'Mikan.Proxy',
+          label: '代理地址',
+          bottomHelpMessage: '使用镜像站请修改下面RSS地址',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '使用代理访问的地址',
+          }
+        },
+        {
+          field: 'Mikan.url',
+          label: 'RSS地址',
+          bottomHelpMessage: 'RSS地址，默认为主站https://mikanani.me/',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '最后无 / 号，如：https://mikanani.me',
+          }
+        }, 
+        {
+          field: 'Mikan.token',
+          label: '蜜柑订阅Token',
+          bottomHelpMessage: '自行获取RSS订阅Token，“%2b”替换为“+”，“%3d%3d”替换为“==”',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: 'https://mikanani.me/RSS/MyBangumi?token=后面的内容',
           }
         }
       ],

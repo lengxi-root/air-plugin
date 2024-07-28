@@ -5,6 +5,10 @@
 
 云崽机器人插件，主要适配官方机器人，搭配TRSS云崽的QQbot使用
 
+此分支与主分支不可一起使用，公域机器人请选择主分支
+
+推荐使用锅巴插件来配置Air-plugin
+
 [![Stars](https://img.shields.io/github/stars/lengxi-root/air-plugin?color=yellow&label=收藏)](../../stargazers)
 [![访问量](https://profile-counter.glitch.me/lengxi-root-air-plugin/count.svg)](https://github.com/lengxi-root/air-plugin)
 
@@ -16,17 +20,48 @@
 
 2. 选择安装方式
 
+在云崽根目录执行
+
 > 使用Gitee安装
 ```
-git clone --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugins/air-plugin/
+git clone -b main --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugins/air-plugin/
+cd ./plugins/air-plugin
 ```
 
 > 使用Github安装
 ```
-git clone --depth=1 https://github.com/lengxi-root/air-plugin.git ./plugins/air-plugin/
+git clone -b main --depth=1 https://github.com/lengxi-root/air-plugin.git ./plugins/air-plugin/
+cd ./plugins/air-plugin
 ```
 
-3. 使用VST QQ msg url 任选一种
+3.安装依赖
+
+> 使用npm
+```
+npm i
+```
+
+> 使用pnpm
+
+安装pnpm，已安装可跳过
+```
+npm i pnpm -g
+```
+```
+pnpm i
+```
+
+> 使用yarn
+
+安装yarn，已安装可跳过
+```
+npm i yarn -g
+```
+```
+yarn
+```
+
+4. 使用VST QQ msg url 任选一种
 
 <details><summary>1.展开</summary>
 <br>
@@ -94,6 +129,7 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 发送`#air帮助`查看帮助菜单
 
 > 均支持 `#` 或 `/` 前缀
+> 注意：截止`2024-7-28`测试Ark功能仅能在`私域机器人`使用
 
 <details><summary>伊蕾娜图片</summary>
 
@@ -141,6 +177,18 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 
 - 找到`config/air.config.yaml`添加以下内容
 - `msgReset: true`
+
+</details>
+
+<details><summary>Mikan - 蜜柑计划</summary>
+
+> 蜜柑计划推送
+> 由于此功能消息比较长，不适合在`官方Bot`使用
+> （可能会更新订阅推送功能）
+
+- `#来点新番`
+- `#蜜柑推送`
+- （功能是一样的）
 
 </details>
 

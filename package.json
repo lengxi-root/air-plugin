@@ -1,0 +1,25 @@
+{
+  "name": "air-plugin",
+  "version": "1.0.0",
+  "description": "云崽插件",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/lengxihddj/air-plugin"
+  },
+  "keywords": [
+    "Yunzai"
+  ],
+  "author": "@TS霆生，@冷曦",
+  "license": "AFL-3.0",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.12"
+  }
+}
