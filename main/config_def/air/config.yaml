@@ -7,11 +7,11 @@ tips:
   - "MsgUrl请看README.md设置教程或搭建服务，如没有备案域名请进群953774387"
 
 Ark: false
+msgReset: false
 # 官方机器人消息url配置
-MsgUrl: "https://vst.qqmsg.cn/url?url="
+MsgUrl: ""
 
 chat:
   user_id: ""
   appid: ""
   token: ""
-msgReset: false
