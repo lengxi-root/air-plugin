@@ -29,6 +29,11 @@ export class Mikan extends plugin {//插件的一个函数组，可以创建多�
     /** e.msg 用户的命令消息 */
     logger.info('[用户命令]', e.msg)
     /** 最后回复消息 */
+    let _cfg = await cfg.getConfig('air', 'config')
+    if (!_cfg.Mikan) {
+      await e.reply('检查蜜柑计划配置是否正确')
+      return true
+    }
     let RSS = await getRss()
     logger.info(RSS)
     await e.reply(RSS)
@@ -72,7 +77,7 @@ async function getRss() {
     });
     return items;
   } catch (error) {
-    logger.wran(`[getRss] Error: ${error}`);
-    return [];
+    logger.error(`[getRss] Error: ${error}`);
+    return `[getRss] Error: ${error}`;
   }
 }
