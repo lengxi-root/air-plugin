@@ -53,18 +53,18 @@ export class wallpaper extends plugin {
                 const { randomNumber, imageUrl } = existingRecord[e.user_id];
 
                 if (Ark) {
-                    let msg = [tool.imgark('[伊蕾娜]', `你今日的 ELaina 值是：${randomNumber}`, '', `${msgurl}${imageUrl}`)]
+                    let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}`, segment.image(imageUrl)];
                     let btn = [tool.button([
                         tool.rows({ text: '今日打卡', data: '#今日伊蕾娜', enter: true }),
-                        tool.rows({ text: '点击跳转', data: `${msgurl}${imageUrl}`, type: 0 })
+                        tool.rows({ text: '如未发送图片，点击查看', data: `${msgurl}${imageUrl}`, type: 0 })
                     ])]
-                    await this.reply(msg)
                     await this.reply(btn)
+                    await this.reply(msg)
                     return true
                 }
-                let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}\n`, segment.image(imageUrl)];
+                let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}`, segment.image(imageUrl)];
                 e.reply(msg);
-                e.reply(`如果图片未发送成功，请点击链接查看：${msgurl}${imageUrl}`);
+                e.reply(`如未发送图片，点击链接查看：${msgurl}${imageUrl}`);
                 return true;
             }
 
@@ -88,18 +88,18 @@ export class wallpaper extends plugin {
             fs.writeFileSync(recordFilePath, JSON.stringify(existingRecord));
 
             if (Ark) {
-                let msg = [tool.imgark('[伊蕾娜]', `你今日的 ELaina 值是：${randomNumber}`, '', `${msgurl}${imageUrl}`)]
+                let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}`, segment.image(imageUrl)];
                 let btn = [tool.button([
                     tool.rows({ text: '今日打卡', data: '#今日伊蕾娜', enter: true }),
-                    tool.rows({ text: '点击跳转', data: `${msgurl}${imageUrl}`, type: 0 })
+                    tool.rows({ text: '如未发送图片，点击查看', data: `${msgurl}${imageUrl}`, type: 0 })
                 ])]
-                await this.reply(msg)
                 await this.reply(btn)
+                await this.reply(msg)
                 return true
             }
-            let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}\n`, segment.image(imageUrl)];
+            let msg = [segment.at(e.user_id), `\n 你今日的 ELaina 值是：${randomNumber}`, segment.image(imageUrl)];
             e.reply(msg);
-            e.reply(`如果图片未发送成功，请点击链接查看：${msgurl}${imageUrl}`);
+            e.reply(`如未发送图片，点击链接查看：${msgurl}${imageUrl}`);
             return true;
         } catch (error) {
             logger.error(`获取图片链接失败: ${error.message}`);

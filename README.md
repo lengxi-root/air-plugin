@@ -22,28 +22,26 @@
 
 在云崽根目录执行
 
-> 使用Gitee安装
-```
-git clone -b main --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugins/air-plugin/
-cd ./plugins/air-plugin
-```
-
 > 使用Github安装
 ```
 git clone -b main --depth=1 https://github.com/lengxi-root/air-plugin.git ./plugins/air-plugin/
-cd ./plugins/air-plugin
+```
+
+> [!tip]
+> 如果您的网络环境较差，建议使用代理加速
+> ```
+> git clone --depth=1 https://mirror.ghproxy.com/https://github.com/lengxi-root/air-plugin.git ./plugins/air-plugin/
+> ```
+
+> 使用Gitee安装（同步可能较慢）
+```
+git clone -b main --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugins/air-plugin/
 ```
 
 3.安装依赖
 
 以下方法任选其一
-
-使用npm
-```
-npm i
-```
-
-使用pnpm
+<details><summary>1.使用pnpm推荐</summary>
 
 > 安装pnpm，已安装可跳过
 ```
@@ -53,7 +51,15 @@ npm i pnpm -g
 pnpm i
 ```
 
-使用yarn
+</details>
+<details><summary>2.使用npm</summary>
+
+```
+pnpm i
+```
+
+</details>
+<details><summary>3.使用yarn</summary>
 
 > 安装yarn，已安装可跳过
 ```
@@ -62,6 +68,7 @@ npm i yarn -g
 ```
 yarn
 ```
+</details>
 
 4. 使用VST QQ msg url 任选一种
 
