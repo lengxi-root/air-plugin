@@ -5,12 +5,11 @@
 
 云崽机器人插件，主要适配官方机器人，搭配TRSS云崽的QQbot使用
 
-此分支与主分支不可一起使用，公域机器人请选择主分支
+> 此分支对于私域机器人有特殊适配，公域机器人请选择另一个分支  
+> 推荐使用锅巴插件来配置Air-plugin
 
-推荐使用锅巴插件来配置Air-plugin
-
-[![Stars](https://img.shields.io/github/stars/lengxi-root/air-plugin?color=yellow&label=收藏)](../../stargazers)
-[![访问量](https://profile-counter.glitch.me/lengxi-root-air-plugin/count.svg)](https://github.com/lengxi-root/air-plugin)
+[![Stars](https://img.shields.io/github/stars/lengxi-root/air-plugin?color=yellow&label=收藏)](../../stargazers)  
+[![访问量](https://moe-counter.glitch.me/get/@lengxi-root-air-plugin?theme=rule34)](https://github.com/lengxi-root/air-plugin)
 
 </div>
 
@@ -40,11 +39,12 @@ git clone -b main --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugin
 
 3.安装依赖
 
-以下方法任选其一
-<details><summary>1.使用pnpm推荐</summary>
+> 以下方法任选其一，在air-plugin目录运行  
+> 先在云崽根目录执行`cd ./plugins/air-plugin`
+<details><summary>1.使用pnpm - 推荐</summary>
 
-> 安装pnpm，已安装可跳过
 ```
+# 安装pnpm，已安装可跳过（应该都安装了吧，不安装怎么运行云崽）
 npm i pnpm -g
 ```
 ```
@@ -52,25 +52,25 @@ pnpm i
 ```
 
 </details>
-<details><summary>2.使用npm</summary>
+<details><summary>2.使用yarn - 速度快</summary>
 
 ```
-pnpm i
-```
-
-</details>
-<details><summary>3.使用yarn</summary>
-
-> 安装yarn，已安装可跳过
-```
+# 安装yarn，已安装可跳过
 npm i yarn -g
 ```
 ```
 yarn
 ```
 </details>
+<details><summary>3.使用npm</summary>
 
-4. 使用VST QQ msg url 任选一种
+```
+npm i
+```
+
+</details>
+
+4.使用VST QQ msg url 任选一种
 
 <details><summary>1.展开</summary>
 <br>
@@ -137,7 +137,7 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 
 发送`#air帮助`查看帮助菜单
 
-> 均支持 `#` 或 `/` 前缀
+> 均支持 `#` 或 `/` 前缀  
 > 注意：截止`2024-7-28`测试Ark功能仅能在`私域机器人`使用
 
 <details><summary>伊蕾娜图片</summary>
@@ -191,8 +191,8 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 
 <details><summary>Mikan - 蜜柑计划</summary>
 
-> 蜜柑计划推送
-> 由于此功能消息比较长，不适合在`官方Bot`使用
+> 蜜柑计划推送  
+> 由于此功能消息比较长，不适合在`官方Bot`使用  
 > （可能会更新订阅推送功能）
 
 - `#来点新番`
