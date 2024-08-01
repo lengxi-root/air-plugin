@@ -169,7 +169,7 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 </details>
 
 <details><summary>全局转Ark</summary>  
-将云崽发送的消息转换为特定Ark再发送  
+将云崽发送的消息转换为特定Ark再发送   
 | 原内容 | 转换后 |
 | - | - |
 | 纯文本 | 文本卡片 |
