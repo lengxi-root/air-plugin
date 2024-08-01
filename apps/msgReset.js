@@ -15,10 +15,11 @@ export class msgReset extends plugin {
     let cdtime = 0//←请勿修改此配置
     let _cfg = await cfg.getConfig('air', 'config')
     let isopen = _cfg.msgReset
-    if (!_cfg.Ark_users.includes(this.e.self_id)) { isopen = false }
     if (!isopen) {
       return false
     } else {
+      if (!_cfg.Ark_users) { logger.info('未配置Ark白名单'); return false }
+      if (!_cfg.Ark_users.includes(this.e.self_id)) { return false }
       isopen = false;
       setTimeout(async () => {
         isopen = true;
