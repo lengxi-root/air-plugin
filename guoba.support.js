@@ -41,6 +41,16 @@ export function supportGuoba() {
           component: 'Switch'
         },
         {
+          field: 'Ark_users',
+          label: 'Ark白名单',
+          bottomHelpMessage: '填写Bot账号QQ号',
+          component: 'GTags',
+          componentProps: {
+            allowAdd: true,
+            allowDel: true,
+          },
+        },
+        {
           field: 'MsgUrl',
           label: '消息url配置',
           bottomHelpMessage: '非必填，请看README.md设置教程和搭建服务，如没有备案域名请进群953774387',

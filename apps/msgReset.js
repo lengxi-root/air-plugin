@@ -13,8 +13,9 @@ export class msgReset extends plugin {
   }
   async accept() {
     let cdtime = 0//←请勿修改此配置
-    let isopen = await cfg.getConfig('air','config')
-    isopen = isopen.msgReset
+    let _cfg = await cfg.getConfig('air', 'config')
+    let isopen = _cfg.msgReset
+    if (!_cfg.Ark_users.includes(this.e.self_id)) { isopen = false }
     if (!isopen) {
       return false
     } else {
@@ -38,23 +39,23 @@ export class msgReset extends plugin {
 async function makeMsg(msg) {
   const messages = [], button = []
   let message = [], reply
-    let msgurl = await cfg.getConfig('air', 'config')
-    msgurl = msgurl.MsgUrl
+  let msgurl = await cfg.getConfig('air', 'config')
+  msgurl = msgurl.MsgUrl
   for (let i of Array.isArray(msg) ? msg : [msg]) {
-    if (typeof i === "object"){
+    if (typeof i === "object") {
       i = { ...i }
-    }  else {
+    } else {
       i = { type: "text", text: Bot.String(i) }
-      }
-      // logger.info(i)
+    }
+    // logger.info(i)
     switch (i.type) {
       case 'text':
-      i.text = await textark(i.text)
+        i.text = await textark(i.text)
         // logger.info(i.text)
         return [i.text]
       case 'image':
-       if (Buffer.isBuffer(i.file)) i.file = await upimg(i.file, i)
-        return [tool.imgark('[图片]','','',`${msgurl}${i.file}`)]
+        if (Buffer.isBuffer(i.file)) i.file = await upimg(i.file, i)
+        return [tool.imgark('[图片]', '', '', `${msgurl}${i.file}`)]
     }
   }
   return msg
@@ -63,8 +64,8 @@ async function makeMsg(msg) {
 async function textark(text) {
   let msgs = [];
   let splitText = text.replace(/&amp;/g, "").split('\n');
-    let msgurl = await cfg.getConfig('air', 'config')
-    msgurl = msgurl.MsgUrl
+  let msgurl = await cfg.getConfig('air', 'config')
+  msgurl = msgurl.MsgUrl
   for (let i = 0; i < splitText.length; i++) {
     msgs.push(tool.textobj(splitText[i].replace(/\\n/g, "\n").replace(/https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g, "")))
     let link = splitText[i].match(/https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g);
@@ -77,22 +78,22 @@ async function textark(text) {
   return tool.textark('[AIR-Plugin]', msgs);
 }
 async function upimg(data) {
-    let formdata = new FormData();
-    formdata.append("file", new Blob([data]), {
-      filename: Date.now(),//上传的文件名
-      contentType: 'image/png',//文件类型标识
-    });
-    //改用花瓣图床了
-    let res = await fetch('https://api.huaban.com/upload', {
-      method: 'POST',
-      body: formdata,
-      headers: {
-        Cookie: "user_device_id=e3dd10685265414f93d3f04c15e74685; user_device_id_timestamp=1703324451174; Hm_lvt_d4a0e7c3cd16eb58a65472f40e7ee543=1703324453; Hm_up_d4a0e7c3cd16eb58a65472f40e7ee543=%7B%22version%22%3A%7B%22value%22%3A%222.0.0%22%2C%22scope%22%3A1%7D%2C%22has_plugin%22%3A%7B%22value%22%3A%220%22%2C%22scope%22%3A1%7D%7D; acw_tc=0a5cc92217033244502815684e63a715799ce171d75d2e2ddc555219656e78; sid=s%3AHdhYR_G6ofOS2LVR7ykAuIsKC6_iO5RM.O2CDlmHn1uxS1%2F55NV9wT85TqH83c6OKsZ2P1xtWzlw; Hm_lpvt_d4a0e7c3cd16eb58a65472f40e7ee543=1703324453; uid=38424159; gd_id=2026592737661326360"
-      }
+  let formdata = new FormData();
+  formdata.append("file", new Blob([data]), {
+    filename: Date.now(),//上传的文件名
+    contentType: 'image/png',//文件类型标识
+  });
+  //改用花瓣图床了
+  let res = await fetch('https://api.huaban.com/upload', {
+    method: 'POST',
+    body: formdata,
+    headers: {
+      Cookie: "user_device_id=e3dd10685265414f93d3f04c15e74685; user_device_id_timestamp=1703324451174; Hm_lvt_d4a0e7c3cd16eb58a65472f40e7ee543=1703324453; Hm_up_d4a0e7c3cd16eb58a65472f40e7ee543=%7B%22version%22%3A%7B%22value%22%3A%222.0.0%22%2C%22scope%22%3A1%7D%2C%22has_plugin%22%3A%7B%22value%22%3A%220%22%2C%22scope%22%3A1%7D%7D; acw_tc=0a5cc92217033244502815684e63a715799ce171d75d2e2ddc555219656e78; sid=s%3AHdhYR_G6ofOS2LVR7ykAuIsKC6_iO5RM.O2CDlmHn1uxS1%2F55NV9wT85TqH83c6OKsZ2P1xtWzlw; Hm_lpvt_d4a0e7c3cd16eb58a65472f40e7ee543=1703324453; uid=38424159; gd_id=2026592737661326360"
     }
-    )
-    res = await res.json()
-    const url = `https://gd-hbimg.huaban.com/${res.key}_fw1200`
-    console.log(url)
-    return url
   }
+  )
+  res = await res.json()
+  const url = `https://gd-hbimg.huaban.com/${res.key}_fw1200`
+  console.log(url)
+  return url
+}

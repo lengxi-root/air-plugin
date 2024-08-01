@@ -168,8 +168,8 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 
 </details>
 
-<details><summary>全局转Ark</summary>
-
+<details><summary>全局转Ark</summary>  
+将云崽发送的消息转换为特定Ark再发送  
 | 原内容 | 转换后 |
 | - | - |
 | 纯文本 | 文本卡片 |
@@ -178,14 +178,26 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 
 注意：正确配置消息url以体验完整版(不然发不出去
 
-> 使用锅巴插件
+<details><summary>使用锅巴配置-推荐</summary>
 
-在锅巴插件配置打开`全局转Ark`然后保存
+- 在锅巴插件配置页面找到`air插件`
+- 打开`全局转Ark`
+- 添加`Ark白名单`，填写BotQQ号
 
-> 手动配置
+</details>  
 
-- 找到`config/air.config.yaml`添加以下内容
-- `msgReset: true`
+<details><summary>手动配置</summary>
+
+- 在插件目录找到`config/air.config.yaml`使用文本编辑器打开
+- 添加以下内容  
+```
+msgReset: true
+Ark_users:
+  - 123456789
+
+```
+
+</details>  
 
 </details>
 
