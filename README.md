@@ -15,11 +15,9 @@
 
 ## 安装教程
 
-1. 准备：[Yunzai-Bot](https://github.com/TimeRainStarSky/Yunzai)
+## 1. 准备：[Yunzai-Bot](https://github.com/TimeRainStarSky/Yunzai)
 
-2. 选择安装方式
-
-在云崽根目录执行
+## 2. 选择安装方式，在云崽根目录执行
 
 > 使用Github安装
 ```
@@ -37,7 +35,7 @@ git clone -b main --depth=1 https://github.com/lengxi-root/air-plugin.git ./plug
 git clone -b main --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugins/air-plugin/
 ```
 
-3.安装依赖
+## 3.安装依赖
 
 > 以下方法任选其一，在air-plugin目录运行  
 > 先在云崽根目录执行`cd ./plugins/air-plugin`
@@ -70,7 +68,7 @@ npm i
 
 </details>
 
-4.使用VST QQ msg url 任选一种
+## 4.使用配置消息url，任选一种（可选）
 
 <details><summary>1.展开</summary>
 <br>
@@ -169,14 +167,16 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 </details>
 
 <details><summary>全局转Ark</summary>  
-将云崽发送的消息转换为特定Ark再发送   
+
+### 将云崽发送的消息转换为特定Ark再发送
+  
 | 原内容 | 转换后 |
 | - | - |
 | 纯文本 | 文本卡片 |
 | 带链接文本 | 文本链接卡片 |
 | 图片 | 大图卡片 |
 
-注意：正确配置消息url以体验完整版(不然发不出去
+> 注意：正确配置消息url以体验完整版(不然发不出去
 
 <details><summary>使用锅巴配置-推荐</summary>
 
