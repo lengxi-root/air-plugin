@@ -15,6 +15,7 @@ export function supportGuoba() {
       author: ['@冷曦', '@Ts霆生'],
       authorLink: ['https://github.com/lengxi-root/', 'https://github.com/Ts-yf'],
       link: 'https://github.com/lengxi-root/air-plugin',
+      isV4: true,
       isV3: true,
       isV2: false,
       description: `伊蕾娜api与全局Ark卡片消息转换`,
@@ -117,11 +118,11 @@ export function supportGuoba() {
         {
           field: 'Mikan.url',
           label: 'RSS地址',
-          bottomHelpMessage: 'RSS地址，默认为主站https://mikanani.me/',
+          bottomHelpMessage: 'RSS地址，默认为主站https://mikanani.me',
           component: 'Input',
           required: false,
           componentProps: {
-            placeholder: '最后无 / 号，如：https://mikanani.me',
+            placeholder: '如：https://mikanani.me',
           }
         }, 
         {

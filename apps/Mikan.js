@@ -32,7 +32,10 @@ export class Mikan extends plugin {//插件的一个函数组，可以创建多�
     let _cfg = await cfg.getConfig('air', 'config')
     if (!_cfg.Mikan) {
       await e.reply('检查蜜柑计划配置是否正确')
-      return true
+      return false
+    } else if (!_cfg.Mikan.token) {
+      await e.reply('未配置蜜柑计划RSSToken')
+      return false
     }
     let RSS = await getRss()
     logger.info(RSS)
@@ -45,8 +48,10 @@ async function getRss() {
   try {
     let _cfg = await cfg.getConfig('air', 'config')
     let response
+    let url = _cfg.Mikan.url || 'https://mikanani.me/';
+    if (!url.endsWith('/')) url = url + '/';
     if (_cfg.Mikan.withProxy) {
-      response = await fetchWithProxy(`${_cfg.Mikan.url}/RSS/MyBangumi?token=${_cfg.Mikan.token}`, {
+      response = await fetchWithProxy(`${url}RSS/MyBangumi?token=${_cfg.Mikan.token}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +60,7 @@ async function getRss() {
         timeout: 10000,
       })
     } else {
-      response = await fetch(`${_cfg.Mikan.url}/RSS/MyBangumi?token=${_cfg.Mikan.token}`, {
+      response = await fetch(`${url}RSS/MyBangumi?token=${_cfg.Mikan.token}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
