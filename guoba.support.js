@@ -52,6 +52,56 @@ export function supportGuoba() {
           },
         },
         {
+          field: 'Ark_set.Text_wx',
+          label: '文本卡片外显',
+          bottomHelpMessage: '非必填，在消息列表查看的文字',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '',
+          }
+        },
+        {
+          field: 'Ark_set.Text',
+          label: '文卡消息格式',
+          bottomHelpMessage: '非必填，文本卡片内容格式，自由搭配，可用变量：[消息内容]，[换行]，[时间]，[一言]',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '例子：BotName[换行][时间][换行][消息内容][换行][一言]',
+          }
+        },
+        {
+          field: 'Ark_set.img_wx',
+          label: '大图卡片外显',
+          bottomHelpMessage: '非必填，在消息列表查看的文字',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '留空则使用文本卡片标题',
+          }
+        },
+        {
+          field: 'Ark_set.img_bt',
+          label: '大图卡片标题',
+          bottomHelpMessage: '非必填，大图卡片大标题，可用变量：[时间]，[一言]',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '留空则不使用标题，不宜过长',
+          }
+        },
+        {
+          field: 'Ark_set.img_xbt',
+          label: '大图卡片小标题',
+          bottomHelpMessage: '非必填，大图卡片小标题，可用变量：[时间]，[一言]',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '留空则不使用小标题，不宜过长',
+          }
+        },
+        {
           field: 'MsgUrl',
           label: '消息url配置',
           bottomHelpMessage: '非必填，请看README.md设置教程和搭建服务，如没有备案域名请进群953774387',
@@ -124,7 +174,7 @@ export function supportGuoba() {
           componentProps: {
             placeholder: '如：https://mikanani.me',
           }
-        }, 
+        },
         {
           field: 'Mikan.token',
           label: '蜜柑订阅Token',

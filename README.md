@@ -5,7 +5,7 @@
 
 云崽机器人插件，主要适配官方机器人，搭配TRSS云崽的QQbot使用
 
-> 此分支对于私域机器人有特殊适配，公域机器人请选择另一个分支  
+> 此分支对于私域机器人有特殊适配，公域机器人请选择另一个分支（不使用Ark功能的话用这个分支也不是不行）   
 > 推荐使用锅巴插件来配置Air-plugin
 
 [![Stars](https://img.shields.io/github/stars/lengxi-root/air-plugin?color=yellow&label=收藏)](../../stargazers)  
@@ -176,34 +176,35 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 | 带链接文本 | 文本链接卡片 |
 | 图片 | 大图卡片 |
 
-> 注意：正确配置消息url以体验完整版(不然发不出去
+> ![Tip]
+> 正确配置消息url以体验完整版，否则无法发送包含链接的消息  
+> ```
 
-<details><summary>使用锅巴配置-推荐</summary>
+> 使用锅巴配置-推荐
 
 - 在锅巴插件配置页面找到`air插件`
 - 打开`全局转Ark`
 - 添加`Ark白名单`，填写BotQQ号
 
-</details>  
-
-<details><summary>手动配置</summary>
+> 手动配置
 
 - 在插件目录找到`config/air.config.yaml`使用文本编辑器打开
 - 添加以下内容  
+
 ```
+
 msgReset: true
 Ark_users:
   - 123456789
 
 ```
 
-</details>  
-
 </details>
 
 <details><summary>Mikan - 蜜柑计划</summary>
 
 > 蜜柑计划推送  
+> 用锅巴插件配置好Token后再用
 > 由于此功能消息比较长，不适合在`官方Bot`使用  
 > （可能会更新订阅推送功能）
 

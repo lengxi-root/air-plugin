@@ -38,25 +38,35 @@ export class msgReset extends plugin {
 
 // 消息处理区
 async function makeMsg(msg) {
-  const messages = [], button = []
-  let message = [], reply
-  let msgurl = await cfg.getConfig('air', 'config')
-  msgurl = msgurl.MsgUrl
+  let _cfg = await cfg.getConfig('air', 'config')
   for (let i of Array.isArray(msg) ? msg : [msg]) {
     if (typeof i === "object") {
       i = { ...i }
     } else {
       i = { type: "text", text: Bot.String(i) }
     }
-    // logger.info(i)
+    let now, time, ht, _text
     switch (i.type) {
       case 'text':
-        i.text = await textark(i.text)
+        now = new Date()
+        time = now.toLocaleString()
+        ht = await fetch("https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20");
+        ht = await ht.text();
+        if (typeof _cfg.Ark_set?.Text != 'undefined') _text = await _cfg.Ark_set.Text.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht).replace(/\[换行\]/g, '\n').replace(/\[消息内容\]/g, i.text)
+        i.text = await textark(_text || i.text)
         // logger.info(i.text)
         return [i.text]
       case 'image':
-        if (Buffer.isBuffer(i.file)) i.file = await upimg(i.file, i)
-        return [tool.imgark('[图片]', '', '', `${msgurl}${i.file}`)]
+        now = new Date()
+        time = now.toLocaleString()
+        ht = await fetch("https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20");
+        ht = await ht.text();
+        let wx, bt, xbt;
+        if (typeof _cfg.Ark_set?.img_wx != 'undefined') wx = _cfg.Ark_set.img_wx || _cfg.Ark_set.Text_wx;
+        if (typeof _cfg.Ark_set?.img_bt != 'undefined') bt = await _cfg.Ark_set.img_bt.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht);
+        if (typeof _cfg.Ark_set?.img_xbt != 'undefined') xbt = await _cfg.Ark_set.img_xbt.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht);
+        if (Buffer.isBuffer(i.file)) i.file = await upimg(i.file, i);
+        return [tool.imgark(wx || '[AIR-Plugin]', bt || '', xbt || '', `${i.file}`)]
     }
   }
   return msg
@@ -65,8 +75,9 @@ async function makeMsg(msg) {
 async function textark(text) {
   let msgs = [];
   let splitText = text.replace(/&amp;/g, "").split('\n');
-  let msgurl = await cfg.getConfig('air', 'config')
-  msgurl = msgurl.MsgUrl
+  let _cfg = await cfg.getConfig('air', 'config')
+  let msgurl = _cfg.MsgUrl0
+  let wx = _cfg.Ark_set?.Text_wx || '[AIR-Plugin]'
   for (let i = 0; i < splitText.length; i++) {
     msgs.push(tool.textobj(splitText[i].replace(/\\n/g, "\n").replace(/https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g, "")))
     let link = splitText[i].match(/https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g);
@@ -76,7 +87,7 @@ async function textark(text) {
       }
     }
   }
-  return tool.textark('[AIR-Plugin]', msgs);
+  return tool.textark(wx, msgs);
 }
 async function upimg(data) {
   let formdata = new FormData();
