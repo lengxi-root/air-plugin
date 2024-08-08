@@ -19,12 +19,16 @@ export class msgReset extends plugin {
     let isbtn = (_cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != ''))
     let self_id = this.e.self_id;
     if (isbtn && !isopen) {
-      let result = await old_reply(msgs, quote, data);
-      if (_cfg.button?.btn_users == null) { logger.info('未配置按钮白名单'); return result }
-      if (!_cfg.button?.btn_users.includes(self_id)) { return result }
-      await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data)
-      return result;
-    } else if (isopen)  {
+      this.e.reply = async function (msgs, quote, data) {
+        if (!msgs) return false;
+        if (!Array.isArray(msgs)) msgs = [msgs];
+        let result = await old_reply(msgs, quote, data);
+        if (_cfg.button?.btn_users == null) { logger.info('未配置按钮白名单'); return result }
+        if (!_cfg.button?.btn_users.includes(self_id)) { return result }
+        await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data)
+        return result;
+      }
+    } else if (isopen) {
       if (_cfg.Ark_users == null) { logger.info('未配置Ark白名单'); return false }
       if (!_cfg.Ark_users.includes(self_id)) { return false }
       isopen = false;
