@@ -15,22 +15,34 @@ export class msgReset extends plugin {
     let cdtime = 0//←请勿修改此配置
     let _cfg = await cfg.getConfig('air', 'config')
     let isopen = _cfg.msgReset
-    if (!isopen) {
-      return false
-    } else {
-      if (!_cfg.Ark_users) { logger.info('未配置Ark白名单'); return false }
-      if (!_cfg.Ark_users.includes(this.e.self_id)) { return false }
+    let old_reply = this.e.reply;
+    let isbtn = (_cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != ''))
+    let self_id = this.e.self_id;
+    if (isbtn && !isopen) {
+      let result = await old_reply(msgs, quote, data);
+      if (_cfg.button?.btn_users == null) { logger.info('未配置按钮白名单'); return result }
+      if (!_cfg.button?.btn_users.includes(self_id)) { return result }
+      await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data)
+      return result;
+    } else if (isopen)  {
+      if (_cfg.Ark_users == null) { logger.info('未配置Ark白名单'); return false }
+      if (!_cfg.Ark_users.includes(self_id)) { return false }
       isopen = false;
       setTimeout(async () => {
         isopen = true;
       }, cdtime);
+    } else {
+      return false
     }
-    let old_reply = this.e.reply;
+
     this.e.reply = async function (msgs, quote, data) {
       if (!msgs) return false;
       if (!Array.isArray(msgs)) msgs = [msgs];
       msgs = await makeMsg(msgs)
       let result = await old_reply(msgs, quote, data);
+      if (_cfg.button?.btn_users == null) { logger.info('未配置按钮白名单'); return result }
+      if (!_cfg.button?.btn_users.includes(self_id)) { return result }
+      if (isbtn) await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data)
       return result;
     }
   }

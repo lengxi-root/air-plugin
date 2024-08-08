@@ -113,6 +113,46 @@ export function supportGuoba() {
         },
         {
           component: 'Divider',
+          label: 'Markdown类设置'
+        },
+        {
+          field: 'button.open',
+          label: '开启按钮',
+          bottomHelpMessage: '在每一条消息最后发送按钮',
+          component: 'Switch'
+        },
+        {
+          field: 'button.btn_users',
+          label: '按钮白名单',
+          bottomHelpMessage: '填写Bot账号QQ号，只能填一个（懒得弄对应了）',
+          component: 'GTags',
+          componentProps: {
+            allowAdd: true,
+            allowDel: true,
+          },
+        },
+        {
+          field: 'button.template',
+          label: '按钮模板id',
+          bottomHelpMessage: '按钮的模板id',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '只能填一个',
+          }
+        }, 
+        {
+          field: 'markdown.template',
+          label: 'Markdown模板id',
+          bottomHelpMessage: 'DAU2000以上的机器人申请md资格可用（本插件暂不支持）',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '为什么不支持模板md？因为插件作者没有DAU2000的机器人来测试☝️🤓',
+          }
+        },
+        {
+          component: 'Divider',
           label: '智能体聊天设置'
         },
         {
