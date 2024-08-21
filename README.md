@@ -221,11 +221,19 @@ Ark_users:
 
 ## 联系方式
 
-- 班级群(bushi： [632910692](https://jq.qq.com/?_wv=1027&k=A2f9grK0)
-- url配置发送申请群(shi?： [953774387](https://qm.qq.com/q/U0aaXRCzce)
+- 班级群(New： [687976465](https://qm.qq.com/q/PCWuy2zV6u)
+- url配置发送申请群： [953774387](https://qm.qq.com/q/U0aaXRCzce)
 
 ### 开发者 & 赞助支持
 
 - 冷曦：[GitHub](https://github.com/lengxi-root) | [Gitee](https://gitee.com/lengxihddj) |  [QQ：2218872014](https://qm.qq.com/q/44OFS6WBKM)
 - TS沂沨：[GitHub](https://github.com/Ts-yf) | [Gitee](https://gitee.com/Ts-yf) |  [QQ：1918530969](https://qm.qq.com/q/l7nDOOUQL)
 
+
+### QQ机器人友链
+>  欢迎广大开发者交换友链  
+
+| Robot | 创建人 | 功能&介绍 |
+| - | - | - |
+| [TK伊蕾娜](https://qun.qq.com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889045760) | [冷曦](https://qm.qq.com/q/44OFS6WBKM) | 定位：核心为API触发型图库BOT，拓展其他API功能。 |
+| [XxxXBot](https://qun.qq.com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889042293) | [TS沂沨](https://qm.qq.com/q/l7nDOOUQL) | 杂交宝可梦，2048，象棋，葫芦侠美图，米游查询工具等，更多神秘指令等你探索。(可定制功能) |
