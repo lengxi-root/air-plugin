@@ -25,6 +25,20 @@ export function supportGuoba() {
     },
     configInfo: {
       schemas: [
+          {
+          component: 'Divider',
+          label: 'TTS语音转换'
+        },
+           {
+          field: 'tts_token',
+          label: 'tts-token设置',
+          bottomHelpMessage: '内置共用40w字token，用光如果还需要联系2218872014',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '输入32位token',
+          }
+        },
         {
           component: 'Divider',
           label: 'Ark卡片设置'
@@ -111,6 +125,7 @@ export function supportGuoba() {
             placeholder: '如：https://vst.qqmsg.cn/url?url=',
           }
         },
+         
         {
           component: 'Divider',
           label: 'Markdown类设置'

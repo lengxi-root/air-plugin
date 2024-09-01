@@ -20,6 +20,7 @@
   "author": "@TS霆生，@冷曦",
   "license": "AFL-3.0",
   "dependencies": {
-    "cheerio": "^1.0.0-rc.12"
+    "cheerio": "^1.0.0-rc.12",
+    "axios": "^1.7.2"
   }
 }
