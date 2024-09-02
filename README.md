@@ -37,8 +37,7 @@ git clone -b main --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugin
 
 ## 3.安装依赖
 
-> 以下方法任选其一，在air-plugin目录运行  
-> 先在云崽根目录执行`cd ./plugins/air-plugin`
+> yunzai根目录执行
 <details><summary>1.使用pnpm - 推荐</summary>
 
 ```
@@ -59,13 +58,6 @@ npm i yarn -g
 ```
 yarn
 ```
-</details>
-<details><summary>3.使用npm</summary>
-
-```
-npm i
-```
-
 </details>
 
 ## 4.使用配置消息url，任选一种（可选）
@@ -109,27 +101,6 @@ https://你的网站域名/url?url=
 
 </details>
 
-<details><summary>3.展开-暂时无法使用</summary>
-<br>
-  
-带上自己的机器人appid进入该网站
-```
-https://url.oxoll.cn?appid=你的appid
-```
-
-进入机器人后台把下方内容输入进 消息url配置
-```
-url.oxoll.cn/url
-```
-
-然后在锅巴设置里 把下方内容输入到 消息url配置
-```
-https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
-```
-记得appid提前换成自己机器人的appid
-
-</details>
-
 
 ## 使用教程
 
@@ -153,6 +124,10 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 [![伊蕾娜](https://gd-hbimg.huaban.com/bf14ef2e02c8c14adb5f19d6a0073e9c3c9814eb95df9-LqnarO)](https://github.com/lengxi-root/air-plugin)
 
 </details>
+<details><summary>TTS音色转换（2000+二次元音色）</summary>
+  
+- 发送air菜单查看指令
+ </details>
 
 <details><summary>QQ智能体</summary>
 
@@ -167,6 +142,7 @@ https://url.oxoll.cn/url?qqbotid=需要替换的appid&url=
 </details>
 
 <details><summary>全局转Ark</summary>  
+
 
 ### 将云崽发送的消息转换为特定Ark再发送
   
@@ -235,5 +211,5 @@ Ark_users:
 
 | Robot | 创建人 | 功能&介绍 |
 | - | - | - |
-| [TK伊蕾娜](https://qun.qq.com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889045760) | [冷曦](https://qm.qq.com/q/44OFS6WBKM) | 定位：核心为API触发型图库BOT，拓展其他API功能。 |
+| [TK伊蕾娜](https://qun.qq.com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889045760) | [冷曦](https://qm.qq.com/q/44OFS6WBKM) | 定位：核心为API触发型图库BOT，TTS转换与其他拓展API功能。 |
 | [XxxXBot](https://qun.qq.com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889042293) | [TS沂沨](https://qm.qq.com/q/l7nDOOUQL) | 杂交宝可梦，2048，象棋，葫芦侠美图，米游查询工具等，更多神秘指令等你探索。(可定制功能) |
