@@ -9,32 +9,19 @@ export class help extends plugin {
       name: 'air帮助',
       priority: -50,
       rule: [
-        /*{
-          reg: /^#(air|AIR)版本$/,
-          fnc: 'version'
-        },*/
+          
         {
-          reg: /^#(air|AIR)(.*)帮助$/,
+          reg: "^(#|/)?(AIR|air)(菜单|帮助)$",
           fnc: 'help'
         }
       ]
     })
   }
 
-  /*async version (e) {
-    return await Render.render('help/version-info', {
-      currentVersion: Version.version,
-      changelogs: Version.changelogs,
-      name: 'Lain',
-      elem: 'cryo'
-    }, { e, scale: 1.2 })
-  }*/
-
   async help (e) {
-    if (!e.msg.match(/^#(air|AIR)帮助$/)) {
+    if (!e.msg.match(/^#?(air|AIR)(帮助|菜单)$/)) {
       return await this.reply(e.msg.replace(/帮助/, '菜单'))
-    }
-    let helpGroup = []
+    }    let helpGroup = []
     _.forEach(helpList, (group) => {
       _.forEach(group.list, (help) => {
         let icon = help.icon * 1
