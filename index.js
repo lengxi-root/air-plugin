@@ -1,3 +1,4 @@
+import Image from 'ascii-art-image';
 import fs from 'node:fs'
 import { dirPath } from './lib/dir.js'
 //输出提示
@@ -31,6 +32,13 @@ for (let i in files) {
   }
   apps[name] = ret[i].value[Object.keys(ret[i].value)[0]]
 }
+    let image = new Image({
+      filepath: `${dirPath}/resources/help/imgs/start.png`,
+      alphabet: 'variant1',
+    });
+    await image.write(async function (err, data) {
+      logger.info("\n" + data);
+    })
 
 logger.info(logger.green("- 加载 air-plugin 完成"))
 export { apps }
