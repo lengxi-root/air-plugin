@@ -25,20 +25,6 @@ export function supportGuoba() {
     },
     configInfo: {
       schemas: [
-          {
-          component: 'Divider',
-          label: 'TTS语音转换'
-        },
-           {
-          field: 'tts_token',
-          label: 'tts-token设置',
-          bottomHelpMessage: '内置共用40w字token，用光如果还需要联系2218872014',
-          component: 'Input',
-          required: false,
-          componentProps: {
-            placeholder: '输入32位token',
-          }
-        },
         {
           component: 'Divider',
           label: 'Ark卡片设置'
@@ -125,7 +111,6 @@ export function supportGuoba() {
             placeholder: '如：https://vst.qqmsg.cn/url?url=',
           }
         },
-         
         {
           component: 'Divider',
           label: 'Markdown类设置'
@@ -165,6 +150,46 @@ export function supportGuoba() {
           componentProps: {
             placeholder: '为什么不支持模板md？因为插件作者没有DAU2000的机器人来测试☝️🤓',
           }
+        },
+        {
+          component: 'Divider',
+          label: '官机代发设置'
+        },
+        {
+          field: 'msgServer.open',
+          label: '官机代发模式',
+          bottomHelpMessage: '使用官机代发消息，仅群消息可用',
+          component: 'Switch'
+        },
+        {
+          field: 'msgServer.userbot',
+          label: '代发数据账号',
+          bottomHelpMessage: '用来接收消息数据的账号',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '填入QQ号',
+          }
+        },
+        {
+          field: 'msgServer.robot',
+          label: '代发发送账号',
+          bottomHelpMessage: '用来发送息数据的账号',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '填入QQ号',
+          }
+        },
+        {
+          field: 'msgServer.group',
+          label: '代发群白名单',
+          bottomHelpMessage: '填写真·QQ群号',
+          component: 'GTags',
+          componentProps: {
+            allowAdd: true,
+            allowDel: true,
+          },
         },
         {
           component: 'Divider',

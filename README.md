@@ -128,7 +128,16 @@ https://你的网站域名/url?url=
   
 - 发送air菜单查看指令
  </details>
+<details><summary>官机代发</summary>
+  
+- 使用锅巴插件配置 官机代发 相关设置即可
+- 使用数据账号接收消息并使用官方机器人发送消息
+- 免去频繁艾特官方机器人的步骤
+- 第一版，有不少bug，严重恶性bug及时停止插件并进群反馈
+> 在Ark白名单内加入数据账号QQ即可使用Ark代发
+[![伊蕾娜](https://gd-hbimg.huaban.com/8e68ecad9047f2c8a4a20926dd19fcac59016b779b42-1jnULH)](https://github.com/lengxi-root/air-plugin)
 
+ </details>
 <details><summary>QQ智能体</summary>
 
 - chat功能需要在[腾讯元器](https://yuanqi.tencent.com/)申请智能体
