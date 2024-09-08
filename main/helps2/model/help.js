@@ -36,21 +36,6 @@ export const helpList = [
     ]
   },
   {
-    group: 'Mikan-蜜柑计划（需要在锅巴配置蜜柑计划的token，不适合官方机器人）',
-    list: [
-      {
-        icon: 2,
-        title: '/来点新番',
-        desc: '新季度番剧'
-      },
-      {
-        icon: 5,
-        title: '/蜜柑推送',
-        desc: '蜜柑计划推送'
-      }
-    ]
-  },
-  {
     group: 'TTS语音转换（所有人共用40w字token，用完可进入爱发电购买token）',
     list: [
       {

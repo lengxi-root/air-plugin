@@ -37,26 +37,18 @@ git clone -b main --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugin
 
 ## 3.安装依赖
 
-> yunzai根目录执行
-<details><summary>1.使用pnpm - 推荐</summary>
+> air-plugin目录下执行
 
-```
-# 安装pnpm，已安装可跳过（应该都安装了吧，不安装怎么运行云崽）
-npm i pnpm -g
-```
-```
-pnpm i
-```
+<details><summary>使用yarn</summary>
 
-</details>
-<details><summary>2.使用yarn - 速度快</summary>
+> 不推荐npm，pnpm！
 
 ```
 # 安装yarn，已安装可跳过
-npm i yarn -g
+pnpm add yarn
 ```
 ```
-yarn
+pnpm yarn
 ```
 </details>
 
@@ -181,19 +173,6 @@ Ark_users:
   - 123456789
 
 ```
-
-</details>
-
-<details><summary>Mikan - 蜜柑计划</summary>
-
-> 蜜柑计划推送  
-> 用锅巴插件配置好Token后再用
-> 由于此功能消息比较长，不适合在`官方Bot`使用  
-> （可能会更新订阅推送功能）
-
-- `#来点新番`
-- `#蜜柑推送`
-- （功能是一样的）
 
 </details>
 

@@ -27,6 +27,20 @@ export function supportGuoba() {
       schemas: [
         {
           component: 'Divider',
+          label: 'TTS语音转换'
+        },
+           {
+          field: 'tts_token',
+          label: 'tts-token设置',
+          bottomHelpMessage: '内置共用40w字token，用光如果还需要联系2218872014',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '输入32位token',
+          }
+        },
+        {
+          component: 'Divider',
           label: 'Ark卡片设置'
         },
         {
@@ -223,46 +237,6 @@ export function supportGuoba() {
           required: false,
           componentProps: {
             placeholder: '请输入智能体token',
-          }
-        },
-        {
-          component: 'Divider',
-          label: 'Mikan-蜜柑计划'
-        },
-        {
-          field: 'Mikan.withProxy',
-          label: '使用代理',
-          bottomHelpMessage: '是否使用代理访问',
-          component: 'Switch'
-        },
-        {
-          field: 'Mikan.Proxy',
-          label: '代理地址',
-          bottomHelpMessage: '使用镜像站请修改下面RSS地址',
-          component: 'Input',
-          required: false,
-          componentProps: {
-            placeholder: '使用代理访问的地址',
-          }
-        },
-        {
-          field: 'Mikan.url',
-          label: 'RSS地址',
-          bottomHelpMessage: 'RSS地址，默认为主站https://mikanani.me',
-          component: 'Input',
-          required: false,
-          componentProps: {
-            placeholder: '如：https://mikanani.me',
-          }
-        },
-        {
-          field: 'Mikan.token',
-          label: '蜜柑订阅Token',
-          bottomHelpMessage: '自行获取RSS订阅Token，“%2b”替换为“+”，“%3d%3d”替换为“==”',
-          component: 'Input',
-          required: false,
-          componentProps: {
-            placeholder: 'https://mikanani.me/RSS/MyBangumi?token=后面的内容',
           }
         }
       ],
