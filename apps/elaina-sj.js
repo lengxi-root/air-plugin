@@ -28,7 +28,7 @@ export class wallpaper extends plugin {
         let Ark = config.Ark
         let msgurl = config.MsgUrl
         console.log("用户命令：", e.msg);
-        let url = `https://vst.qqmsg.cn/api/esj`;
+        let url = `https://i.elaina.vin/api/esj`;
         let res = await fetch(url).catch((err) => logger.error(err));
 
         // 提取图片地址
@@ -58,7 +58,7 @@ export class wallpaper extends plugin {
         let config = await cfg.getConfig('air', 'config')
         let Ark = config.Ark
         let msgurl = config.MsgUrl
-        let url = `https://vst.qqmsg.cn/api/ebq`;
+        let url = `https://i.laina.vin/api/ebq`;
         let res = await fetch(url).catch((err) => logger.error(err));
 
         // 提取图片地址

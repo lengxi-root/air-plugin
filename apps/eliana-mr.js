@@ -69,7 +69,7 @@ export class wallpaper extends plugin {
             }
 
             // 如果当天未获取过，进行新的获取
-            const response = await fetch('https://vst.qqmsg.cn/api/emr', {
+            const response = await fetch('https://i.elaina.vin/api/emr', {
                 redirect: 'follow'
             });
             if (!response.ok) {
