@@ -44,35 +44,17 @@ git clone -b main --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugin
 > 不推荐npm，pnpm！
 
 ```
-# 安装yarn，已安装可跳过
-pnpm add yarn
+# 安装yarn，可使用npm，pnpm等包管理器安装，已安装可跳过
+pnpm add yarn 
 ```
 ```
 pnpm yarn
 ```
 </details>
 
-## 4.使用配置消息url，任选一种（可选）
+## 4.使用配置消息url（可选）
 
-<details><summary>1.展开</summary>
-<br>
-  
-请进入群聊953774387 发送下方消息 appid换成自己机器人的appid
-```
-#校验appid
-```
-
-进行创建你机器人appid的校验文件，进入机器人后台把
-```
-vst.qqmsg.cn/url
-```
-输入进 消息url配置 然后在锅巴设置里 把下面内容输入到 消息url配置
-```
-https://vst.qqmsg.cn/url?url=
-```
-
-</details>
-<details><summary>2.展开</summary>
+<details><summary>点击展开</summary>
 <br>
   
 注意：需要备案域名和ssl证书<br>
@@ -141,6 +123,27 @@ https://你的网站域名/url?url=
 [![伊蕾娜](https://gd-hbimg.huaban.com/491c06d1eac04b4a4e991bc8856ed7d1b40213ce51cad-KqdVKB)](https://github.com/lengxi-root/air-plugin)
 
 </details>
+<details><summary>全局转换模板md</summary>  
+
+
+### 将云崽发送的消息转换为特定模板md再发送
+  
+| 原内容 | 转换后 |
+| - | - |
+| 纯文本 | 文字模板md |
+| 纯图片 | 图片模板md |
+| 图文混排 | 图文模板md |
+
+###### 正确配置消息url与图床cookie以体验完整版，否则无法发送包含链接，图片的消息  
+
+> 使用锅巴配置
+
+- 在锅巴插件配置页面找到`air插件`
+- 配置好`Markdown类设置`
+- 添加`markdown白名单`，填写BotQQ号
+
+
+</details>
 
 <details><summary>全局转Ark</summary>  
 
@@ -153,7 +156,7 @@ https://你的网站域名/url?url=
 | 带链接文本 | 文本链接卡片 |
 | 图片 | 大图卡片 |
 
-###### 正确配置消息url以体验完整版，否则无法发送包含链接的消息  
+###### 正确配置消息url与图床cookie以体验完整版，否则无法发送包含链接，图片的消息  
 
 > 使用锅巴配置-推荐
 
@@ -186,7 +189,7 @@ Ark_users:
 ## 联系方式
 
 - 班级群(New： [687976465](https://qm.qq.com/q/PCWuy2zV6u)
-- url配置发送申请群： [953774387](https://qm.qq.com/q/U0aaXRCzce)
+- url配置咨询群： [953774387](https://qm.qq.com/q/U0aaXRCzce)
 
 ### 开发者 & 赞助支持
 

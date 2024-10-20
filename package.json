@@ -20,8 +20,6 @@
   "author": "@TS霆生，@冷曦",
   "license": "AFL-3.0",
   "dependencies": {
-    "ansi_up": "^6.0.2",
-    "ascii-art": "^2.8.5",
     "axios": "^1.7.2",
     "cheerio": "^1.0.0-rc.12",
     "iconv-lite": "^0.6.3",

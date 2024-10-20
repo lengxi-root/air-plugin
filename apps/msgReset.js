@@ -1,7 +1,9 @@
 import cfg from '../lib/xxCfg.js';
 import fetch from 'node-fetch'
 import { tool } from '../lib/tool.js';
-import event from '../lib/msgServerEvent.js'
+import event from '../lib/msgServerEvent.js';
+import imageSize from 'image-size';
+import axios from 'axios';
 
 export class msgReset extends plugin {
   constructor() {
@@ -25,6 +27,7 @@ export class msgReset extends plugin {
     let ub = _cfg.msgServer?.userbot
     let mg = _cfg.msgServer?.group
     let msgServer = _cfg.msgServer?.open
+    let markdown = (_cfg.markdown?.text_open || _cfg.markdown?.img_open || _cfg.markdown?.mix_open)
     let old_reply = this.e.reply;
     let isbtn = (_cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != ''))
     msgServer = (ub == this.e.self_id) && msgServer && (this.e.isGroup == true)
@@ -32,7 +35,7 @@ export class msgReset extends plugin {
     let group_id = this.e.group?.group_id;
     if (!mg?.includes(String(group_id))) { msgServer = false }
     if (!_cfg.Ark_users?.includes(String(self_id))) { isopen = false }
-    if (isbtn && isopen == false) {
+    if (isbtn && isopen == false && markdown == false) {
       this.e.reply = async function (msgs, quote, data) {
         if (!msgs) return false;
         if (!Array.isArray(msgs)) msgs = [msgs];
@@ -42,7 +45,7 @@ export class msgReset extends plugin {
         } else {
           result = await old_reply(msgs, quote, data);
         }
-        if (!_cfg.button?.btn_users.includes(String(self_id))) { return result }
+        if (_cfg.button?.btn_users.includes(String(self_id))) { return result }
         await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data)
         return result;
       }
@@ -58,13 +61,32 @@ export class msgReset extends plugin {
           result = await old_reply(msgs, quote, data);
         }
         if (_cfg.button?.btn_users == null) { logger.info('未配置按钮白名单'); return result }
-        if (!_cfg.button?.btn_users.includes(self_id)) { return result }
+        if (_cfg.button?.btn_users.includes(self_id)) { return result }
         if (isbtn) await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data)
         return result;
       }
+    } else if (markdown) {
+      this.e.reply = async function (msgs, quote, data) {
+        if (!msgs) return false;
+        if (!Array.isArray(msgs)) msgs = [msgs];
+        msgs = await makeMd(msgs)
+        logger.info(_cfg.button?.btn_users.includes(String(self_id)))
+        if (_cfg.button?.btn_users.includes(String(self_id))) { return old_reply(msgs, quote, data) }
+        let result
+        if (msgServer) {
+          result = await send(group_id, msgs, quote, data)
+        } else {
+          result = await old_reply(msgs, quote, data);
+        }
+        return result
+      }
     } else if (msgServer) {
-      result = await send(group_id, msgs, quote, data)
-      return result
+      this.e.reply = async function (msgs, quote, data) {
+        if (!msgs) return false;
+        if (!Array.isArray(msgs)) msgs = [msgs];
+        let result = await send(group_id, msgs, quote, data)
+        return result
+      }
     } else {
       return false
     }
@@ -129,7 +151,80 @@ async function makeMsg(msg) {
   }
   return msg
 }
+async function makeMd(msg) {
+  let _cfg = await cfg.getConfig('air', 'config')
+  let text_open = (_cfg.markdown?.text_open && typeof _cfg.markdown?.text_id != 'undefined') || false
+  let img_open = (_cfg.markdown?.img_open && typeof _cfg.markdown?.img_id != 'undefined') || false
+  let mix_open = (_cfg.markdown?.mix_open && typeof _cfg.markdown?.mix_id != 'undefined') || false
+  let button_open = (_cfg.button?.open && typeof _cfg.button?.template != 'undefined') || false
+  let isbtn = (_cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != ''))
+  let msgs = []
+  let params = []
+  for (let i of Array.isArray(msg) ? msg : [msg]) {
+    if (typeof i === "object") {
+      i = { ...i }
+    } else {
+      i = { type: "text", text: Bot.String(i) }
+    }
 
+    let md = []
+    logger.info(0, i.type)
+    switch (i.type) {
+      case 'text':
+        if (!mix_open) {
+          params.push({
+            "key": _cfg.markdown?.text_a,
+            "values": [i.text.replace(/\n/g, '\r')]
+          })
+          md.push(segment.markdown({ custom_template_id: _cfg.markdown?.text_id, params }))
+          if (isbtn) md.push(segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template }))
+          return md
+        }
+        params.push({
+          "key": _cfg.markdown?.mix_text,
+          "values": [i.text.replace(/\n/g, '\r')]
+        })
+        break
+      case 'image':
+        logger.info(1, i.file)
+        let { width, height } = await getImageSize(i.file)
+        if (Buffer.isBuffer(i.file)) i.file = await upimg(i.file);
+        logger.info(2,i.file)
+        if (i.file?.includes('huaban.com') == false) i.file = await upimg(i.file);
+        logger.info(3, i.file)
+        i.file = `${_cfg.MsgUrl}${i.file}`
+        logger.info(4, i.file)
+        let px = `[AIR-Plugin] #${width}px #${height}px`
+        if (!mix_open) {
+          params.push({
+            "key": _cfg.markdown?.img_px,
+            "values": [px]
+          })
+          params.push({
+            "key": _cfg.markdown?.img_url,
+            "values": [i.file]
+          })
+          md.push(segment.markdown({ custom_template_id: _cfg.markdown?.text_id, params }))
+          if (isbtn) md.push(segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template }))
+          return md
+        }
+        params.push({
+          "key": _cfg.markdown?.mix_px,
+          "values": [px]
+        })
+        params.push({
+          "key": _cfg.markdown?.mix_url,
+          "values": [i.file]
+        })
+        break
+    }
+  }
+  logger.info(5, params)
+  msgs.push(segment.markdown({ custom_template_id: _cfg.markdown?.mix_id, params }))
+  if (isbtn) msgs.push(segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template }))
+    if(msgs.length == 0) msgs = msg
+  return msgs
+}
 async function textark(text) {
   let msgs = [];
   let splitText = text.replace(/&amp;/g, "").split('\n');
@@ -149,6 +244,7 @@ async function textark(text) {
 }
 async function upimg(data) {
   let formdata = new FormData();
+  let _cfg = await cfg.getConfig('air', 'config')
   formdata.append("file", new Blob([data]), {
     filename: Date.now(),//上传的文件名
     contentType: 'image/png',//文件类型标识
@@ -158,7 +254,7 @@ async function upimg(data) {
     method: 'POST',
     body: formdata,
     headers: {
-      Cookie: "user_device_id=e3dd10685265414f93d3f04c15e74685; user_device_id_timestamp=1703324451174; Hm_lvt_d4a0e7c3cd16eb58a65472f40e7ee543=1703324453; Hm_up_d4a0e7c3cd16eb58a65472f40e7ee543=%7B%22version%22%3A%7B%22value%22%3A%222.0.0%22%2C%22scope%22%3A1%7D%2C%22has_plugin%22%3A%7B%22value%22%3A%220%22%2C%22scope%22%3A1%7D%7D; acw_tc=0a5cc92217033244502815684e63a715799ce171d75d2e2ddc555219656e78; sid=s%3AHdhYR_G6ofOS2LVR7ykAuIsKC6_iO5RM.O2CDlmHn1uxS1%2F55NV9wT85TqH83c6OKsZ2P1xtWzlw; Hm_lpvt_d4a0e7c3cd16eb58a65472f40e7ee543=1703324453; uid=38424159; gd_id=2026592737661326360"
+      Cookie: _cfg.imgck
     }
   }
   )
@@ -194,7 +290,7 @@ async function getmsgid(group, msgs, quote, data) {
   ds[group] = {
     sign: 0
   }
-  await cfg.saveSet("air", "msgServer", "config", ds);
+  cfg.saveSet("air", "msgServer", "config", ds);
   let groupobj = Bot[ub].pickGroup(group)
   let mid = (await groupobj.sendMsg([segment.at(robot), " msgServer"])).message_id
   await sleep(2024)
@@ -216,4 +312,15 @@ async function getmsgid(group, msgs, quote, data) {
 }
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
+}
+async function getImageSize(url) {
+  if (Buffer.isBuffer(url)) {
+    return imageSize(new Uint8Array(url));
+  } else {
+    // let res = await axios.get(url, { responseType: 'arrayBuffer' })
+    let res = await fetch(url)
+    res = await res.arrayBuffer()
+    res = new Uint8Array(res)
+    return imageSize(res);
+  }
 }
