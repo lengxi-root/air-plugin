@@ -70,7 +70,6 @@ export class msgReset extends plugin {
         if (!msgs) return false;
         if (!Array.isArray(msgs)) msgs = [msgs];
         msgs = await makeMd(msgs)
-        logger.info(_cfg.button?.btn_users.includes(String(self_id)))
         if (_cfg.button?.btn_users.includes(String(self_id))) { return old_reply(msgs, quote, data) }
         let result
         if (msgServer) {
@@ -134,7 +133,6 @@ async function makeMsg(msg) {
         ht = await ht.text();
         if (typeof _cfg.Ark_set?.Text != 'undefined') _text = await _cfg.Ark_set.Text.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht).replace(/\[换行\]/g, '\n').replace(/\[消息内容\]/g, i.text)
         i.text = await textark(_text || i.text)
-        // logger.info(i.text)
         return [i.text]
       case 'image':
         now = new Date()
@@ -153,13 +151,11 @@ async function makeMsg(msg) {
 }
 async function makeMd(msg) {
   let _cfg = await cfg.getConfig('air', 'config')
-  let text_open = (_cfg.markdown?.text_open && typeof _cfg.markdown?.text_id != 'undefined') || false
-  let img_open = (_cfg.markdown?.img_open && typeof _cfg.markdown?.img_id != 'undefined') || false
   let mix_open = (_cfg.markdown?.mix_open && typeof _cfg.markdown?.mix_id != 'undefined') || false
-  let button_open = (_cfg.button?.open && typeof _cfg.button?.template != 'undefined') || false
   let isbtn = (_cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != ''))
   let msgs = []
   let params = []
+  let btn = []
   for (let i of Array.isArray(msg) ? msg : [msg]) {
     if (typeof i === "object") {
       i = { ...i }
@@ -186,14 +182,10 @@ async function makeMd(msg) {
         })
         break
       case 'image':
-        logger.info(1, i.file)
         let { width, height } = await getImageSize(i.file)
         if (Buffer.isBuffer(i.file)) i.file = await upimg(i.file);
-        logger.info(2,i.file)
         if (i.file?.includes('huaban.com') == false) i.file = await upimg(i.file);
-        logger.info(3, i.file)
         i.file = `${_cfg.MsgUrl}${i.file}`
-        logger.info(4, i.file)
         let px = `[AIR-Plugin] #${width}px #${height}px`
         if (!mix_open) {
           params.push({
@@ -217,12 +209,47 @@ async function makeMd(msg) {
           "values": [i.file]
         })
         break
+      case 'keyboard':
+        if (i.id) {
+          btn.push(segment.raw({ 'type': 'keyboard', 'id': i.id }))
+        } else {
+          btn.push(segment.raw({ 'type': 'keyboard', ...i.data }))
+        }
+        break
+      case 'button':
+        if (i.id) {
+          btn.push(segment.raw({ 'type': 'keyboard', 'id': i.id }))
+        } else {
+          btn.push(segment.raw({ 'type': 'keyboard', ...i.data }))
+        }
+        break
+      case 'raw':
+        switch (i.data.type) {
+          case 'keyboard':
+            if (i.data.id) {
+              btn.push(segment.raw({ 'type': 'keyboard', 'id': i.data.id }))
+            } else {
+              btn.push(segment.raw({ 'type': 'keyboard', ...i.data.data }))
+            }
+            break
+          case 'button':
+            if (i.data.id) {
+              btn.push(segment.raw({ 'type': 'keyboard', 'id': i.data.id }))
+            } else {
+              btn.push(segment.raw({ 'type': 'keyboard', ...i.data.data }))
+            }
+            break
+        }
+        break
     }
   }
-  logger.info(5, params)
   msgs.push(segment.markdown({ custom_template_id: _cfg.markdown?.mix_id, params }))
-  if (isbtn) msgs.push(segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template }))
-    if(msgs.length == 0) msgs = msg
+  if (btn.length == 0 && isbtn == true) {
+    msgs.push(segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template }))
+  } else {
+    msgs.push(...btn)
+  }
+  if (msgs.length == 0) msgs = msg
   return msgs
 }
 async function textark(text) {
@@ -317,7 +344,6 @@ async function getImageSize(url) {
   if (Buffer.isBuffer(url)) {
     return imageSize(new Uint8Array(url));
   } else {
-    // let res = await axios.get(url, { responseType: 'arrayBuffer' })
     let res = await fetch(url)
     res = await res.arrayBuffer()
     res = new Uint8Array(res)
