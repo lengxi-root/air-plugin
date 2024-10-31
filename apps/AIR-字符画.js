@@ -1,15 +1,6 @@
-import Image from 'ascii-art-image';
-import { pipeline } from 'stream'
-import { promisify } from 'util'
-import fetch from 'node-fetch'
-import fs from 'node:fs'
-import path from 'node:path'
-import { pluginPath } from '../lib/dir.js'
-import { AnsiUp } from "ansi_up";
-import puppeteer from "../../../lib/puppeteer/puppeteer.js";
-
-const tempPath = path.join(process.cwd(), "./temp/Air/zfh.png");
-const htmlPath = path.join(pluginPath, "./resources/zfh/AIR-字符画.html");
+import axios from "axios"
+import _ from "lodash"
+const url = "http://datukuai.top:2233/memes/charpic"
 export class zifuhua extends plugin {
   constructor() {
     super({
@@ -33,7 +24,7 @@ export class zifuhua extends plugin {
       return
     }
     e = this.e
-    main(e)
+    main2(e)
 
   }
 
@@ -50,60 +41,37 @@ export class zifuhua extends plugin {
       return
     }
     e = this.e
-    main(e)
+    main2(e)
 
     this.finish('_zfh')
   }
 
 
 }
-async function downFile(fileUrl, savePath, param = {}) {
-  try {
-    mkdirs(path.dirname(savePath))
-    logger.debug(`[下载文件] ${fileUrl}`)
-    const response = await fetch(fileUrl, param)
-    const streamPipeline = promisify(pipeline)
-    await streamPipeline(response.body, fs.createWriteStream(savePath))
-    return true
-  } catch (err) {
-    logger.error(`下载文件错误：${err}`)
-    return false
-  }
-}
+async function main2(e) {
+  const id = e.at || e.user_id
+  const pick = await e.group?.pickMember?.(id) || await e.bot?.pickFriend?.(id)
+  const info = await pick?.getInfo?.() || pick?.info || pick
+  const name = info?.card || info?.nickname
+  const formData = new FormData()
+  const imgRes = await axios.get(e.img[0], { responseType: 'arraybuffer' })
+  const buffer = Buffer.from(imgRes.data)
+  formData.append("images", new Blob([buffer]))
 
-function mkdirs(dirname) {
-  if (fs.existsSync(dirname)) return true
-  if (mkdirs(path.dirname(dirname))) {
-    fs.mkdirSync(dirname)
-    return true
-  }
+  let args
+  args = handleArgs([{ text: name, gender: "unknown" }])
+  formData.set("args", args)
+  const res = await axios.post(`${url}/`, formData, { responseType: 'arraybuffer' })
+  const resultBuffer = Buffer.from(res.data)
+  return e.reply(segment.image(resultBuffer))
 }
-async function a2h(text) {
-  let ap = new AnsiUp();
-  return await ap.ansi_to_html(text);
-}
-async function main(e) {
-  try {
-    await downFile(e.img[0], tempPath);
-    let image = new Image({
-      filepath: tempPath,
-      alphabet: 'variant1',
-    });
-    await image.write(async function (err, data) {
-      logger.info("\n" + data);
-      data = await a2h(data)
-      let jsondata = await fs.readFileSync(htmlPath, "utf8");
-      jsondata = jsondata.replace("{{ content }}", data)
-      fs.writeFileSync(path.join(pluginPath, "./resources/zfh/字符画.html"), jsondata);
-      let ds = {
-        tplFile: path.join(pluginPath, "./resources/zfh/字符画.html"),
-      }
-      let img = await puppeteer.screenshot("字符画", ds);
-      e.reply(img);
-    })
-  } catch (err) {
-    await e.reply('操作失败：' + err)
-    return
-  }
-
+function handleArgs(userInfos) {
+  let argsObj = {}
+  argsObj.user_infos = userInfos.map(u => {
+    return {
+      name: _.trim(u.text, "@"),
+      gender: u.gender
+    }
+  })
+  return JSON.stringify(argsObj)
 }
