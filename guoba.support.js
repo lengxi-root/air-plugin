@@ -18,7 +18,7 @@ export function supportGuoba() {
       isV4: true,
       isV3: true,
       isV2: false,
-      description: `伊蕾娜api与全局Ark卡片消息转换`,
+      description: `伊蕾娜Api与全局消息转换`,
       icon: 'mdi:stove',
       iconColor: '#d19f56',
       iconPath: path.join(__dirname, 'main/helps/icon.png')
@@ -27,9 +27,33 @@ export function supportGuoba() {
       schemas: [
         {
           component: 'Divider',
+          label: '全局消息转换设置'
+        },
+        {
+          field: 'MsgUrl',
+          label: '消息url配置',
+          bottomHelpMessage: '非必填，请看README.md设置教程和搭建服务',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '如：https://vst.qqmsg.cn/url?url=',
+          }
+        },
+        {
+          field: 'imgck',
+          label: '花瓣图床配置',
+          bottomHelpMessage: '使用全局转换功能必填，使用浏览器访问huaban.com自行获取cookie',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '请求标头的cookie值的全部内容',
+          }
+        },
+        {
+          component: 'Divider',
           label: 'TTS语音转换'
         },
-           {
+        {
           field: 'tts_token',
           label: 'tts-token设置',
           bottomHelpMessage: '内置共用40w字token，用光如果还需要联系2218872014',
@@ -116,16 +140,6 @@ export function supportGuoba() {
           }
         },
         {
-          field: 'MsgUrl',
-          label: '消息url配置',
-          bottomHelpMessage: '非必填，请看README.md设置教程和搭建服务，如没有备案域名请进群953774387',
-          component: 'Input',
-          required: false,
-          componentProps: {
-            placeholder: '如：https://vst.qqmsg.cn/url?url=',
-          }
-        },
-        {
           component: 'Divider',
           label: 'Markdown类设置'
         },
@@ -137,7 +151,7 @@ export function supportGuoba() {
         },
         {
           field: 'button.btn_users',
-          label: '按钮白名单',
+          label: 'Markdown白名单',
           bottomHelpMessage: '填写Bot账号QQ号，只能填一个（懒得弄对应了）',
           component: 'GTags',
           componentProps: {
@@ -154,20 +168,138 @@ export function supportGuoba() {
           componentProps: {
             placeholder: '只能填一个',
           }
-        }, 
+        },
         {
-          field: 'markdown.template',
-          label: 'Markdown模板id',
-          bottomHelpMessage: 'DAU2000以上的机器人申请md资格可用（本插件暂不支持）',
+          field: 'markdown.text_open',
+          label: '开启纯文模板',
+          bottomHelpMessage: '纯文转换模板md',
+          component: 'Switch'
+        },
+        {
+          field: 'markdown.text_id',
+          label: '纯文模板id',
+          bottomHelpMessage: '纯文字使用的md模板id',
           component: 'Input',
           required: false,
           componentProps: {
-            placeholder: '为什么不支持模板md？因为插件作者没有DAU2000的机器人来测试☝️🤓',
+            placeholder: '114_514',
+          }
+        },
+        {
+          field: 'markdown.text_a',
+          label: '纯文模板参数',
+          bottomHelpMessage: '纯文字使用的md模板参数',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: 'a',
+          }
+        },
+        {
+          field: 'markdown.img_open',
+          label: '开启图片模板',
+          bottomHelpMessage: '图片转换模板md',
+          component: 'Switch'
+        },
+        {
+          field: 'markdown.img_id',
+          label: '图片模板id',
+          bottomHelpMessage: '纯图片使用的md模板id',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '114_514',
+          }
+        },
+        {
+          field: 'markdown.img_px',
+          label: '图片模板大小参数',
+          bottomHelpMessage: '纯图片使用的md模板参数',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: 'imgsize模板参数格式：![{{.imgsize}}]({{.imgurl}})',
+          }
+        },
+        {
+          field: 'markdown.img_url',
+          label: '图片模板链接参数',
+          bottomHelpMessage: '纯图片使用的md模板参数',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: 'imgurl模板参数格式：![{{.imgsize}}]({{.imgurl}})',
+          }
+        },
+        {
+          field: 'markdown.mix_open',
+          label: '开启图文模板',
+          bottomHelpMessage: '图文转换模板md',
+          component: 'Switch'
+        },
+        {
+          field: 'markdown.mix_id',
+          label: '图文模板id',
+          bottomHelpMessage: '图文模板使用的md模板id',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '114_514',
+          }
+        },
+        {
+          field: 'markdown.mix_text',
+          label: '图文模板文字参数',
+          bottomHelpMessage: '图文模板使用的md模板参数',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: 'text模板参数格式：# {{.text}}![{{.imgsize}}]({{.imgurl}})',
+          }
+        },
+        {
+          field: 'markdown.mix_px',
+          label: '图文模板大小参数',
+          bottomHelpMessage: '图文模板使用的md模板参数',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: 'imgsize模板参数格式：# {{.text}}![{{.imgsize}}]({{.imgurl}})',
+          }
+        },
+        {
+          field: 'markdown.mix_url',
+          label: '图文模板链接参数',
+          bottomHelpMessage: '图文模板使用的md模板参数',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: 'imgurl模板参数格式：# {{.text}}![{{.imgsize}}]({{.imgurl}})',
           }
         },
         {
           component: 'Divider',
           label: '官机代发设置'
+        },
+        {
+          field: 'msgServer.sendcmd',
+          label: '发送响应指令',
+          bottomHelpMessage: '数据账号用来发送获取MsgID时发送的指令',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '填入指令名',
+          }
+        },
+        {
+          field: 'msgServer.callcmd',
+          label: '官机回应指令',
+          bottomHelpMessage: '官方bot用来回应获取MsgID时发送的指令',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '填入指令名',
+          }
         },
         {
           field: 'msgServer.open',
@@ -208,16 +340,6 @@ export function supportGuoba() {
         {
           component: 'Divider',
           label: '智能体聊天设置'
-        },
-        {
-          field: 'chat.user_id',
-          label: '智能体user.id',
-          bottomHelpMessage: '智能体用户id，在调用示例里面查看user_id',
-          component: 'Input',
-          required: false,
-          componentProps: {
-            placeholder: '请输入user.id',
-          }
         },
         {
           field: 'chat.appid',

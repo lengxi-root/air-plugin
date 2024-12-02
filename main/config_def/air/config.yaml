@@ -1,18 +1,22 @@
-tips:
-  - "推荐使用锅巴插件进行配置"
-  - "Ark: 是否使用卡片回复，官方机器人专用，野生机器人请填false"
-  - chat功能需要在腾讯元器申请智能体：https://yuanqi.tencent.com/
-  - "user_id: 智能体用户id，在调用示例里面查看user_id"
-  - "appid: 智能体id, token: 智能体token"
-  - "MsgUrl请看README.md设置教程或搭建服务，如没有备案域名请进群953774387"
-
 Ark: false
-msgReset: false
-# 官方机器人消息url配置
 MsgUrl: ""
-
-chat:
-  user_id: ""
-  appid: ""
-  token: ""
-tts_token: "tZ2vV7rE0iH5jH3iJ7kB4aQ9dM1wO8xS"
+msgReset: false
+Ark_users:
+  - "00000"
+Ark_set:
+  Text_wx: ""
+  Text: ""
+  img_bt: ""
+  img_xbt: ""
+button:
+  open: false
+  btn_users:
+    - "114514"
+  template: 114_514
+msgServer:
+  open: false
+  userbot: "114"
+  robot: "514"
+  group:
+    - "12345"
+tts_token: tE4bE1jR9jR4nM5tP0zM9pH1mK0xF2yM

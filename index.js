@@ -1,13 +1,10 @@
 import fs from 'node:fs'
+import xx from './lib/xxCfg.js'
 import { dirPath } from './lib/dir.js'
 //输出提示
 logger.info(logger.yellow("- 正在加载 air-plugin "))
-if (!fs.existsSync(`${dirPath}/config/air.config.yaml`)) {
-  fs.copyFile(`${dirPath}/main/config_def/air/config.yaml`, `${dirPath}/config/air.config.yaml`, (err) => {
-    if (err) throw err;
-    logger.info(logger.yellow("- air-plugin 默认配置加载完成"))
-  });
-};
+await xx.start()
+
 //加载插件
 const files = fs.readdirSync(`${dirPath}/apps`).filter(file => file.endsWith('.js'))
 

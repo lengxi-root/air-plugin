@@ -39,7 +39,7 @@ export class example extends plugin {
 async function main(content) {
 	let config = await cfg.getConfig('air', 'config')
 	let chat = config.chat;
-	let userid = chat.user_id;
+	let userid = 'Elaina';
 	let appid = chat.appid;
 	let token = chat.token;
 	try {

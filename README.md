@@ -1,11 +1,10 @@
 
 [![伊蕾娜](https://gd-hbimg.huaban.com/376b918e109d20d83556a9d76c7b2e91dbfede1dd3d24-Tkqbpl)](https://github.com/lengxi-root/air-plugin)
 
-# Yunzai air-Plugin
+# Yunzai Air-Plugin
 
 云崽机器人插件，主要适配官方机器人，搭配TRSS云崽的QQbot使用
 
-> 此分支对于私域机器人有特殊适配，公域机器人请选择另一个分支（不使用Ark功能的话用这个分支也不是不行）   
 > 推荐使用锅巴插件来配置Air-plugin
 
 [![Stars](https://img.shields.io/github/stars/lengxi-root/air-plugin?color=yellow&label=收藏)](../../stargazers)  
@@ -42,6 +41,7 @@ git clone -b main --depth=1 https://gitee.com/lengxihddj/air-plugin.git ./plugin
 <details><summary>使用yarn</summary>
 
 > 不推荐npm，pnpm！
+> Linux用户可能会有点不一样，自行查找教程
 
 ```
 # 安装yarn，可使用npm，pnpm等包管理器安装，已安装可跳过
@@ -53,7 +53,7 @@ pnpm yarn
 </details>
 
 ## 4.使用配置消息url（可选）
-
+> 只是发链接的时候要用的，只有普通文本的时候是不需要的
 <details><summary>点击展开</summary>
 <br>
   
@@ -81,7 +81,6 @@ https://你的网站域名/url?url=
 发送`#air帮助`查看帮助菜单
 
 > 均支持 `#` 或 `/` 前缀  
-> 注意：截止`2024-7-28`测试Ark功能仅能在`私域机器人`使用
 
 <details><summary>伊蕾娜图片</summary>
 
@@ -107,7 +106,7 @@ https://你的网站域名/url?url=
 - 使用锅巴插件配置 官机代发 相关设置即可
 - 使用数据账号接收消息并使用官方机器人发送消息
 - 免去频繁艾特官方机器人的步骤
-- 第一版，有不少bug，严重恶性bug及时停止插件并进群反馈
+- 第一版，有不少bug，严重恶性bug及时停止插件并进入班级群反馈
 > 在Ark白名单内加入数据账号QQ即可使用Ark代发
 [![伊蕾娜](https://gd-hbimg.huaban.com/8e68ecad9047f2c8a4a20926dd19fcac59016b779b42-1jnULH)](https://github.com/lengxi-root/air-plugin)
 
@@ -116,7 +115,6 @@ https://你的网站域名/url?url=
 
 - chat功能需要在[腾讯元器](https://yuanqi.tencent.com/)申请智能体
 - 按照调用示例所给的东西填入config
-- "user_id: 智能体用户id，在调用示例里面查看user_id"
 - "appid: 智能体id, token: 智能体token"
 - #CE + `问题`
 
@@ -125,9 +123,9 @@ https://你的网站域名/url?url=
 </details>
 <details><summary>全局转换模板md</summary>  
 
-
 ### 将云崽发送的消息转换为特定模板md再发送
-  
+> 注意：Markdown功能仅能在`公域机器人`使用，需要达到特定DAU数量去申请权限
+
 | 原内容 | 转换后 |
 | - | - |
 | 纯文本 | 文字模板md |
@@ -147,8 +145,8 @@ https://你的网站域名/url?url=
 
 <details><summary>全局转Ark</summary>  
 
-
-### 将云崽发送的消息转换为特定Ark再发送
+### 将云崽发送的消息转换为特定Ark再发送  
+> 注意：截止`2024-7-28`测试Ark功能仅能在`私域机器人`使用，公域的需要达到特定DAU数量去申请权限
   
 | 原内容 | 转换后 |
 | - | - |
@@ -176,6 +174,13 @@ Ark_users:
   - 123456789
 
 ```
+
+</details>
+
+<details><summary>图床Cookie</summary>
+
+- 前往[花瓣网](https://www.huaban.com)注册并登录
+- 自行搜索`获取网页cookie方法`
 
 </details>
 

@@ -4,6 +4,7 @@ import { tool } from '../lib/tool.js';
 import event from '../lib/msgServerEvent.js';
 import imageSize from 'image-size';
 import axios from 'axios';
+let _cmdmsg = await cfg.getConfig('air', 'config')
 
 export class msgReset extends plugin {
   constructor() {
@@ -13,10 +14,10 @@ export class msgReset extends plugin {
       event: 'message',
       priority: 2000,
       rule: [{
-        reg: '^msgServer$',
+        reg: _cmdmsg?.msgServer?.sendcmd || 'msgServer',
         fnc: 'em'
       }, {
-        reg: "愿此行，终抵群星",
+        reg: _cmdmsg?.msgServer?.callcmd || 'Elaina',
         fnc: 'eem'
       },]
     });
@@ -319,7 +320,7 @@ async function getmsgid(group, msgs, quote, data) {
   }
   cfg.saveSet("air", "msgServer", "config", ds);
   let groupobj = Bot[ub].pickGroup(group)
-  let mid = (await groupobj.sendMsg([segment.at(robot), " msgServer"])).message_id
+  let mid = (await groupobj.sendMsg([segment.at(robot), _cfg?.msgServer?.sendcmd || ' msgServer'])).message_id
   await sleep(2024)
   await groupobj.recallMsg(mid)
   let k = 0
