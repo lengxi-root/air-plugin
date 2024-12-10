@@ -40,6 +40,26 @@ export function supportGuoba() {
           }
         },
         {
+          field: 'imgbot',
+          label: '频道图床botQQ',
+          bottomHelpMessage: '使用全局转换功能必填（ 花瓣-频道 二选一），配置此项则优先使用频道图床',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '使用bot的QQ号，将使用此bot向频道发送图片',
+          }
+        },
+        {
+          field: 'imgchannelid',
+          label: '频道图床子频道id',
+          bottomHelpMessage: '使用全局转换功能必填，向指定频道发送图片，建议使用私人子频道',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '在频道向机器人发消息，看后台日志自行获取',
+          }
+        },
+        {
           field: 'imgck',
           label: '花瓣图床配置',
           bottomHelpMessage: '使用全局转换功能必填，使用浏览器访问huaban.com自行获取cookie',
@@ -47,20 +67,6 @@ export function supportGuoba() {
           required: false,
           componentProps: {
             placeholder: '请求标头的cookie值的全部内容',
-          }
-        },
-        {
-          component: 'Divider',
-          label: 'TTS语音转换'
-        },
-        {
-          field: 'tts_token',
-          label: 'tts-token设置',
-          bottomHelpMessage: '内置共用40w字token，用光如果还需要联系2218872014',
-          component: 'Input',
-          required: false,
-          componentProps: {
-            placeholder: '输入32位token',
           }
         },
         {

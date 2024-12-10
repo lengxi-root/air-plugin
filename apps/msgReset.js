@@ -4,6 +4,8 @@ import { tool } from '../lib/tool.js';
 import event from '../lib/msgServerEvent.js';
 import imageSize from 'image-size';
 import axios from 'axios';
+import crypto from 'node:crypto';
+
 let _cmdmsg = await cfg.getConfig('air', 'config')
 
 export class msgReset extends plugin {
@@ -144,7 +146,8 @@ async function makeMsg(msg) {
         if (typeof _cfg.Ark_set?.img_wx != 'undefined') wx = _cfg.Ark_set.img_wx || _cfg.Ark_set.Text_wx;
         if (typeof _cfg.Ark_set?.img_bt != 'undefined') bt = await _cfg.Ark_set.img_bt.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht);
         if (typeof _cfg.Ark_set?.img_xbt != 'undefined') xbt = await _cfg.Ark_set.img_xbt.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht);
-        if (Buffer.isBuffer(i.file)) i.file = await upimg(i.file);
+        i.file = await Bot.Buffer(i.file);
+        i.file = await upimg(i.file)
         return [tool.imgark(wx || '[AIR-Plugin]', bt || '', xbt || '', `${i.file}`)]
     }
   }
@@ -183,9 +186,9 @@ async function makeMd(msg) {
         })
         break
       case 'image':
+        i.file = await Bot.Buffer(i.file);
         let { width, height } = await getImageSize(i.file)
-        if (Buffer.isBuffer(i.file)) i.file = await upimg(i.file);
-        if (i.file?.includes('huaban.com') == false) i.file = await upimg(i.file);
+        i.file = await upimg(i.file);
         i.file = `${_cfg.MsgUrl}${i.file}`
         let px = `[AIR-Plugin] #${width}px #${height}px`
         if (!mix_open) {
@@ -270,27 +273,6 @@ async function textark(text) {
   }
   return tool.textark(wx, msgs);
 }
-async function upimg(data) {
-  let formdata = new FormData();
-  let _cfg = await cfg.getConfig('air', 'config')
-  formdata.append("file", new Blob([data]), {
-    filename: Date.now(),//上传的文件名
-    contentType: 'image/png',//文件类型标识
-  });
-  //改用花瓣图床了
-  let res = await fetch('https://api.huaban.com/upload', {
-    method: 'POST',
-    body: formdata,
-    headers: {
-      Cookie: _cfg.imgck
-    }
-  }
-  )
-  res = await res.json()
-  const url = `https://gd-hbimg.huaban.com/${res.key}_fw1200`
-  console.log(url)
-  return url
-}
 async function send(group, msgs, quote, data) {
   let setting = await cfg.getConfig("air", "msgServer")
   let cfgs = setting[group];
@@ -337,6 +319,60 @@ async function getmsgid(group, msgs, quote, data) {
   }
   k = 0
   return false
+}
+async function upimg(file) {
+let _cfg = await cfg.getConfig('air', 'config')
+  if (typeof _cfg.imgbot == 'string' && _cfg.imgbot != '' && typeof _cfg.imgchannelid == 'string' && _cfg.imgchannelid != ''){
+    return await img_cn(file)
+  } else {
+    return await img_hb(file)
+  }
+}
+async function img_cn(data) {
+let _cfg = await cfg.getConfig('air', 'config')
+let botQQ = Number(_cfg?.imgbot)
+let channelid = Number(_cfg?.imgchannelid)
+
+    const bot = {
+        token:Bot[botQQ].sdk.sessionManager.access_token,
+        appId: Bot[botQQ].info.appid,
+        secret: Bot[botQQ].info.secret,
+        channelId: channelid
+    };
+
+    const payload = new FormData();
+    payload.append('msg_id', '0');
+    payload.append('file_image', new Blob([data], { type: 'image/png' }), 'image.jpg');
+
+    await axios.post(`https://api.sgroup.qq.com/channels/${bot.channelId}/messages`, payload, {
+        headers: {
+            Authorization: 'QQBot ' + bot.token,
+            'X-Union-Appid': bot.appId
+        }
+    });
+    const md5 = crypto.createHash('md5').update(data).digest('hex').toUpperCase();
+    const url = `https://gchat.qpic.cn/qmeetpic/0/0-0-${md5}/0`;
+    logger.info(`[AIR-Plugin]频道图床URL： ${url}`);
+    return url
+}
+async function img_hb(data) {
+  let formdata = new FormData();
+  let _cfg = await cfg.getConfig('air', 'config')
+  formdata.append("file", new Blob([data], { type: 'image/png' }), {
+    filename: Date.now(),//上传的文件名
+    contentType: 'image/png',//文件类型标识
+  });
+  let res = await fetch('https://api.huaban.com/upload', {
+    method: 'POST',
+    body: formdata,
+    headers: {
+      Cookie: _cfg?.imgck?.trim()
+    }
+  })
+  res = await res.json()
+  const url = `https://gd-hbimg.huaban.com/${res.key}_fw1200`
+  logger.info(`[AIR-Plugin]花瓣图床URL： ${url}`);
+  return url
 }
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))

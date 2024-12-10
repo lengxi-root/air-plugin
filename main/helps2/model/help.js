@@ -36,18 +36,8 @@ export const helpList = [
     ]
   },
   {
-    group: 'TTS语音转换（所有人共用40w字token，用完可进入爱发电购买token）',
+    group: '其他功能',
     list: [
-      {
-        icon: 9,
-        title: '/tts查询**',
-        desc: '例如：/tts查询伊蕾娜'
-      },
-      {
-        icon: 9,
-        title: '/**转换**',
-        desc: '例如：/2298转换你好啊'
-      },
       {
         icon: 9,
         title: '/字符字**',
@@ -55,8 +45,8 @@ export const helpList = [
       },
       {
         icon: 9,
-        title: '/转换次数',
-        desc: '仅主人可用，查询token剩余次数'
+        title: '/字符画**',
+        desc: '例如：/字符画+图片'
       }
     ]
   }

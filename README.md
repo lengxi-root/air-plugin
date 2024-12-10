@@ -97,10 +97,6 @@ https://你的网站域名/url?url=
 [![伊蕾娜](https://gd-hbimg.huaban.com/bf14ef2e02c8c14adb5f19d6a0073e9c3c9814eb95df9-LqnarO)](https://github.com/lengxi-root/air-plugin)
 
 </details>
-<details><summary>TTS音色转换（2000+二次元音色）</summary>
-  
-- 发送air菜单查看指令
- </details>
 <details><summary>官机代发</summary>
   
 - 使用锅巴插件配置 官机代发 相关设置即可
