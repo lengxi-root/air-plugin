@@ -298,16 +298,6 @@ export function supportGuoba() {
           }
         },
         {
-          field: 'msgServer.callcmd',
-          label: '官机回应指令',
-          bottomHelpMessage: '官方bot用来回应获取MsgID时发送的指令',
-          component: 'Input',
-          required: false,
-          componentProps: {
-            placeholder: '填入指令名',
-          }
-        },
-        {
           field: 'msgServer.open',
           label: '官机代发模式',
           bottomHelpMessage: '使用官机代发消息，仅群消息可用',

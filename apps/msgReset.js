@@ -18,10 +18,7 @@ export class msgReset extends plugin {
       rule: [{
         reg: _cmdmsg?.msgServer?.sendcmd || 'msgServer',
         fnc: 'em'
-      }, {
-        reg: _cmdmsg?.msgServer?.callcmd || 'Elaina',
-        fnc: 'eem'
-      },]
+      }]
     });
   }
   async accept() {
@@ -40,7 +37,7 @@ export class msgReset extends plugin {
     if (!_cfg.Ark_users?.includes(String(self_id))) { isopen = false }
     if (isbtn && isopen == false && markdown == false) {
       this.e.reply = async function (msgs, quote, data) {
-        if (!msgs) return false;
+        if (!msgs) return true;
         if (!Array.isArray(msgs)) msgs = [msgs];
         let result
         if (msgServer) {
@@ -54,7 +51,7 @@ export class msgReset extends plugin {
       }
     } else if (isopen) {
       this.e.reply = async function (msgs, quote, data) {
-        if (!msgs) return false;
+        if (!msgs) return true;
         if (!Array.isArray(msgs)) msgs = [msgs];
         msgs = await makeMsg(msgs)
         let result
@@ -70,7 +67,7 @@ export class msgReset extends plugin {
       }
     } else if (markdown) {
       this.e.reply = async function (msgs, quote, data) {
-        if (!msgs) return false;
+        if (!msgs) return true;
         if (!Array.isArray(msgs)) msgs = [msgs];
         msgs = await makeMd(msgs)
         if (_cfg.button?.btn_users.includes(String(self_id))) { return old_reply(msgs, quote, data) }
@@ -84,22 +81,15 @@ export class msgReset extends plugin {
       }
     } else if (msgServer) {
       this.e.reply = async function (msgs, quote, data) {
-        if (!msgs) return false;
+        if (!msgs) return true;
         if (!Array.isArray(msgs)) msgs = [msgs];
         let result = await send(group_id, msgs, quote, data)
         return result
       }
     } else {
-      return false
+      return true
     }
 
-  }
-  async eem(e) {
-    let ud = this.e.user_id;
-    let cfgs = await cfg.getConfig("air", "config");
-    if ((ud == cfgs?.msgServer?.robot) && (isresends == false)) {
-      isresends = true
-    }
   }
   async em(e) {
     let ud = this.e.self_id;
@@ -110,7 +100,8 @@ export class msgReset extends plugin {
         peer: this.e.group.group_id,
         msgid: this.e.message_id
       }
-      await event(ds)
+      let res = await event(ds)
+      if (res.d == 2 && !isresends) isresends = true
     }
   }
 
@@ -168,7 +159,6 @@ async function makeMd(msg) {
     }
 
     let md = []
-    logger.info(0, i.type)
     switch (i.type) {
       case 'text':
         if (!mix_open) {
@@ -274,12 +264,12 @@ async function textark(text) {
   return tool.textark(wx, msgs);
 }
 async function send(group, msgs, quote, data) {
-  let setting = await cfg.getConfig("air", "msgServer")
+  let setting = await event({ d: 3 })
   let cfgs = setting[group];
   let msgid = cfgs?.msgid
   if ((Date.now() - cfgs?.time > 250000) || (cfgs?.sign == 0) || (!cfgs?.hasOwnProperty("peer"))) {
     await getmsgid(group, msgs, quote, data)
-    return false
+    return true
   }
   let ds = {
     d: 8,
@@ -288,7 +278,7 @@ async function send(group, msgs, quote, data) {
     quote, data
   }
   await event(ds)
-  return false
+  return true
 }
 async function getmsgid(group, msgs, quote, data) {
   let _cfg = await cfg.getConfig('air', 'config')
@@ -296,64 +286,67 @@ async function getmsgid(group, msgs, quote, data) {
   let robot = _cfg.msgServer?.robot
   isresends = false
   logger.info("[AIR-Plugin]MsgID失效，尝试重新获取")
-  let ds = await cfg.getConfig("air", "msgServer")
+  let ds = await event({ d: 3 })
   ds[group] = {
     sign: 0
   }
-  cfg.saveSet("air", "msgServer", "config", ds);
+  await event({ d: 4, ds })
   let groupobj = Bot[ub].pickGroup(group)
   let mid = (await groupobj.sendMsg([segment.at(robot), _cfg?.msgServer?.sendcmd || ' msgServer'])).message_id
-  await sleep(2024)
   await groupobj.recallMsg(mid)
   let k = 0
-  while (k < 10) {
-    k++
-    logger.info("[AIR-Plugin]getMsgID等待响应-" + String(k) + "|" + String(isresends))
-    await sleep(2024)
-    if (isresends == true) {
-      return await send(group, msgs, quote, data)
+  await new Promise(async (resolve) => {
+    while (k < 10) {
+      k++
+      logger.info("[AIR-Plugin]getMsgID等待响应-" + String(k) + "|" + String(isresends))
+      if (isresends == true) {
+        resolve()
+        return await send(group, msgs, quote, data)
+      }
+      await sleep(520)
     }
-  }
+    resolve()
+  });
   if (isresends == false) {
     logger.info("[AIR-Plugin]MsgID失败")
   }
   k = 0
-  return false
+  return true
 }
 async function upimg(file) {
-let _cfg = await cfg.getConfig('air', 'config')
-  if (typeof _cfg.imgbot == 'string' && _cfg.imgbot != '' && typeof _cfg.imgchannelid == 'string' && _cfg.imgchannelid != ''){
+  let _cfg = await cfg.getConfig('air', 'config')
+  if (typeof _cfg.imgbot == 'string' && _cfg.imgbot != '' && typeof _cfg.imgchannelid == 'string' && _cfg.imgchannelid != '') {
     return await img_cn(file)
   } else {
     return await img_hb(file)
   }
 }
 async function img_cn(data) {
-let _cfg = await cfg.getConfig('air', 'config')
-let botQQ = Number(_cfg?.imgbot)
-let channelid = Number(_cfg?.imgchannelid)
+  let _cfg = await cfg.getConfig('air', 'config')
+  let botQQ = Number(_cfg?.imgbot)
+  let channelid = Number(_cfg?.imgchannelid)
 
-    const bot = {
-        token:Bot[botQQ].sdk.sessionManager.access_token,
-        appId: Bot[botQQ].info.appid,
-        secret: Bot[botQQ].info.secret,
-        channelId: channelid
-    };
+  const bot = {
+    token: Bot[botQQ].sdk.sessionManager.access_token,
+    appId: Bot[botQQ].info.appid,
+    secret: Bot[botQQ].info.secret,
+    channelId: channelid
+  };
 
-    const payload = new FormData();
-    payload.append('msg_id', '0');
-    payload.append('file_image', new Blob([data], { type: 'image/png' }), 'image.jpg');
+  const payload = new FormData();
+  payload.append('msg_id', '0');
+  payload.append('file_image', new Blob([data], { type: 'image/png' }), 'image.jpg');
 
-    await axios.post(`https://api.sgroup.qq.com/channels/${bot.channelId}/messages`, payload, {
-        headers: {
-            Authorization: 'QQBot ' + bot.token,
-            'X-Union-Appid': bot.appId
-        }
-    });
-    const md5 = crypto.createHash('md5').update(data).digest('hex').toUpperCase();
-    const url = `https://gchat.qpic.cn/qmeetpic/0/0-0-${md5}/0`;
-    logger.info(`[AIR-Plugin]频道图床URL： ${url}`);
-    return url
+  await axios.post(`https://api.sgroup.qq.com/channels/${bot.channelId}/messages`, payload, {
+    headers: {
+      Authorization: 'QQBot ' + bot.token,
+      'X-Union-Appid': bot.appId
+    }
+  });
+  const md5 = crypto.createHash('md5').update(data).digest('hex').toUpperCase();
+  const url = `https://gchat.qpic.cn/qmeetpic/0/0-0-${md5}/0`;
+  logger.info(`[AIR-Plugin]频道图床URL： ${url}`);
+  return url
 }
 async function img_hb(data) {
   let formdata = new FormData();
