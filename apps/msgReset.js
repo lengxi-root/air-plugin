@@ -295,21 +295,23 @@ async function getmsgid(group, msgs, quote, data) {
   let mid = (await groupobj.sendMsg([segment.at(robot), _cfg?.msgServer?.sendcmd || ' msgServer'])).message_id
   await groupobj.recallMsg(mid)
   let k = 0
-  await new Promise(async (resolve) => {
+  new Promise(async (resolve, reject) => {
     while (k < 10) {
       k++
       logger.info("[AIR-Plugin]getMsgID等待响应-" + String(k) + "|" + String(isresends))
       if (isresends == true) {
         resolve()
-        return await send(group, msgs, quote, data)
+        break
       }
       await sleep(520)
     }
-    resolve()
-  });
-  if (isresends == false) {
-    logger.info("[AIR-Plugin]MsgID失败")
-  }
+    reject()
+  }).then(() => {
+    send(group, msgs, quote, data)
+  })
+    .catch(() => {
+      logger.info("[AIR-Plugin]MsgID失败")
+    });
   k = 0
   return true
 }
