@@ -23,73 +23,56 @@ export class msgReset extends plugin {
   }
   async accept() {
     let _cfg = await cfg.getConfig('air', 'config')
-    let isopen = _cfg.msgReset
-    let ub = _cfg.msgServer?.userbot
-    let mg = _cfg.msgServer?.group
-    let msgServer = _cfg.msgServer?.open
-    let markdown = (_cfg.markdown?.text_open || _cfg.markdown?.img_open || _cfg.markdown?.mix_open)
-    let old_reply = this.e.reply;
-    let isbtn = (_cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != ''))
-    msgServer = (ub == this.e.self_id) && msgServer && (this.e.isGroup == true)
+    let ub = _cfg.msgServer?.userbot;//代发数据账号
+    let rb = _cfg.msgServer?.robot;//代发机器账号
+    let mg = _cfg.msgServer?.group;//代发群列表
+    let btnbot = _cfg.button?.btn_users[0];//发按钮的bot
     let self_id = this.e.self_id;
     let group_id = this.e.group?.group_id;
-    if (!mg?.includes(String(group_id))) { msgServer = false }
-    if (!_cfg.Ark_users?.includes(String(self_id))) { isopen = false }
-    if (isbtn && isopen == false && markdown == false) {
+    //是否QQBot适配器
+    let isQQbot = this.e.bot.version.name == 'QQBot'
+    //全局ark开关
+    let isopen = isQQbot && (_cfg.Ark_users?.includes(String(self_id))) && _cfg.msgReset;
+    //代发开关
+    let msgServer = !isQQbot && (mg?.includes(String(group_id))) && (ub == this.e.self_id) && (this.e.isGroup == true) && _cfg.msgServer?.open;
+    //是否使用markdown
+    let markdown = isQQbot && (_cfg.markdown?.text_open || _cfg.markdown?.img_open || _cfg.markdown?.mix_open)
+    //原始reply对象
+    let old_reply = this.e.reply;
+    //是否使用按钮
+    let isbtn = _cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != '')
+    if (!isopen && !msgServer && !isbtn && !markdown) return false;
+    if (msgServer) {
       this.e.reply = async function (msgs, quote, data) {
         if (!msgs) return true;
         if (!Array.isArray(msgs)) msgs = [msgs];
-        let result
-        if (msgServer) {
-          result = await send(group_id, msgs, quote, data)
-        } else {
-          result = await old_reply(msgs, quote, data);
+        let result;
+        if (isopen) {
+          msgs = await makeMsg(msgs);
+        } else if (markdown) {
+          msgs = await makeMd(msgs);
         }
-        if (_cfg.button?.btn_users.includes(String(self_id))) { return result }
-        await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data)
-        return result;
-      }
-    } else if (isopen) {
-      this.e.reply = async function (msgs, quote, data) {
-        if (!msgs) return true;
-        if (!Array.isArray(msgs)) msgs = [msgs];
-        msgs = await makeMsg(msgs)
-        let result
-        if (msgServer) {
-          result = await send(group_id, msgs, quote, data)
-        } else {
-          result = await old_reply(msgs, quote, data);
-        }
-        if (_cfg.button?.btn_users == null) { logger.info('未配置按钮白名单'); return result }
-        if (_cfg.button?.btn_users.includes(self_id)) { return result }
-        if (isbtn) await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data)
-        return result;
-      }
-    } else if (markdown) {
-      this.e.reply = async function (msgs, quote, data) {
-        if (!msgs) return true;
-        if (!Array.isArray(msgs)) msgs = [msgs];
-        msgs = await makeMd(msgs)
-        if (_cfg.button?.btn_users.includes(String(self_id))) { return old_reply(msgs, quote, data) }
-        let result
-        if (msgServer) {
-          result = await send(group_id, msgs, quote, data)
-        } else {
-          result = await old_reply(msgs, quote, data);
-        }
+        result = await send(group_id, msgs, quote, data);
+        if (isbtn && isQQbot && self_id == btnbot) await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
         return result
       }
-    } else if (msgServer) {
+    } else if (isQQbot) {
       this.e.reply = async function (msgs, quote, data) {
         if (!msgs) return true;
         if (!Array.isArray(msgs)) msgs = [msgs];
-        let result = await send(group_id, msgs, quote, data)
+        let result;
+        if (isopen) {
+          msgs = await makeMsg(msgs);
+        } else if (markdown) {
+          msgs = await makeMd(msgs);
+        }
+        result = await old_reply(msgs, quote, data);
+        if (isbtn && isQQbot) await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
         return result
       }
     } else {
-      return true
+      return false
     }
-
   }
   async em(e) {
     let ud = this.e.self_id;
