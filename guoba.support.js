@@ -30,6 +30,12 @@ export function supportGuoba() {
           label: '全局消息转换设置'
         },
         {
+          field: 'toimg.open',
+          label: '全局转图模式',
+          bottomHelpMessage: '将消息用md语法转换成纯图片',
+          component: 'Switch'
+        },
+        {
           field: 'MsgUrl',
           label: '消息url配置',
           bottomHelpMessage: '非必填，请看README.md设置教程和搭建服务',
@@ -150,6 +156,22 @@ export function supportGuoba() {
           label: 'Markdown类设置'
         },
         {
+          field: 'markdown.mds',
+          label: '使用原生md',
+          bottomHelpMessage: '转换成自定义markdown文本格式（此功能为全局，无白名单）',
+          component: 'Switch'
+        },
+        {
+          field: 'markdown.Text',
+          label: 'md消息格式',
+          bottomHelpMessage: '非必填，markdown内容格式，自由搭配，可用变量：[消息内容]，[换行]，[时间]，[一言]',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '例子：BotName[换行][时间][换行][消息内容][换行][一言]',
+          }
+        },
+        {
           field: 'button.open',
           label: '开启按钮',
           bottomHelpMessage: '在每一条消息最后发送按钮',
@@ -157,7 +179,7 @@ export function supportGuoba() {
         },
         {
           field: 'button.btn_users',
-          label: 'Markdown白名单',
+          label: '模板md白名单',
           bottomHelpMessage: '填写Bot账号QQ号，只能填一个（懒得弄对应了）',
           component: 'GTags',
           componentProps: {

@@ -2,13 +2,15 @@ import cfg from '../lib/xxCfg.js';
 import fetch from 'node-fetch'
 import { tool } from '../lib/tool.js';
 import event from '../lib/msgServerEvent.js';
+import Button from '../lib/button.js';
+import toimg from '../lib/toimg.js';
 import imageSize from 'image-size';
 import axios from 'axios';
 import crypto from 'node:crypto';
 
 let _cmdmsg = await cfg.getConfig('air', 'config')
 
-export class msgReset extends plugin {
+export default class msgReset extends plugin {
   constructor() {
     super({
       name: '全局消息转换',
@@ -21,7 +23,7 @@ export class msgReset extends plugin {
       }]
     });
   }
-  async accept() {
+  async accept(e) {
     let _cfg = await cfg.getConfig('air', 'config')
     let ub = _cfg.msgServer?.userbot;//代发数据账号
     let rb = _cfg.msgServer?.robot;//代发机器账号
@@ -35,18 +37,26 @@ export class msgReset extends plugin {
     let isopen = isQQbot && (_cfg.Ark_users?.includes(String(self_id))) && _cfg.msgReset;
     //代发开关
     let msgServer = !isQQbot && (mg?.includes(String(group_id))) && (ub == this.e.self_id) && (this.e.isGroup == true) && _cfg.msgServer?.open;
+    //是否使用原生markdown
+    let mds = isQQbot && _cfg.markdown?.mds
     //是否使用markdown
     let markdown = isQQbot && (_cfg.markdown?.text_open || _cfg.markdown?.img_open || _cfg.markdown?.mix_open)
     //原始reply对象
     let old_reply = this.e.reply;
+    //是否使用全局转图
+    let istoimg = _cfg.toimg?.open && (Bot.md2img || toimg)
     //是否使用按钮
     let isbtn = _cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != '')
-    if (!isopen && !msgServer && !isbtn && !markdown) return false;
+    if (!istoimg && !isopen && !msgServer && !isbtn && !markdown && !mds) return false;
     if (msgServer) {
       this.e.reply = async function (msgs, quote, data) {
         if (!msgs) return true;
         if (!Array.isArray(msgs)) msgs = [msgs];
         let result;
+        if (istoimg) {
+          const md = (await makeMds(msgs, e)).md;
+          msgs = [segment.image(await Bot.md2img(md))]
+        }
         if (isopen) {
           msgs = await makeMsg(msgs);
         } else if (markdown) {
@@ -61,10 +71,16 @@ export class msgReset extends plugin {
         if (!msgs) return true;
         if (!Array.isArray(msgs)) msgs = [msgs];
         let result;
+        if (istoimg) {
+          const md = (await makeMds(msgs, e)).md;
+          msgs = [segment.image(await Bot.md2img(md))]
+        }
         if (isopen) {
           msgs = await makeMsg(msgs);
         } else if (markdown) {
           msgs = await makeMd(msgs);
+        } else if (mds) {
+          msgs = (await makeMds(msgs, e)).msgs;
         }
         result = await old_reply(msgs, quote, data);
         if (isbtn && isQQbot) await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
@@ -123,9 +139,51 @@ async function makeMsg(msg) {
         i.file = await Bot.Buffer(i.file);
         i.file = await upimg(i.file)
         return [tool.imgark(wx || '[AIR-Plugin]', bt || '', xbt || '', `${i.file}`)]
+      case 'raw':
+        msgs.push(...await makeMsg(i.data))
+        break
     }
   }
   return msg
+}
+async function makeMds(msg, e) {
+  let _cfg = await cfg.getConfig('air', 'config')
+  let _text = '';
+  let msgs = [];
+  for (let i of Array.isArray(msg) ? msg : [msg]) {
+    if (typeof i === "object") {
+      i = { ...i }
+    } else {
+      i = { type: "text", text: Bot.String(i) }
+    }
+    let now, time, ht
+    switch (i.type) {
+      case 'text':
+        now = new Date()
+        time = now.toLocaleString()
+        ht = await (await fetch("https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20")).text();
+        if (typeof _cfg.markdown?.Text != 'undefined') i.text = await _cfg.markdown.Text.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht).replace(/\[换行\]/g, '\n').replace(/\[消息内容\]/g, i.text)
+        _text += i.text
+        break
+      case 'image':
+        i.file = await Bot.Buffer(i.file);
+        let { width, height } = await getImageSize(i.file)
+        i.file = await upimg(i.file);
+        i.file = `(${_cfg.MsgUrl}${i.file})`
+        let px = `[[AIR-Plugin] #${width}px #${height}px]`
+        _text += `!${px}${i.file}`
+        break
+      case 'raw':
+        msgs.push(...await makeMds(i.data))
+        break
+    }
+  }
+  msgs.push(segment.markdown(_text))
+  if (Button) {
+    const buttons = await button(e)
+    if (buttons) msgs.push(buttons)
+  }
+  return { msgs, md: _text }
 }
 async function makeMd(msg) {
   let _cfg = await cfg.getConfig('air', 'config')
@@ -201,22 +259,7 @@ async function makeMd(msg) {
         }
         break
       case 'raw':
-        switch (i.data.type) {
-          case 'keyboard':
-            if (i.data.id) {
-              btn.push(segment.raw({ 'type': 'keyboard', 'id': i.data.id }))
-            } else {
-              btn.push(segment.raw({ 'type': 'keyboard', ...i.data.data }))
-            }
-            break
-          case 'button':
-            if (i.data.id) {
-              btn.push(segment.raw({ 'type': 'keyboard', 'id': i.data.id }))
-            } else {
-              btn.push(segment.raw({ 'type': 'keyboard', ...i.data.data }))
-            }
-            break
-        }
+        msgs.push(...await makeMd(i.data))
         break
     }
   }
@@ -229,6 +272,41 @@ async function makeMd(msg) {
   if (msgs.length == 0) msgs = msg
   return msgs
 }
+
+// 功能区
+async function button(e) {
+  try {
+    for (let p of Button) {
+      for (let v of p.plugin.rule) {
+        const regExp = new RegExp(v.reg)
+        if (regExp.test(e.msg)) {
+          p.e = e
+          let button = await p[v.fnc](e)
+          const message = []
+          if (button) {
+            if (!Array.isArray(button)) button = [button]
+            const rows = []
+            button.forEach(item => {
+              rows.push({
+                buttons: item.buttons
+              })
+            })
+            message.push({
+              type: 'keyboard',
+              content: { rows }
+            })
+            return segment.raw(...message)
+          }
+          return false
+        }
+      }
+    }
+  } catch (error) {
+    logger.error('air-plugin', error)
+    return false
+  }
+}
+
 async function textark(text) {
   let msgs = [];
   let splitText = text.replace(/&amp;/g, "").split('\n');
@@ -246,6 +324,7 @@ async function textark(text) {
   }
   return tool.textark(wx, msgs);
 }
+
 async function send(group, msgs, quote, data) {
   let setting = await event({ d: 3 })
   let cfgs = setting[group];
@@ -263,6 +342,7 @@ async function send(group, msgs, quote, data) {
   await event(ds)
   return true
 }
+
 async function getmsgid(group, msgs, quote, data) {
   let _cfg = await cfg.getConfig('air', 'config')
   let ub = _cfg.msgServer?.userbot
@@ -298,6 +378,7 @@ async function getmsgid(group, msgs, quote, data) {
   k = 0
   return true
 }
+
 async function upimg(file) {
   let _cfg = await cfg.getConfig('air', 'config')
   if (typeof _cfg.imgbot == 'string' && _cfg.imgbot != '' && typeof _cfg.imgchannelid == 'string' && _cfg.imgchannelid != '') {
@@ -306,6 +387,7 @@ async function upimg(file) {
     return await img_hb(file)
   }
 }
+
 async function img_cn(data) {
   let _cfg = await cfg.getConfig('air', 'config')
   let botQQ = Number(_cfg?.imgbot)
@@ -333,6 +415,7 @@ async function img_cn(data) {
   logger.info(`[AIR-Plugin]频道图床URL： ${url}`);
   return url
 }
+
 async function img_hb(data) {
   let formdata = new FormData();
   let _cfg = await cfg.getConfig('air', 'config')
@@ -352,6 +435,8 @@ async function img_hb(data) {
   logger.info(`[AIR-Plugin]花瓣图床URL： ${url}`);
   return url
 }
+
+// 小工具区
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
