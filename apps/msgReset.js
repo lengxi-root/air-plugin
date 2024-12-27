@@ -9,6 +9,7 @@ import axios from 'axios';
 import crypto from 'node:crypto';
 
 let _cmdmsg = await cfg.getConfig('air', 'config')
+var isresends = true
 
 export default class msgReset extends plugin {
   constructor() {
@@ -20,6 +21,9 @@ export default class msgReset extends plugin {
       rule: [{
         reg: _cmdmsg?.msgServer?.sendcmd || 'msgServer',
         fnc: 'em'
+      }, {
+        reg: 'TS_cbind_(.*)',
+        fnc: 'cbind'
       }]
     });
   }
@@ -63,7 +67,10 @@ export default class msgReset extends plugin {
           msgs = await makeMd(msgs);
         }
         result = await send(group_id, msgs, quote, data);
-        if (isbtn && isQQbot && self_id == btnbot) await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
+        if (!result){
+          result = await old_reply(msgs, quote, data);
+        }
+        if (isbtn && isQQbot && self_id == btnbot) await send(group_id, [segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
         return result
       }
     } else if (isQQbot) {
@@ -90,6 +97,23 @@ export default class msgReset extends plugin {
       return false
     }
   }
+  async cbind(e) {
+    let ud = this.e.self_id;
+    let cfgs = await cfg.getConfig("air", "config");
+    let rb = cfgs?.msgServer?.robot;
+    if (ud == rb) {
+      let ds = {
+        d: 1,
+        peer: this.e.group.group_id,
+        group: this.e.msg.replace(/TS_cbind_/, '')
+      }
+      await event(ds);
+      await Bot[rb].setrawgroup(ds.peer, ds.group)
+      if (!isresends) isresends = true
+      return true
+    }
+    return true
+  }
   async em(e) {
     let ud = this.e.self_id;
     let cfgs = await cfg.getConfig("air", "config");
@@ -101,14 +125,15 @@ export default class msgReset extends plugin {
       }
       let res = await event(ds)
       if (res.d == 2 && !isresends) isresends = true
+      return true
     }
+    return true
   }
 
 
 };//插个飞雷神
 
 // 消息处理区
-var isresends = true
 async function makeMsg(msg) {
   let _cfg = await cfg.getConfig('air', 'config')
   for (let i of Array.isArray(msg) ? msg : [msg]) {
@@ -325,13 +350,43 @@ async function textark(text) {
   return tool.textark(wx, msgs);
 }
 
-async function send(group, msgs, quote, data) {
+async function send(group, msg, quote, data) {
+  let _cfg = await cfg.getConfig('air', 'config')
   let setting = await event({ d: 3 })
+  let rb = _cfg?.msgServer?.robot;
   let cfgs = setting[group];
   let msgid = cfgs?.msgid
-  if ((Date.now() - cfgs?.time > 250000) || (cfgs?.sign == 0) || (!cfgs?.hasOwnProperty("peer"))) {
-    await getmsgid(group, msgs, quote, data)
-    return true
+  let msgs = [];
+  for (let i of Array.isArray(msg) ? msg : [msg]) {
+    if (typeof i === "object") {
+      i = { ...i }
+    } else {
+      i = { type: "text", text: Bot.String(i) }
+    }
+    switch (i.type) {
+      case 'reply':
+        break
+      case 'at':
+        if (i?.qq) msgs.push({ type: "text", text: `@${Bot.String(i.qq)} ` })
+        break
+      default:
+        msgs.push(i)
+    }
+  }
+  
+  if (_cfg?.msgServer?.auto) {
+    let ds = {
+      d: 8,
+      peer: cfgs?.peer,
+      content: [{ type: 'reply', id: msgid }, ...msgs],
+      quote, data
+    }
+    if (!cfgs?.hasOwnProperty("peer")) {
+      return await getcallback(group, msgs, quote, data)
+    }
+    return await event(ds);
+  } else if ((Date.now() - cfgs?.time > 250000) || (cfgs?.sign == 0) || (!cfgs?.hasOwnProperty("peer"))) {
+    return await getmsgid(group, msgs, quote, data)
   }
   let ds = {
     d: 8,
@@ -339,8 +394,42 @@ async function send(group, msgs, quote, data) {
     content: [{ type: 'reply', id: msgid }, ...msgs],
     quote, data
   }
-  await event(ds)
-  return true
+  return await event(ds)
+}
+
+async function getcallback(group, msgs, quote, data) {
+  let _cfg = await cfg.getConfig('air', 'config')
+  let robot = _cfg.msgServer?.robot
+  isresends = false
+  logger.info("[AIR-Plugin]MsgID失效，尝试重新获取")
+  let ds = await event({ d: 3 })
+  ds[group] = {
+    sign: 0
+  }
+  await event({ d: 4, ds })
+  await Bot[robot].callbacks(group, `TS_cbind_${group}`)
+  isresends = false
+  let k = 0
+  let result = true
+  await sleep(500);
+  await new Promise(async (resolve, reject) => {
+    while (k < 10) {
+      k++
+      // logger.info("[AIR-Plugin]getMsgID等待响应-" + String(k) + "|" + String(isresends))
+      if (isresends == true) {
+        resolve()
+        break
+      }
+      await sleep(520)
+    }
+    reject()
+  }).then(async () => {
+    await send(group, msgs, quote, data)
+  }).catch(async () => {
+    result = false
+    logger.info("[AIR-Plugin]MsgID失败")
+  }).finally(() => k = 0);
+  return result
 }
 
 async function getmsgid(group, msgs, quote, data) {
@@ -358,10 +447,12 @@ async function getmsgid(group, msgs, quote, data) {
   let mid = (await groupobj.sendMsg([segment.at(robot), _cfg?.msgServer?.sendcmd || ' msgServer'])).message_id
   await groupobj.recallMsg(mid)
   let k = 0
-  new Promise(async (resolve, reject) => {
+  let result = true
+  await sleep(500);
+  await new Promise(async (resolve, reject) => {
     while (k < 10) {
       k++
-      logger.info("[AIR-Plugin]getMsgID等待响应-" + String(k) + "|" + String(isresends))
+      // logger.info("[AIR-Plugin]getMsgID等待响应-" + String(k) + "|" + String(isresends))
       if (isresends == true) {
         resolve()
         break
@@ -369,14 +460,13 @@ async function getmsgid(group, msgs, quote, data) {
       await sleep(520)
     }
     reject()
-  }).then(() => {
-    send(group, msgs, quote, data)
-  })
-    .catch(() => {
-      logger.info("[AIR-Plugin]MsgID失败")
-    });
-  k = 0
-  return true
+  }).then(async () => {
+    await send(group, msgs, quote, data)
+  }).catch(() => {
+    result = false
+    logger.info("[AIR-Plugin]MsgID失败")
+  }).finally(() => k = 0);
+  return result
 }
 
 async function upimg(file) {

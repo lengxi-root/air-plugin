@@ -21,7 +21,7 @@ export function supportGuoba() {
       description: `伊蕾娜Api与全局消息转换`,
       icon: 'mdi:stove',
       iconColor: '#d19f56',
-      iconPath: path.join(__dirname, 'main/helps/icon.png')
+      iconPath: path.join(__dirname, 'main/res/img/icon.png')
     },
     configInfo: {
       schemas: [
@@ -323,6 +323,12 @@ export function supportGuoba() {
           field: 'msgServer.open',
           label: '官机代发模式',
           bottomHelpMessage: '使用官机代发消息，仅群消息可用',
+          component: 'Switch'
+        },
+        {
+          field: 'msgServer.auto',
+          label: '免艾特代发模式',
+          bottomHelpMessage: '使用类似主动的方法代发（需要搭配https://gitee.com/ts-yf/QQBot-Plugin使用）',
           component: 'Switch'
         },
         {
