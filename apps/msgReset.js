@@ -378,7 +378,7 @@ async function send(group, msg, quote, data) {
     let ds = {
       d: 8,
       peer: cfgs?.peer,
-      content: [{ type: 'reply', id: msgid }, ...msgs],
+      content: msgs,
       quote, data
     }
     if (!cfgs?.hasOwnProperty("peer")) {
