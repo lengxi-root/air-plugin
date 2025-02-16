@@ -144,7 +144,6 @@ export default class msgReset extends plugin {
     return true
   }
   async setcallback(e) {
-    let ud = this.e.self_id;
     let cfgs = await cfg.getConfig("air", "config");
     if (cfgs?.msgServer?.auto) {
       logger.mark("[AIR-Plugin]初始化callback进程")
@@ -415,7 +414,7 @@ async function send(group, msg, quote, data) {
       quote, data
     }
     if (!cfgs?.hasOwnProperty("peer")) {
-        return false;
+      await msgReset.setcallback()
     }
     return await event(ds);
   } else if ((Date.now() - cfgs?.time > 250000) || (cfgs?.sign == 0) || (!cfgs?.hasOwnProperty("peer"))) {
