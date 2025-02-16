@@ -10,6 +10,7 @@ import crypto from 'node:crypto';
 
 let _cmdmsg = await cfg.getConfig('air', 'config')
 var isresends = true
+var inited = false
 
 export default class msgReset extends plugin {
   constructor() {
@@ -53,6 +54,19 @@ export default class msgReset extends plugin {
     let isbtn = _cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != '')
     if (!istoimg && !isopen && !msgServer && !isbtn && !markdown && !mds) return false;
     if (msgServer) {
+      if (inited != true && _cfg?.msgServer?.auto) {
+        inited = await this.setcallback();
+        setInterval(async () => {
+          if (_cfg?.msgServer?.auto) {
+            logger.mark("[AIR-Plugin]执行callback进程")
+            let gs = _cfg?.msgServer?.group
+            for (let i of gs) {
+              await Bot[rb].callbacks(i, `TS_cbind_${i}`)
+              await sleep(300)
+            }
+          }
+        }, 1000 * 60 * 4)
+      }
       this.e.reply = async function (msgs, quote, data) {
         if (!msgs) return true;
         if (!Array.isArray(msgs)) msgs = [msgs];
@@ -67,7 +81,7 @@ export default class msgReset extends plugin {
           msgs = await makeMd(msgs);
         }
         result = await send(group_id, msgs, quote, data);
-        if (!result){
+        if (!result) {
           result = await old_reply(msgs, quote, data);
         }
         if (isbtn && isQQbot && self_id == btnbot) await send(group_id, [segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
@@ -128,6 +142,25 @@ export default class msgReset extends plugin {
       return true
     }
     return true
+  }
+  async setcallback(e) {
+    let ud = this.e.self_id;
+    let cfgs = await cfg.getConfig("air", "config");
+    if (cfgs?.msgServer?.auto) {
+      logger.mark("[AIR-Plugin]初始化callback进程")
+      let gs = cfgs?.msgServer?.group
+      for (let i of gs) {
+        let ds = await event({ d: 3 })
+        ds[i] = {
+          sign: 0
+        }
+        await event({ d: 4, ds })
+        await Bot[cfgs?.msgServer?.robot].callbacks(i, `TS_cbind_${i}`)
+        await sleep(300)
+      }
+    }
+    inited = true;
+    return inited;
   }
 
 
@@ -373,7 +406,7 @@ async function send(group, msg, quote, data) {
         msgs.push(i)
     }
   }
-  
+
   if (_cfg?.msgServer?.auto) {
     let ds = {
       d: 8,
@@ -382,7 +415,7 @@ async function send(group, msg, quote, data) {
       quote, data
     }
     if (!cfgs?.hasOwnProperty("peer")) {
-      return await getcallback(group, msgs, quote, data)
+        return false;
     }
     return await event(ds);
   } else if ((Date.now() - cfgs?.time > 250000) || (cfgs?.sign == 0) || (!cfgs?.hasOwnProperty("peer"))) {
@@ -397,47 +430,12 @@ async function send(group, msg, quote, data) {
   return await event(ds)
 }
 
-async function getcallback(group, msgs, quote, data) {
-  let _cfg = await cfg.getConfig('air', 'config')
-  let robot = _cfg.msgServer?.robot
-  isresends = false
-  logger.info("[AIR-Plugin]MsgID失效，尝试重新获取")
-  let ds = await event({ d: 3 })
-  ds[group] = {
-    sign: 0
-  }
-  await event({ d: 4, ds })
-  await Bot[robot].callbacks(group, `TS_cbind_${group}`)
-  isresends = false
-  let k = 0
-  let result = true
-  await sleep(500);
-  await new Promise(async (resolve, reject) => {
-    while (k < 10) {
-      k++
-      // logger.info("[AIR-Plugin]getMsgID等待响应-" + String(k) + "|" + String(isresends))
-      if (isresends == true) {
-        resolve()
-        break
-      }
-      await sleep(520)
-    }
-    reject()
-  }).then(async () => {
-    await send(group, msgs, quote, data)
-  }).catch(async () => {
-    result = false
-    logger.info("[AIR-Plugin]MsgID失败")
-  }).finally(() => k = 0);
-  return result
-}
-
 async function getmsgid(group, msgs, quote, data) {
   let _cfg = await cfg.getConfig('air', 'config')
   let ub = _cfg.msgServer?.userbot
   let robot = _cfg.msgServer?.robot
   isresends = false
-  logger.info("[AIR-Plugin]MsgID失效，尝试重新获取")
+  logger.mark("[AIR-Plugin]MsgID失效，尝试重新获取")
   let ds = await event({ d: 3 })
   ds[group] = {
     sign: 0
@@ -452,7 +450,7 @@ async function getmsgid(group, msgs, quote, data) {
   await new Promise(async (resolve, reject) => {
     while (k < 10) {
       k++
-      // logger.info("[AIR-Plugin]getMsgID等待响应-" + String(k) + "|" + String(isresends))
+      // logger.mark("[AIR-Plugin]getMsgID等待响应-" + String(k) + "|" + String(isresends))
       if (isresends == true) {
         resolve()
         break
@@ -464,7 +462,7 @@ async function getmsgid(group, msgs, quote, data) {
     await send(group, msgs, quote, data)
   }).catch(() => {
     result = false
-    logger.info("[AIR-Plugin]MsgID失败")
+    logger.mark("[AIR-Plugin]MsgID失败")
   }).finally(() => k = 0);
   return result
 }
@@ -502,7 +500,7 @@ async function img_cn(data) {
   });
   const md5 = crypto.createHash('md5').update(data).digest('hex').toUpperCase();
   const url = `https://gchat.qpic.cn/qmeetpic/0/0-0-${md5}/0`;
-  logger.info(`[AIR-Plugin]频道图床URL： ${url}`);
+  logger.mark(`[AIR-Plugin]频道图床URL： ${url}`);
   return url
 }
 
@@ -522,7 +520,7 @@ async function img_hb(data) {
   })
   res = await res.json()
   const url = `https://gd-hbimg.huaban.com/${res.key}_fw1200`
-  logger.info(`[AIR-Plugin]花瓣图床URL： ${url}`);
+  logger.mark(`[AIR-Plugin]花瓣图床URL： ${url}`);
   return url
 }
 
