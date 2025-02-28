@@ -26,7 +26,7 @@ git clone -b main --depth=1 https://github.com/lengxi-root/air-plugin.git ./plug
 > [!tip]
 > 如果您的网络环境较差，建议使用代理加速
 > ```
-> git clone --depth=1 https://ghproxy.net/https://github.com/lengxi-root/air-plugin.git ./plugins/air-plugin/
+> git clone --depth=1 https://mirror.ghproxy.com/https://github.com/lengxi-root/air-plugin.git ./plugins/air-plugin/
 > ```
 
 > 使用Gitee安装（同步可能较慢）
@@ -189,8 +189,7 @@ Ark_users:
 
 ## 联系方式
 
-- 班级群(New： [687976465](https://qm.qq.com/q/PCWuy2zV6u)
-- url配置咨询群： [953774387](https://qm.qq.com/q/U0aaXRCzce)
+- 班级群： [687976465](https://qm.qq.com/q/PCWuy2zV6u)
 
 ### 开发者 & 赞助支持
 
@@ -203,5 +202,5 @@ Ark_users:
 
 | Robot | 创建人 | 功能&介绍 |
 | - | - | - |
-| [TK伊蕾娜](https://qun.qq.com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889045760) | [冷曦](https://qm.qq.com/q/44OFS6WBKM) | 定位：核心为API触发型图库BOT，TTS转换与其他拓展API功能。 |
-| [XxxXBot](https://qun.qq.com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889042293) | [TS沂沨](https://qm.qq.com/q/l7nDOOUQL) | 杂交宝可梦，2048，象棋，葫芦侠美图，米游查询工具等，更多神秘指令等你探索。(可定制功能) |
+| [伊蕾娜](https://qun.qq.com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889045760) | [冷曦](https://qm.qq.com/q/44OFS6WBKM) | 定位：核心为API触发型多功能BOT与其他拓展玩法功能。 |
+| [XxxXBot](https://qun.qq.com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889042293) | [TS沂沨](https://qm.qq.com/q/l7nDOOUQL) | 良言一句三冬暖，恶语伤人六月寒。提供一言，情话，毒鸡汤，答案之书等大量语库，再也不为没有文案发朋友圈而发愁。 |

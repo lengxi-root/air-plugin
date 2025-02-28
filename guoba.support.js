@@ -321,7 +321,7 @@ export function supportGuoba() {
         },
         {
           field: 'msgServer.open',
-          label: '官机代发模式',
+          label: '官机代发总开关',
           bottomHelpMessage: '使用官机代发消息，仅群消息可用',
           component: 'Switch'
         },
@@ -344,7 +344,7 @@ export function supportGuoba() {
         {
           field: 'msgServer.robot',
           label: '代发发送账号',
-          bottomHelpMessage: '用来发送息数据的账号',
+          bottomHelpMessage: '用来发送消息数据的账号',
           component: 'Input',
           required: false,
           componentProps: {
@@ -354,7 +354,7 @@ export function supportGuoba() {
         {
           field: 'msgServer.group',
           label: '代发群白名单',
-          bottomHelpMessage: '填写真·QQ群号',
+          bottomHelpMessage: '填写真实·QQ群号（非openid）',
           component: 'GTags',
           componentProps: {
             allowAdd: true,

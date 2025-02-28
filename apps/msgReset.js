@@ -62,10 +62,10 @@ export default class msgReset extends plugin {
             let gs = _cfg?.msgServer?.group
             for (let i of gs) {
               await Bot[rb].callbacks(i, `TS_cbind_${i}`)
-              await sleep(300)
+              await sleep(500)
             }
           }
-        }, 1000 * 60 * 4)
+        }, 250000)
       }
       this.e.reply = async function (msgs, quote, data) {
         if (!msgs) return true;
@@ -155,7 +155,7 @@ export default class msgReset extends plugin {
         }
         await event({ d: 4, ds })
         await Bot[cfgs?.msgServer?.robot].callbacks(i, `TS_cbind_${i}`)
-        await sleep(300)
+        await sleep(500)
       }
     }
     inited = true;
@@ -414,7 +414,11 @@ async function send(group, msg, quote, data) {
       quote, data
     }
     if (!cfgs?.hasOwnProperty("peer")) {
-      await msgReset.setcallback()
+        let ds = await event({ d: 3 })
+        ds[group] = { sign: 0 }
+        await event({ d: 4, ds })
+        await Bot[rb].callbacks(group, `TS_cbind_${group}`)
+        await sleep(500)
     }
     return await event(ds);
   } else if ((Date.now() - cfgs?.time > 250000) || (cfgs?.sign == 0) || (!cfgs?.hasOwnProperty("peer"))) {
