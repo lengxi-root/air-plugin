@@ -26,7 +26,7 @@ git clone -b main --depth=1 https://github.com/lengxi-root/air-plugin.git ./plug
 > [!tip]
 > 如果您的网络环境较差，建议使用代理加速
 > ```
-> git clone --depth=1 https://mirror.ghproxy.com/https://github.com/lengxi-root/air-plugin.git ./plugins/air-plugin/
+> git clone --depth=1 https://ghproxy.net/https://github.com/lengxi-root/air-plugin.git ./plugins/air-plugin/
 > ```
 
 > 使用Gitee安装（同步可能较慢）
