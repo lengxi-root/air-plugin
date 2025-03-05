@@ -144,6 +144,7 @@ export default class msgReset extends plugin {
     return true
   }
   async setcallback(e) {
+    inited = true;
     let cfgs = await cfg.getConfig("air", "config");
     if (cfgs?.msgServer?.auto) {
       logger.mark("[AIR-Plugin]初始化callback进程")
@@ -158,7 +159,6 @@ export default class msgReset extends plugin {
         await sleep(3000)
       }
     }
-    inited = true;
     return inited;
   }
 
