@@ -62,7 +62,7 @@ export default class msgReset extends plugin {
             let gs = _cfg?.msgServer?.group
             for (let i of gs) {
               await Bot[rb].callbacks(i, `TS_cbind_${i}`)
-              await sleep(500)
+              await sleep(4000)
             }
           }
         }, 250000)
@@ -155,7 +155,7 @@ export default class msgReset extends plugin {
         }
         await event({ d: 4, ds })
         await Bot[cfgs?.msgServer?.robot].callbacks(i, `TS_cbind_${i}`)
-        await sleep(500)
+        await sleep(3000)
       }
     }
     inited = true;
