@@ -204,3 +204,4 @@ Ark_users:
 | - | - | - |
 | [伊蕾娜](https://qun.qq.com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889045760) | [冷曦](https://qm.qq.com/q/44OFS6WBKM) | 定位：核心为API触发型多功能BOT与其他拓展玩法功能。 |
 | [XxxXBot](https://qun.qq.com/qunpro/robot/qunshare?biz_type=1&robot_uin=3889042293) | [TS沂沨](https://qm.qq.com/q/l7nDOOUQL) | 良言一句三冬暖，恶语伤人六月寒。提供一言，情话，毒鸡汤，答案之书等大量语库，再也不为没有文案发朋友圈而发愁。 |
+| [玉衡星刻晴](https://bot.q.qq.com/s/917433cnh?id=102131063) | [F246](https://qm.qq.com/q/6dLKCGt6Le) | 璃月七星之「玉衡星」，负责土地规划与建设，以行动力与 革新理念闻名 |
