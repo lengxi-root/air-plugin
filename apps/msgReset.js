@@ -12,10 +12,10 @@ let _cmdmsg = await cfg.getConfig('air', 'config')
 var isresends = true
 var inited = false
 
-输出 默认 class msgReset extends plugin {
+export default class msgReset extends plugin {
   constructor() {
     super({
-      名字: '全局消息转换',
+      name: '全局消息转换',
       dsc: '将其他插件的消息处理后重新发送',
       event: 'message',
       priority: 2000,
@@ -37,11 +37,11 @@ var inited = false
     let self_id = this.e.self_id;
     let group_id = this.e.group?.group_id;
     //是否QQBot适配器
-    let isQQbot = this.e.bot.version.名字 == 'QQBot'
+    let isQQbot = this.e.bot.version.name == 'QQBot'
     //全局ark开关
     let isopen = isQQbot && (_cfg.Ark_users?.includes(String(self_id))) && _cfg.msgReset;
     //代发开关
-    let msgServer = !isQQbot && (mg?.includes(String(group_id))) && (ub == this.e.self_id) && (this.e.isGroup == true) && _cfg.msgServer?.打开;
+    let msgServer = !isQQbot && (mg?.includes(String(group_id))) && (ub == this.e.self_id) && (this.e.isGroup == true) && _cfg.msgServer?.open;
     //是否使用原生markdown
     let mds = isQQbot && _cfg.markdown?.mds
     //是否使用markdown
@@ -49,10 +49,10 @@ var inited = false
     //原始reply对象
     let old_reply = this.e.reply;
     //是否使用全局转图
-    let istoimg = _cfg.toimg?.打开 && (Bot.md2img || toimg)
+    let istoimg = _cfg.toimg?.open && (Bot.md2img || toimg)
     //是否使用按钮
-    let isbtn = _cfg.button?.打开 && (_cfg.button?.template != null || _cfg.button?.template != '')
-    if (!istoimg && !isopen && !msgServer && !isbtn && !markdown && !mds) return false
+    let isbtn = _cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != '')
+    if (!istoimg && !isopen && !msgServer && !isbtn && !markdown && !mds) return false;
     if (msgServer) {
       if (inited != true && _cfg?.msgServer?.auto) {
         inited = await this.setcallback();
@@ -84,7 +84,9 @@ var inited = false
         if (!result) {
           result = await old_reply(msgs, quote, data);
         }
-        if (isbtn && isQQbot && self_id == btnbot) await send(group_id, [segment.源码({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
+        if (isbtn && isQQbot && self_id == btnbot) {
+          await send(group_id, [segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
+        }
         return result
       }
     } else if (isQQbot) {
@@ -104,7 +106,9 @@ var inited = false
           msgs = (await makeMds(msgs, e)).msgs;
         }
         result = await old_reply(msgs, quote, data);
-        if (isbtn && isQQbot) await old_reply([segment.源码({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
+        if (isbtn && isQQbot) {
+          await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
+        }
         return result
       }
     } else {
@@ -168,28 +172,33 @@ var inited = false
 // 消息处理区
 async function makeMsg(msg) {
   let _cfg = await cfg.getConfig('air', 'config')
-  let msgs = []
+  let msgs = [];
   for (let i of Array.isArray(msg) ? msg : [msg]) {
     if (typeof i === "object") {
       i = { ...i }
     } else {
-      i = { 请键入: "text", text: Bot.String(i) }
+      i = { type: "text", text: Bot.String(i) }
     }
     let now, time, ht, _text
-    switch (i.请键入) {
+    switch (i.type) {
       case 'text':
-        now = 新建 日期()
+        now = new Date()
         time = now.toLocaleString()
-        ht = await fetch("<url id="d0agjhrlmiu6loe877gg" type="url" status="parsed" title="" wc="32">https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20</url> ")
+        ht = await fetch("https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20");
         ht = await ht.text();
-        if (typeof _cfg.Ark_set?.Text != 'undefined') _text = await _cfg.Ark_set.Text.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht).replace(/\[换行\]/g, '\n').replace(/\[消息内容\]/g, i.text)
-        i.text = await textark(_text || i.text)
-        msgs.push(i.text)
-        break
+        if (typeof _cfg.Ark_set?.Text != 'undefined') {
+          _text = await _cfg.Ark_set.Text.replace(/\[时间\]/g, time)
+                                          .replace(/\[一言\]/g, ht)
+                                          .replace(/\[换行\]/g, '\n')
+                                          .replace(/\[消息内容\]/g, i.text);
+        }
+        i.text = await textark(_text || i.text);
+        msgs.push(i.text);
+        break;
       case 'image':
-        now = 新建 日期()
+        now = new Date()
         time = now.toLocaleString()
-        ht = await fetch("<url id="d0agjhrlmiu6loe877gg" type="url" status="parsed" title="" wc="32">https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20</url> ")
+        ht = await fetch("https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20");
         ht = await ht.text();
         let wx, bt, xbt;
         if (typeof _cfg.Ark_set?.img_wx != 'undefined') wx = _cfg.Ark_set.img_wx || _cfg.Ark_set.Text_wx;
@@ -197,18 +206,18 @@ async function makeMsg(msg) {
         if (typeof _cfg.Ark_set?.img_xbt != 'undefined') xbt = await _cfg.Ark_set.img_xbt.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht);
         i.file = await Bot.Buffer(i.file);
         i.file = await upimg(i.file)
-        msgs.push(tool.imgark(wx || '[AIR-Plugin]', bt || '', xbt || '', `${i.file}`))
-        break
+        msgs.push(tool.imgark(wx || '[AIR-Plugin]', bt || '', xbt || '', `${i.file}`));
+        break;
       case 'raw':
         if (i.data && Array.isArray(i.data)) {
-          const nestedMsgs = await makeMsg(i.data)
-          msgs.push(...nestedMsgs)
+          const nestedMsgs = await makeMsg(i.data);
+          msgs.push(...nestedMsgs);
         } else {
-          msgs.push(i)
+          msgs.push(i);
         }
-        break
-      默认:
-        msgs.push(i)
+        break;
+      default:
+        msgs.push(i);
     }
   }
   return msgs
@@ -221,15 +230,20 @@ async function makeMds(msg, e) {
     if (typeof i === "object") {
       i = { ...i }
     } else {
-      i = { 请键入: "text", text: Bot.String(i) }
+      i = { type: "text", text: Bot.String(i) }
     }
     let now, time, ht
-    switch (i.请键入) {
+    switch (i.type) {
       case 'text':
-        now = 新建 日期()
+        now = new Date()
         time = now.toLocaleString()
-        ht = await (await fetch("<url id="d0agjhrlmiu6loe877gg" type="url" status="parsed" title="" wc="32">https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20</url> ")).text();
-        if (typeof _cfg.markdown?.Text != 'undefined') i.text = await _cfg.markdown.Text.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht).replace(/\[换行\]/g, '\n').replace(/\[消息内容\]/g, i.text)
+        ht = await (await fetch("https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20")).text();
+        if (typeof _cfg.markdown?.Text != 'undefined') {
+          i.text = await _cfg.markdown.Text.replace(/\[时间\]/g, time)
+                                            .replace(/\[一言\]/g, ht)
+                                            .replace(/\[换行\]/g, '\n')
+                                            .replace(/\[消息内容\]/g, i.text);
+        }
         _text += i.text
         break
       case 'image':
@@ -242,25 +256,25 @@ async function makeMds(msg, e) {
         break
       case 'raw':
         if (i.data && Array.isArray(i.data)) {
-          const nestedMsgs = await makeMds(i.data, e)
-          msgs.push(...nestedMsgs.msgs)
-          _text += nestedMsgs.md
+          const nestedMsgs = await makeMds(i.data, e);
+          msgs.push(...nestedMsgs.msgs);
+          _text += nestedMsgs.md;
         } else {
-          msgs.push(segment.markdown(_text))
+          msgs.push(segment.markdown(_text));
           if (Button) {
-            const buttons = await button(e)
-            if (buttons) msgs.push(buttons)
+            const buttons = await button(e);
+            if (buttons) msgs.push(buttons);
           }
-          return { msgs, md: _text }
+          return { msgs, md: _text };
         }
-        break
-      默认:
-        msgs.push(segment.markdown(_text))
+        break;
+      default:
+        msgs.push(segment.markdown(_text));
         if (Button) {
-          const buttons = await button(e)
-          if (buttons) msgs.push(buttons)
+          const buttons = await button(e);
+          if (buttons) msgs.push(buttons);
         }
-        return { msgs, md: _text }
+        return { msgs, md: _text };
     }
   }
   msgs.push(segment.markdown(_text))
@@ -273,7 +287,7 @@ async function makeMds(msg, e) {
 async function makeMd(msg) {
   let _cfg = await cfg.getConfig('air', 'config')
   let mix_open = (_cfg.markdown?.mix_open && typeof _cfg.markdown?.mix_id != 'undefined') || false
-  let isbtn = (_cfg.button?.打开 && (_cfg.button?.template != null || _cfg.button?.template != ''))
+  let isbtn = (_cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != ''))
   let msgs = []
   let params = []
   let btn = []
@@ -281,11 +295,10 @@ async function makeMd(msg) {
     if (typeof i === "object") {
       i = { ...i }
     } else {
-      i = { 请键入: "text", text: Bot.String(i) }
+      i = { type: "text", text: Bot.String(i) }
     }
-
     let md = []
-    switch (i.请键入) {
+    switch (i.type) {
       case 'text':
         if (!mix_open) {
           params.push({
@@ -293,7 +306,7 @@ async function makeMd(msg) {
             "values": [i.text.replace(/\n/g, '\r')]
           })
           md.push(segment.markdown({ custom_template_id: _cfg.markdown?.text_id, params }))
-          if (isbtn) md.push(segment.源码({ 'type': 'keyboard', 'id': _cfg.button?.template }))
+          if (isbtn) md.push(segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template }))
           return md
         }
         params.push({
@@ -317,7 +330,7 @@ async function makeMd(msg) {
             "values": [i.file]
           })
           md.push(segment.markdown({ custom_template_id: _cfg.markdown?.text_id, params }))
-          if (isbtn) md.push(segment.源码({ 'type': 'keyboard', 'id': _cfg.button?.template }))
+          if (isbtn) md.push(segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template }))
           return md
         }
         params.push({
@@ -331,33 +344,33 @@ async function makeMd(msg) {
         break
       case 'keyboard':
         if (i.id) {
-          btn.push(segment.源码({ 'type': 'keyboard', 'id': i.id }))
+          btn.push(segment.raw({ 'type': 'keyboard', 'id': i.id }))
         } else {
-          btn.push(segment.源码({ 'type': 'keyboard', ...i.data }))
+          btn.push(segment.raw({ 'type': 'keyboard', ...i.data }))
         }
         break
       case 'button':
         if (i.id) {
-          btn.push(segment.源码({ 'type': 'keyboard', 'id': i.id }))
+          btn.push(segment.raw({ 'type': 'keyboard', 'id': i.id }))
         } else {
-          btn.push(segment.源码({ 'type': 'keyboard', ...i.data }))
+          btn.push(segment.raw({ 'type': 'keyboard', ...i.data }))
         }
         break
       case 'raw':
         if (i.data && Array.isArray(i.data)) {
-          const nestedMsgs = await makeMd(i.data)
-          msgs.push(...nestedMsgs)
+          const nestedMsgs = await makeMd(i.data);
+          msgs.push(...nestedMsgs);
         } else {
-          msgs.push(i)
+          msgs.push(i);
         }
-        break
-      默认:
-        msgs.push(i)
+        break;
+      default:
+        msgs.push(i);
     }
   }
   msgs.push(segment.markdown({ custom_template_id: _cfg.markdown?.mix_id, params }))
   if (btn.length == 0 && isbtn == true) {
-    msgs.push(segment.源码({ 'type': 'keyboard', 'id': _cfg.button?.template }))
+    msgs.push(segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template }))
   } else {
     msgs.push(...btn)
   }
@@ -370,7 +383,7 @@ async function button(e) {
   try {
     for (let p of Button) {
       for (let v of p.plugin.rule) {
-        const regExp = 新建 RegExp(v.reg)
+        const regExp = new RegExp(v.reg)
         if (regExp.test(e.msg)) {
           p.e = e
           let button = await p[v.fnc](e)
@@ -384,10 +397,10 @@ async function button(e) {
               })
             })
             message.push({
-              请键入: 'keyboard',
+              type: 'keyboard',
               content: { rows }
             })
-            return segment.源码(...message)
+            return segment.raw(...message)
           }
           return false
         }
@@ -401,7 +414,7 @@ async function button(e) {
 
 async function textark(text) {
   let msgs = [];
-  let splitText = text.replace(/&amp;/g, "").分屏('\n');
+  let splitText = text.replace(/&amp;/g, "").split('\n');
   let _cfg = await cfg.getConfig('air', 'config')
   let msgurl = _cfg.MsgUrl
   let wx = _cfg.Ark_set?.Text_wx || '[AIR-Plugin]'
@@ -428,15 +441,15 @@ async function send(group, msg, quote, data) {
     if (typeof i === "object") {
       i = { ...i }
     } else {
-      i = { 请键入: "text", text: Bot.String(i) }
+      i = { type: "text", text: Bot.String(i) }
     }
-    switch (i.请键入) {
+    switch (i.type) {
       case 'reply':
         break
       case 'at':
-        if (i?.qq) msgs.push({ 请键入: "text", text: `@${Bot.String(i.qq)} ` })
+        if (i?.qq) msgs.push({ type: "text", text: `@${Bot.String(i.qq)} ` })
         break
-      默认:
+      default:
         msgs.push(i)
     }
   }
@@ -449,20 +462,20 @@ async function send(group, msg, quote, data) {
       quote, data
     }
     if (!cfgs?.hasOwnProperty("peer")) {
-      let ds = await event({ d: 3 })
-      ds[group] = { sign: 0 }
-      await event({ d: 4, ds })
-      await Bot[rb].callbacks(group, `TS_cbind_${group}`)
-      await sleep(500)
+        let ds = await event({ d: 3 })
+        ds[group] = { sign: 0 }
+        await event({ d: 4, ds })
+        await Bot[rb].callbacks(group, `TS_cbind_${group}`)
+        await sleep(500)
     }
-    return await event(ds)
-  } else if ((日期.now() - cfgs?.time > 250000) || (cfgs?.sign == 0) || (!cfgs?.hasOwnProperty("peer"))) {
+    return await event(ds);
+  } else if ((Date.now() - cfgs?.time > 250000) || (cfgs?.sign == 0) || (!cfgs?.hasOwnProperty("peer"))) {
     return await getmsgid(group, msgs, quote, data)
   }
   let ds = {
     d: 8,
     peer: cfgs?.peer,
-    content: [{ 请键入: 'reply', id: msgid }, ...msgs],
+    content: [{ type: 'reply', id: msgid }, ...msgs],
     quote, data
   }
   return await event(ds)
@@ -485,7 +498,7 @@ async function getmsgid(group, msgs, quote, data) {
   let k = 0
   let result = true
   await sleep(500);
-  await 新建 Promise(async (resolve, reject) => {
+  await new Promise(async (resolve, reject) => {
     while (k < 10) {
       k++
       // logger.mark("[AIR-Plugin]getMsgID等待响应-" + String(k) + "|" + String(isresends))
@@ -528,28 +541,28 @@ async function img_cn(data) {
 
   const payload = 新建 FormData();
   payload.append('msg_id', '0');
-  payload.append('file_image', new Blob([data], { 请键入: 'image/png' }), 'image.jpg');
+  payload.append('file_image', 新建 Blob([data], { 请键入: 'image/png' }), 'image.jpg');
 
-  await axios.post(`<url id="d0agjhrlmiu6loe877dg" type="url" status="failed" title="" wc="0">https://api.sgroup.qq.com/channels/</url> ${bot.channelId}/messages`, payload, {
+  await axios.post(`https://api.sgroup.qq.com/channels/${bot.channelId}/messages`, payload, {
     headers: {
       Authorization: 'QQBot ' + bot.token,
       'X-Union-Appid': bot.appId
     }
   });
-  const md5 = crypto.createHash('md5').update(data).digest('hex').toUpperCase()
-  const url = `<url id="d0agjhrlmiu6loe877e0" type="url" status="failed" title="" wc="0">https://gchat.qpic.cn/qmeetpic/0/0-0-</url> ${md5}/0`;
-  logger.mark(`[AIR-Plugin]频道图床URL： ${url}`)
+  const md5 = crypto.createHash('md5').update(data).digest('hex').toUpperCase();
+  const url = `https://gchat.qpic.cn/qmeetpic/0/0-0-${md5}/0`;
+  logger.mark(`[AIR-Plugin]频道图床URL： ${url}`);
   return url
 }
 
 async function img_hb(data) {
-  let formdata = new FormData();
+  let formdata = 新建 FormData();
   let _cfg = await cfg.getConfig('air', 'config')
-  formdata.append("file", new Blob([data], { 请键入: 'image/png' }), {
+  formdata.append("file", 新建 Blob([data], { 请键入: 'image/png' }), {
     filename: 日期.now(),//上传的文件名
     contentType: 'image/png',//文件类型标识
   });
-  let res = await fetch('<url id="d0agjhrlmiu6loe877i0" type="url" status="failed" title="" wc="0">https://api.huaban.com/upload</url> ', {
+  let res = await fetch('https://api.huaban.com/upload', {
     method: 'POST',
     内容: formdata,
     headers: {
@@ -557,22 +570,22 @@ async function img_hb(data) {
     }
   })
   res = await res.json()
-  const url = `<url id="d0agjhrlmiu6loe877f0" type="url" status="failed" title="" wc="0">https://gd-hbimg.huaban.com/</url> ${res.key}_fw1200`
+  const url = `https://gd-hbimg.huaban.com/${res.key}_fw1200`
   logger.mark(`[AIR-Plugin]花瓣图床URL： ${url}`);
   return url
 }
 
 // 小工具区
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return 新建 Promise(resolve => setTimeout(resolve, ms))
 }
 async function getImageSize(url) {
   if (Buffer.isBuffer(url)) {
-    return imageSize(new Uint8Array(url));
+    return imageSize(新建 Uint8Array(url));
   } else {
     let res = await fetch(url)
     res = await res.arrayBuffer()
-    res = new Uint8Array(res)
+    res = 新建 Uint8Array(res)
     return imageSize(res);
   }
 }
