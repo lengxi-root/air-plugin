@@ -297,6 +297,7 @@ async function makeMd(msg) {
     } else {
       i = { type: "text", text: Bot.String(i) }
     }
+    
     let md = []
     switch (i.type) {
       case 'text':
@@ -535,13 +536,13 @@ async function img_cn(data) {
   const bot = {
     token: Bot[botQQ].sdk.sessionManager.access_token,
     appId: Bot[botQQ].info.appid,
-    私密: Bot[botQQ].info.私密,
+    secret: Bot[botQQ].info.secret,
     channelId: channelid
   };
 
-  const payload = 新建 FormData();
+  const payload = new FormData();
   payload.append('msg_id', '0');
-  payload.append('file_image', 新建 Blob([data], { 请键入: 'image/png' }), 'image.jpg');
+  payload.append('file_image', new Blob([data], { type: 'image/png' }), 'image.jpg');
 
   await axios.post(`https://api.sgroup.qq.com/channels/${bot.channelId}/messages`, payload, {
     headers: {
@@ -556,10 +557,10 @@ async function img_cn(data) {
 }
 
 async function img_hb(data) {
-  let formdata = 新建 FormData();
+  let formdata = new FormData();
   let _cfg = await cfg.getConfig('air', 'config')
   formdata.append("file", 新建 Blob([data], { 请键入: 'image/png' }), {
-    filename: 日期.now(),//上传的文件名
+    filename: Date.now(),//上传的文件名
     contentType: 'image/png',//文件类型标识
   });
   let res = await fetch('https://api.huaban.com/upload', {
@@ -577,15 +578,15 @@ async function img_hb(data) {
 
 // 小工具区
 function sleep(ms) {
-  return 新建 Promise(resolve => setTimeout(resolve, ms))
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 async function getImageSize(url) {
   if (Buffer.isBuffer(url)) {
-    return imageSize(新建 Uint8Array(url));
+    return imageSize(new Uint8Array(url));
   } else {
     let res = await fetch(url)
     res = await res.arrayBuffer()
-    res = 新建 Uint8Array(res)
+    res = new Uint8Array(res)
     return imageSize(res);
   }
 }
