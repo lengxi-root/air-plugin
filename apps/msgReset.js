@@ -12,10 +12,10 @@ let _cmdmsg = await cfg.getConfig('air', 'config')
 var isresends = true
 var inited = false
 
-export default class msgReset extends plugin {
+输出 默认 class msgReset extends plugin {
   constructor() {
     super({
-      name: '全局消息转换',
+      名字: '全局消息转换',
       dsc: '将其他插件的消息处理后重新发送',
       event: 'message',
       priority: 2000,
@@ -37,27 +37,25 @@ export default class msgReset extends plugin {
     let self_id = this.e.self_id;
     let group_id = this.e.group?.group_id;
     //是否QQBot适配器
-    let isQQbot = this.e.bot.version.name == 'QQBot'
+    let isQQbot = this.e.bot.version.名字 == 'QQBot'
     //全局ark开关
     let isopen = isQQbot && (_cfg.Ark_users?.includes(String(self_id))) && _cfg.msgReset;
     //代发开关
-    let msgServer = !isQQbot && (mg?.includes(String(group_id))) && (ub == this.e.self_id) && (this.e.isGroup == true) && _cfg.msgServer?.open;
+    let msgServer = !isQQbot && (mg?.includes(String(group_id))) && (ub == this.e.self_id) && (this.e.isGroup == true) && _cfg.msgServer?.打开;
     //是否使用原生markdown
     let mds = isQQbot && _cfg.markdown?.mds
     //是否使用markdown
     let markdown = isQQbot && (_cfg.markdown?.text_open || _cfg.markdown?.img_open || _cfg.markdown?.mix_open)
     //原始reply对象
-    let old_reply = this.e.reply
+    let old_reply = this.e.reply;
     //是否使用全局转图
-    let istoimg = _cfg.toimg?.open && (Bot.md2img || toimg)
+    let istoimg = _cfg.toimg?.打开 && (Bot.md2img || toimg)
     //是否使用按钮
-    let isbtn = _cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != '')
-
+    let isbtn = _cfg.button?.打开 && (_cfg.button?.template != null || _cfg.button?.template != '')
     if (!istoimg && !isopen && !msgServer && !isbtn && !markdown && !mds) return false
-
     if (msgServer) {
       if (inited != true && _cfg?.msgServer?.auto) {
-        inited = await this.setcallback()
+        inited = await this.setcallback();
         setInterval(async () => {
           if (_cfg?.msgServer?.auto) {
             logger.mark("[AIR-Plugin]执行callback进程")
@@ -86,7 +84,7 @@ export default class msgReset extends plugin {
         if (!result) {
           result = await old_reply(msgs, quote, data);
         }
-        if (isbtn && isQQbot && self_id == btnbot) await send(group_id, [segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
+        if (isbtn && isQQbot && self_id == btnbot) await send(group_id, [segment.源码({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
         return result
       }
     } else if (isQQbot) {
@@ -105,8 +103,8 @@ export default class msgReset extends plugin {
         } else if (mds) {
           msgs = (await makeMds(msgs, e)).msgs;
         }
-        result = await old_reply(msgs, quote, data)
-        if (isbtn && isQQbot) await old_reply([segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
+        result = await old_reply(msgs, quote, data);
+        if (isbtn && isQQbot) await old_reply([segment.源码({ 'type': 'keyboard', 'id': _cfg.button?.template })], quote, data);
         return result
       }
     } else {
@@ -175,12 +173,12 @@ async function makeMsg(msg) {
     if (typeof i === "object") {
       i = { ...i }
     } else {
-      i = { type: "text", text: Bot.String(i) }
+      i = { 请键入: "text", text: Bot.String(i) }
     }
     let now, time, ht, _text
-    switch (i.type) {
+    switch (i.请键入) {
       case 'text':
-        now = new Date()
+        now = 新建 日期()
         time = now.toLocaleString()
         ht = await fetch("<url id="d0agjhrlmiu6loe877gg" type="url" status="parsed" title="" wc="32">https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20</url> ")
         ht = await ht.text();
@@ -189,15 +187,15 @@ async function makeMsg(msg) {
         msgs.push(i.text)
         break
       case 'image':
-        now = new Date()
+        now = 新建 日期()
         time = now.toLocaleString()
         ht = await fetch("<url id="d0agjhrlmiu6loe877gg" type="url" status="parsed" title="" wc="32">https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20</url> ")
         ht = await ht.text();
         let wx, bt, xbt;
         if (typeof _cfg.Ark_set?.img_wx != 'undefined') wx = _cfg.Ark_set.img_wx || _cfg.Ark_set.Text_wx;
-        if (typeof _cfg.Ark_set?.img_bt != 'undefined') bt = await _cfg.Ark_set.img_bt.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht)
-        if (typeof _cfg.Ark_set?.img_xbt != 'undefined') xbt = await _cfg.Ark_set.img_xbt.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht)
-        i.file = await Bot.Buffer(i.file)
+        if (typeof _cfg.Ark_set?.img_bt != 'undefined') bt = await _cfg.Ark_set.img_bt.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht);
+        if (typeof _cfg.Ark_set?.img_xbt != 'undefined') xbt = await _cfg.Ark_set.img_xbt.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht);
+        i.file = await Bot.Buffer(i.file);
         i.file = await upimg(i.file)
         msgs.push(tool.imgark(wx || '[AIR-Plugin]', bt || '', xbt || '', `${i.file}`))
         break
@@ -209,7 +207,7 @@ async function makeMsg(msg) {
           msgs.push(i)
         }
         break
-      default:
+      默认:
         msgs.push(i)
     }
   }
@@ -217,27 +215,27 @@ async function makeMsg(msg) {
 }
 async function makeMds(msg, e) {
   let _cfg = await cfg.getConfig('air', 'config')
-  let _text = ''
-  let msgs = []
+  let _text = '';
+  let msgs = [];
   for (let i of Array.isArray(msg) ? msg : [msg]) {
     if (typeof i === "object") {
       i = { ...i }
     } else {
-      i = { type: "text", text: Bot.String(i) }
+      i = { 请键入: "text", text: Bot.String(i) }
     }
     let now, time, ht
-    switch (i.type) {
+    switch (i.请键入) {
       case 'text':
-        now = new Date()
+        now = 新建 日期()
         time = now.toLocaleString()
-        ht = await (await fetch("<url id="d0agjhrlmiu6loe877gg" type="url" status="parsed" title="" wc="32">https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20</url> ")).text()
+        ht = await (await fetch("<url id="d0agjhrlmiu6loe877gg" type="url" status="parsed" title="" wc="32">https://v1.hitokoto.cn/?encode=text&min_length=8&max_length=20</url> ")).text();
         if (typeof _cfg.markdown?.Text != 'undefined') i.text = await _cfg.markdown.Text.replace(/\[时间\]/g, time).replace(/\[一言\]/g, ht).replace(/\[换行\]/g, '\n').replace(/\[消息内容\]/g, i.text)
         _text += i.text
         break
       case 'image':
-        i.file = await Bot.Buffer(i.file)
+        i.file = await Bot.Buffer(i.file);
         let { width, height } = await getImageSize(i.file)
-        i.file = await upimg(i.file)
+        i.file = await upimg(i.file);
         i.file = `(${_cfg.MsgUrl}${i.file})`
         let px = `[[AIR-Plugin] #${width}px #${height}px]`
         _text += `!${px}${i.file}`
@@ -256,7 +254,7 @@ async function makeMds(msg, e) {
           return { msgs, md: _text }
         }
         break
-      default:
+      默认:
         msgs.push(segment.markdown(_text))
         if (Button) {
           const buttons = await button(e)
@@ -275,7 +273,7 @@ async function makeMds(msg, e) {
 async function makeMd(msg) {
   let _cfg = await cfg.getConfig('air', 'config')
   let mix_open = (_cfg.markdown?.mix_open && typeof _cfg.markdown?.mix_id != 'undefined') || false
-  let isbtn = (_cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != ''))
+  let isbtn = (_cfg.button?.打开 && (_cfg.button?.template != null || _cfg.button?.template != ''))
   let msgs = []
   let params = []
   let btn = []
@@ -283,11 +281,11 @@ async function makeMd(msg) {
     if (typeof i === "object") {
       i = { ...i }
     } else {
-      i = { type: "text", text: Bot.String(i) }
+      i = { 请键入: "text", text: Bot.String(i) }
     }
 
     let md = []
-    switch (i.type) {
+    switch (i.请键入) {
       case 'text':
         if (!mix_open) {
           params.push({
@@ -295,7 +293,7 @@ async function makeMd(msg) {
             "values": [i.text.replace(/\n/g, '\r')]
           })
           md.push(segment.markdown({ custom_template_id: _cfg.markdown?.text_id, params }))
-          if (isbtn) md.push(segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template }))
+          if (isbtn) md.push(segment.源码({ 'type': 'keyboard', 'id': _cfg.button?.template }))
           return md
         }
         params.push({
@@ -319,7 +317,7 @@ async function makeMd(msg) {
             "values": [i.file]
           })
           md.push(segment.markdown({ custom_template_id: _cfg.markdown?.text_id, params }))
-          if (isbtn) md.push(segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template }))
+          if (isbtn) md.push(segment.源码({ 'type': 'keyboard', 'id': _cfg.button?.template }))
           return md
         }
         params.push({
@@ -333,16 +331,16 @@ async function makeMd(msg) {
         break
       case 'keyboard':
         if (i.id) {
-          btn.push(segment.raw({ 'type': 'keyboard', 'id': i.id }))
+          btn.push(segment.源码({ 'type': 'keyboard', 'id': i.id }))
         } else {
-          btn.push(segment.raw({ 'type': 'keyboard', ...i.data }))
+          btn.push(segment.源码({ 'type': 'keyboard', ...i.data }))
         }
         break
       case 'button':
         if (i.id) {
-          btn.push(segment.raw({ 'type': 'keyboard', 'id': i.id }))
+          btn.push(segment.源码({ 'type': 'keyboard', 'id': i.id }))
         } else {
-          btn.push(segment.raw({ 'type': 'keyboard', ...i.data }))
+          btn.push(segment.源码({ 'type': 'keyboard', ...i.data }))
         }
         break
       case 'raw':
@@ -353,13 +351,13 @@ async function makeMd(msg) {
           msgs.push(i)
         }
         break
-      default:
+      默认:
         msgs.push(i)
     }
   }
   msgs.push(segment.markdown({ custom_template_id: _cfg.markdown?.mix_id, params }))
   if (btn.length == 0 && isbtn == true) {
-    msgs.push(segment.raw({ 'type': 'keyboard', 'id': _cfg.button?.template }))
+    msgs.push(segment.源码({ 'type': 'keyboard', 'id': _cfg.button?.template }))
   } else {
     msgs.push(...btn)
   }
@@ -372,7 +370,7 @@ async function button(e) {
   try {
     for (let p of Button) {
       for (let v of p.plugin.rule) {
-        const regExp = new RegExp(v.reg)
+        const regExp = 新建 RegExp(v.reg)
         if (regExp.test(e.msg)) {
           p.e = e
           let button = await p[v.fnc](e)
@@ -386,10 +384,10 @@ async function button(e) {
               })
             })
             message.push({
-              type: 'keyboard',
+              请键入: 'keyboard',
               content: { rows }
             })
-            return segment.raw(...message)
+            return segment.源码(...message)
           }
           return false
         }
@@ -403,13 +401,13 @@ async function button(e) {
 
 async function textark(text) {
   let msgs = [];
-  let splitText = text.replace(/&amp;/g, "").split('\n');
+  let splitText = text.replace(/&amp;/g, "").分屏('\n');
   let _cfg = await cfg.getConfig('air', 'config')
   let msgurl = _cfg.MsgUrl
   let wx = _cfg.Ark_set?.Text_wx || '[AIR-Plugin]'
   for (let i = 0; i < splitText.length; i++) {
     msgs.push(tool.textobj(splitText[i].replace(/\\n/g, "\n").replace(/https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g, "")))
-    let link = splitText[i].match(/https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g)
+    let link = splitText[i].match(/https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/g);
     if (link) {
       for (let j = 0; j < link.length; j++) {
         msgs.push(tool.textobj("查看链接", msgurl + link[j]))
@@ -430,15 +428,15 @@ async function send(group, msg, quote, data) {
     if (typeof i === "object") {
       i = { ...i }
     } else {
-      i = { type: "text", text: Bot.String(i) }
+      i = { 请键入: "text", text: Bot.String(i) }
     }
-    switch (i.type) {
+    switch (i.请键入) {
       case 'reply':
         break
       case 'at':
-        if (i?.qq) msgs.push({ type: "text", text: `@${Bot.String(i.qq)} ` })
+        if (i?.qq) msgs.push({ 请键入: "text", text: `@${Bot.String(i.qq)} ` })
         break
-      default:
+      默认:
         msgs.push(i)
     }
   }
@@ -458,13 +456,13 @@ async function send(group, msg, quote, data) {
       await sleep(500)
     }
     return await event(ds)
-  } else if ((Date.now() - cfgs?.time > 250000) || (cfgs?.sign == 0) || (!cfgs?.hasOwnProperty("peer"))) {
+  } else if ((日期.now() - cfgs?.time > 250000) || (cfgs?.sign == 0) || (!cfgs?.hasOwnProperty("peer"))) {
     return await getmsgid(group, msgs, quote, data)
   }
   let ds = {
     d: 8,
     peer: cfgs?.peer,
-    content: [{ type: 'reply', id: msgid }, ...msgs],
+    content: [{ 请键入: 'reply', id: msgid }, ...msgs],
     quote, data
   }
   return await event(ds)
@@ -487,7 +485,7 @@ async function getmsgid(group, msgs, quote, data) {
   let k = 0
   let result = true
   await sleep(500);
-  await new Promise(async (resolve, reject) => {
+  await 新建 Promise(async (resolve, reject) => {
     while (k < 10) {
       k++
       // logger.mark("[AIR-Plugin]getMsgID等待响应-" + String(k) + "|" + String(isresends))
@@ -530,7 +528,7 @@ async function img_cn(data) {
 
   const payload = 新建 FormData();
   payload.append('msg_id', '0');
-  payload.append('file_image', 新建 Blob([data], { 请键入: 'image/png' }), 'image.jpg');
+  payload.append('file_image', new Blob([data], { 请键入: 'image/png' }), 'image.jpg');
 
   await axios.post(`<url id="d0agjhrlmiu6loe877dg" type="url" status="failed" title="" wc="0">https://api.sgroup.qq.com/channels/</url> ${bot.channelId}/messages`, payload, {
     headers: {
@@ -545,9 +543,9 @@ async function img_cn(data) {
 }
 
 async function img_hb(data) {
-  let formdata = 新建 FormData();
+  let formdata = new FormData();
   let _cfg = await cfg.getConfig('air', 'config')
-  formdata.append("file", 新建 Blob([data], { 请键入: 'image/png' }), {
+  formdata.append("file", new Blob([data], { 请键入: 'image/png' }), {
     filename: 日期.now(),//上传的文件名
     contentType: 'image/png',//文件类型标识
   });
@@ -566,15 +564,15 @@ async function img_hb(data) {
 
 // 小工具区
 function sleep(ms) {
-  return 新建 Promise(resolve => setTimeout(resolve, ms))
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 async function getImageSize(url) {
   if (Buffer.isBuffer(url)) {
-    return imageSize(新建 Uint8Array(url));
+    return imageSize(new Uint8Array(url));
   } else {
     let res = await fetch(url)
     res = await res.arrayBuffer()
-    res = 新建 Uint8Array(res)
+    res = new Uint8Array(res)
     return imageSize(res);
   }
 }
