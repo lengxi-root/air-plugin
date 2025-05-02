@@ -297,7 +297,7 @@ async function makeMd(msg) {
     } else {
       i = { type: "text", text: Bot.String(i) }
     }
-    
+
     let md = []
     switch (i.type) {
       case 'text':
