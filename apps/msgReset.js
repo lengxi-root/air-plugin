@@ -559,7 +559,7 @@ async function img_cn(data) {
 async function img_hb(data) {
   let formdata = new FormData();
   let _cfg = await cfg.getConfig('air', 'config')
-  formdata.append("file", 新建 Blob([data], { 请键入: 'image/png' }), {
+  formdata.append("file", new Blob([data], { type: 'image/png' }), {
     filename: Date.now(),//上传的文件名
     contentType: 'image/png',//文件类型标识
   });
