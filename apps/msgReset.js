@@ -30,27 +30,27 @@ export default class msgReset extends plugin {
   }
   async accept(e) {
     let _cfg = await cfg.getConfig('air', 'config')
-    let ub = _cfg.msgServer?.userbot // 代发数据账号
-    let rb = _cfg.msgServer?.robot // 代发机器账号
-    let mg = _cfg.msgServer?.group // 代发群列表
-    let btnbot = _cfg.button?.btn_users[0] // 发按钮的bot
+    let ub = _cfg.msgServer?.userbot//代发数据账号
+    let rb = _cfg.msgServer?.robot//代发机器账号
+    let mg = _cfg.msgServer?.group//代发群列表
+    let btnbot = _cfg.button?.btn_users[0]//发按钮的bot
     let self_id = this.e.self_id
     let group_id = this.e.group?.group_id
-    // 是否QQBot适配器
+    //是否QQBot适配器
     let isQQbot = this.e.bot.version.name == 'QQBot'
-    // 全局ark开关
+    //全局ark开关
     let isopen = isQQbot && (_cfg.Ark_users?.includes(String(self_id))) && _cfg.msgReset
-    // 代发开关
+    //代发开关
     let msgServer = !isQQbot && (mg?.includes(String(group_id))) && (ub == this.e.self_id) && (this.e.isGroup == true) && _cfg.msgServer?.open
-    // 是否使用原生markdown
+    //是否使用原生markdown
     let mds = isQQbot && _cfg.markdown?.mds
-    // 是否使用markdown
+    //是否使用markdown
     let markdown = isQQbot && (_cfg.markdown?.text_open || _cfg.markdown?.img_open || _cfg.markdown?.mix_open)
-    // 原始reply对象
+    //原始reply对象
     let old_reply = this.e.reply
-    // 是否使用全局转图
+    //是否使用全局转图
     let istoimg = _cfg.toimg?.open && (Bot.md2img || toimg)
-    // 是否使用按钮
+    //是否使用按钮
     let isbtn = _cfg.button?.open && (_cfg.button?.template != null || _cfg.button?.template != '')
 
     if (!istoimg && !isopen && !msgServer && !isbtn && !markdown && !mds) return false
@@ -145,7 +145,6 @@ export default class msgReset extends plugin {
     }
     return true
   }
-
   async setcallback(e) {
     inited = true
     let cfgs = await cfg.getConfig("air", "config")
@@ -162,9 +161,11 @@ export default class msgReset extends plugin {
         await sleep(3000)
       }
     }
-    return inited
+    return inited;
   }
-}
+
+
+};//插个飞雷神
 
 // 消息处理区
 async function makeMsg(msg) {
@@ -284,6 +285,7 @@ async function makeMd(msg) {
     } else {
       i = { type: "text", text: Bot.String(i) }
     }
+
     let md = []
     switch (i.type) {
       case 'text':
