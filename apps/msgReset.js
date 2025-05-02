@@ -565,7 +565,7 @@ async function img_hb(data) {
   });
   let res = await fetch('https://api.huaban.com/upload', {
     method: 'POST',
-    内容: formdata,
+    body: formdata,
     headers: {
       Cookie: _cfg?.imgck?.trim()
     }
