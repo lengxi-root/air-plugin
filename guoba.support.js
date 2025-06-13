@@ -66,6 +66,26 @@ export function supportGuoba() {
           }
         },
         {
+          field: 'bili_csrf',
+          label: 'B站图床CSRF_token（cookie里面的jct）',
+          bottomHelpMessage: '使用全局转换功能时使用',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '哔哩哔哩登录网站请求日志自行获取cookie',
+          }
+        },
+        {
+          field: 'bili_sessdata',
+          label: 'B站图床sessdata',
+          bottomHelpMessage: '使用全局转换功能时使用',
+          component: 'Input',
+          required: false,
+          componentProps: {
+            placeholder: '哔哩哔哩登录网站请求日志自行获取cookie',
+          }
+        },
+        {
           field: 'imgck',
           label: '花瓣图床配置',
           bottomHelpMessage: '使用全局转换功能必填，使用浏览器访问huaban.com自行获取cookie',

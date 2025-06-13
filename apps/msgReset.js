@@ -474,6 +474,8 @@ async function upimg(file) {
   let _cfg = await cfg.getConfig('air', 'config')
   if (typeof _cfg.imgbot == 'string' && _cfg.imgbot != '' && typeof _cfg.imgchannelid == 'string' && _cfg.imgchannelid != '') {
     return await img_cn(file)
+  } else if (_cfg.bili_csrf != '' && _cfg.bili_sessdata != '') {
+    return await bilibiliImgUpload(file, { csrf_token: _cfg.bili_csrf, sessdata: _cfg.sessdata })
   } else {
     return await img_hb(file)
   }
@@ -526,7 +528,73 @@ async function img_hb(data) {
   logger.mark(`[AIR-Plugin]花瓣图床URL： ${url}`);
   return url
 }
+const axios = require('axios');
+const FormData = require('form-data');
 
+async function bilibiliImgUpload(data, config) {
+    // 获取B站配置
+    const csrfToken = config?.csrf_token || '';
+    const sessData = config?.sessdata || '';
+
+    // 验证输入
+    if (!data || !Buffer.isBuffer(data)) {
+        console.error('B站图床：图片数据为空或不是Buffer');
+        return '';
+    }
+
+    if (!csrfToken || !sessData) {
+        console.error('B站图床：缺少必要的配置 csrf_token 或 sessdata');
+        return '';
+    }
+
+    // 确定文件类型
+    let fileExt = 'jpg'; // 默认jpg
+    if (data.compare(Buffer.from([0xFF, 0xD8]), 0, 2) === 0) {
+        fileExt = 'jpg';
+    } else if (data.compare(Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]), 0, 8) === 0) {
+        fileExt = 'png';
+    } else if (data.compare(Buffer.from('GIF89a'), 0, 6) === 0) {
+        fileExt = 'gif';
+    } else if (data.compare(Buffer.from('WEBP'), 8, 4) === 0) {
+        fileExt = 'webp';
+    } else if (data.compare(Buffer.from('BM'), 0, 2) === 0) {
+        fileExt = 'bmp';
+    }
+
+    const mimeType = `image/${fileExt === 'jpg' ? 'jpeg' : fileExt}`;
+    const fileName = `upload_${Date.now()}.${fileExt}`;
+
+    try {
+        const formData = new FormData();
+        formData.append('file', data, {
+            filename: fileName,
+            contentType: mimeType
+        });
+        formData.append('bucket', 'openplatform');
+        formData.append('csrf', csrfToken);
+
+        const response = await axios.post('https://api.bilibili.com/x/upload/web/image', formData, {
+            headers: {
+                ...formData.getHeaders(),
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Cookie': `SESSDATA=${sessData}; bili_jct=${csrfToken}`,
+            },
+            httpsAgent: new (require('https').Agent)({ rejectUnauthorized: false }),
+            timeout: 30000
+        });
+
+        const responseData = response.data;
+        if (response.status === 200 && responseData?.code === 0 && responseData?.data?.location) {
+            const url = responseData.data.location.replace('http://', 'https://');
+            console.log(`B站图床URL：${url}`);
+            return url;
+        }
+        return '';
+    } catch (error) {
+        console.error('B站图床上传失败:', error.message);
+        return '';
+    }
+}
 // 小工具区
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
