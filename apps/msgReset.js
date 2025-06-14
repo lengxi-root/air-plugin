@@ -528,8 +528,6 @@ async function img_hb(data) {
   logger.mark(`[AIR-Plugin]花瓣图床URL： ${url}`);
   return url
 }
-const axios = require('axios');
-const FormData = require('form-data');
 
 async function bilibiliImgUpload(data, config) {
     // 获取B站配置
